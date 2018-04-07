@@ -3,7 +3,8 @@
 This document in intended to be a regularly updated document listing the process of development
 of the `kaapi` project.
 
-First off, let us begin with a brief discussion of the goals of this project, and then start filling out the prerequisites (as well as the required knowledge) to begin creating this project.
+First off, let us begin with a brief discussion of the goals of this project, and then start filling out the prerequisites
+(as well as the required knowledge) to begin creating this project.
 
 
 
@@ -12,10 +13,15 @@ First off, let us begin with a brief discussion of the goals of this project, an
 The intention of this project is to create a package cum build manager for Java in the same way
 the [Cargo](https://github.com/rust-lang/cargo) tool is the *de facto* build and package manager for Rust.
 
-[Maven](https://maven.apache.org/index.html), [Gradle](https://gradle.org/), and even [Ant](https://ant.apache.org/) are extremely capable dependency and build managers, but they have their own problems - Maven is too complex, Gradle is just all over the place, and Ant is simply outdate. The intention of this project is not to replace these tools (not by any stretch of the imagination). It is simply a modest experiment in seeing if the approach taken by the `cargo` tool can be 
+[Maven](https://maven.apache.org/index.html), [Gradle](https://gradle.org/), and even [Ant](https://ant.apache.org/) are
+extremely capable dependency and build managers, but they have their own problems - Maven is too complex, Gradle is just
+all over the place, and Ant is simply outdated. The intention of this project is not to replace these tools (not by any
+stretch of the imagination). It is simply a modest experiment in seeing if the approach taken by the `cargo` tool can be
 achieved in Java.
 
-The other goal of this project is to be as self-contained as possible. This implies that most (or more likely, all) of the code will have no external dependencies aside from the obvious dependency on the JDK. This may not be the most efficient or quickest way of getting this project going, but there are a couple of points in its favour:
+The other goal of this project is to be as self-contained as possible. This implies that most (or more likely, all) of
+the code will have no external dependencies aside from the obvious dependency on the JDK. This may not be the most
+efficient or quickest way of getting this project going, but there are a couple of points in its favour:
   
   * Edification - the main aim of this project is to learn, explore, and implement.
   
@@ -23,12 +29,16 @@ The other goal of this project is to be as self-contained as possible. This impl
 
 
 Considering that the Maven repository is the biggest repository of Java artifacts in the world, my 
-initial idea is to pull in dependencies from the Maven repository till such time as a repository can exist (if ever) for `kaapi`, much like what `crates.io` does for Rust.
+initial idea is to pull in dependencies from the Maven repository till such time as a repository can exist (if ever) for
+ `kaapi`, much like what `crates.io` does for Rust.
 
 
 ### Prerequisite Knowledge
 
-Some subjects that will be required to implement this project are, off the top of my head, as follows. This list will expand and grow (and the VCS history should reflect that more accurately) as my own understanding of the problem grows, and the implementation proceeds. The main thing is to ensure that the design is robust enough to be able to handle moderately flexible variations in approaches:
+Some subjects that will be required to implement this project are, off the top of my head, as follows. This list will
+expand and grow (and the VCS history should reflect that more accurately) as my own understanding of the problem grows,
+and the implementation proceeds. The main thing is to ensure that the design is robust enough to be able to handle
+moderately flexible variations in approaches:
 
   * A thorough knowledge of Maven and Cargo internals is absolutely mandatory. 
     Maven for two reasons:
@@ -53,7 +63,8 @@ Some subjects that will be required to implement this project are, off the top o
           platform-specific details (at least for the three major platforms - Windows, Linux, 
           and macOS).
           
-  * In the vein of Cargo, I plan to use [TOML](https://github.com/toml-lang/toml) as the configuration language of choice. I need to understand this format so that I can implement a parser for at least a *strict subset* of TOML.
+  * In the vein of Cargo, I plan to use [TOML](https://github.com/toml-lang/toml) as the configuration language of choice.
+    I need to understand this format so that I can implement a parser for at least a *strict subset* of TOML.
   
   * I plan to use the TOML configuration to retrieve Maven repositories and store them in the local
   cache, and so that will require fast, efficient and robust networking and retrying capabilities. 
@@ -69,12 +80,18 @@ Some subjects that will be required to implement this project are, off the top o
     LOC, then this approach will most likely fail miserably. I need to explore how `make` and other
     such tools detect changes instantly. Maybe this is also a good candidate for parallelism.
     
-  * This is a minor point, but command-line options parsing needs to be robust and efficient. Implementing a custom parser for this seems to be in the offing.
+  * This is a minor point, but command-line options parsing needs to be robust and efficient. Implementing a custom parser
+    for this seems to be in the offing.
+
+  * Another semi-minor point is to ensure that semantic versioning is properly handled (level of support can be increased
+    over releases, in terms of the number of usecases handled).
   
-  * Integrity of the data is of paramout importance - the tool may fail, but under no circumstances should it ever corrupt or lose data. This needs to be explored in depth.
+  * Integrity of the data is of paramount importance - the tool may fail, but under no circumstances should it ever corrupt
+    or lose data. This needs to be explored in depth.
   
   * Good documentation is absolutely necessary. Javadoc may be the way to go here, but I am also
-  not averse to adopting a `rustdoc` style documentation support. IMPORTANT: check with the Rust team if their OS licence allows for it.
+    not averse to adopting a `rustdoc` style documentation support. IMPORTANT: check with the Rust team
+    if their OS licence allows for it.
 
 
 
@@ -89,12 +106,11 @@ Usage:
     kaapi [options]
 
 Options:
-    -h, --help          Display this message
+    -h, --help          Display this message and exit
     -V, --version       Print version info and exit
     --list              List installed commands
-    -v, --verbose ...   Use verbose output (-vv very verbose/build.rs output)
+    -v, --verbose ...   Use verbose output 
     -q, --quiet         No output printed to stdout
-    --color WHEN        Coloring: auto, always, never [optional]
     --frozen            Require Kaapi.lock and cache are up to date
     --locked            Require Kaapi.lock is up to date
 
@@ -151,26 +167,6 @@ authors = ["tzj"]
 ```
 
 
-## Implementation Prerequisites
-
-### Formats
-
- * TOML
-
-### Techical Skills
-
- * Parsing getopt-style
- * TOML parsing
- * Networking
- * Diffing
-
-
-## Design Notes
-
-Expand this section into a separate document. Currently, this is used as as scratchpad.
-
-
-## Running Log
 
 
 
