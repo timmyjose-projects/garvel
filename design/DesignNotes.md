@@ -1,6 +1,5 @@
 # Design Document
 
-
 This document in intended to be a regularly updated document listing the process of development
 of the `kaapi` project.
 
@@ -9,7 +8,6 @@ First off, let us begin with a brief discussion of the goals of this project, an
 
 
 ## Prolegomena
-
 
 The intention of this project is to create a package cum build manager for Java in the same way
 the [Cargo](https://github.com/rust-lang/cargo) tool is the *de facto* build and package manager for Rust.
@@ -77,6 +75,106 @@ Some subjects that will be required to implement this project are, off the top o
   
   * Good documentation is absolutely necessary. Javadoc may be the way to go here, but I am also
   not averse to adopting a `rustdoc` style documentation support. IMPORTANT: check with the Rust team if their OS licence allows for it.
+
+
+
+## Tentative Kaapi interface
+
+```
+$ kaapi
+A Java package manager and dependency manager inspired by Cargo, the Rust package manager.
+
+Usage:
+    kaapi <command> [<args>...]
+    kaapi [options]
+
+Options:
+    -h, --help          Display this message
+    -V, --version       Print version info and exit
+    --list              List installed commands
+    -v, --verbose ...   Use verbose output (-vv very verbose/build.rs output)
+    -q, --quiet         No output printed to stdout
+    --color WHEN        Coloring: auto, always, never [optional]
+    --frozen            Require Kaapi.lock and cache are up to date
+    --locked            Require Kaapi.lock is up to date
+
+Some common kaapi commands are (see all commands with --list):
+    build       Compile the current project
+    clean       Remove the target directory
+    doc         Build this project's and its dependencies' documentation
+    new         Create a new kaapi project
+    init        Create a new kaapi project in an existing directory
+    run         Build and execute src/Main.java
+    test        Run the tests
+    bench       Run the benchmarks [optional]
+    update      Update dependencies listed in Kaapi.lock
+    search      Search registry for JARs/Modules
+    publish     Package and upload this project to the registry (maybe have something like kaapi.io?)
+
+See 'kaapi help <command>' for more information on a specific command.
+```
+
+
+## Project layout
+
+```
+$ kaapi new foo
+
+foo
+├── Kaapi.toml
+└── src
+    └── Lib.java
+
+1 directory, 2 files
+```
+
+```
+$ kaapi new --bin bar
+
+bar
+├── Kaapi.toml
+└── src
+    └── Main.java
+
+1 directory, 2 files
+```
+
+
+```
+$ cat Kaapi.toml
+[package]
+name = "bar"
+version = "0.1.0" (use semver)
+authors = ["tzj"]
+
+[dependencies]
+```
+
+
+## Implementation Prerequisites
+
+### Formats
+
+ * TOML
+
+### Techical Skills
+
+ * Parsing getopt-style
+ * TOML parsing
+ * Networking
+ * Diffing
+
+
+## Design Notes
+
+Expand this section into a separate document. Currently, this is used as as scratchpad.
+
+
+## Running Log
+
+
+
+
 
 
 
