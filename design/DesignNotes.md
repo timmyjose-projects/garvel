@@ -102,8 +102,7 @@ $ kaapi
 A Java package manager and dependency manager inspired by Cargo, the Rust package manager.
 
 Usage:
-    kaapi <command> [<args>...]
-    kaapi [options]
+    kaapi [OPTIONS] [COMMAND]
 
 Options:
     -h, --help          Display this message and exit
@@ -167,7 +166,12 @@ authors = ["tzj"]
 ```
 
 
+### Progress 
 
+
+My intention is to write the basic functionality from scratch, bootstrap the project, and then
+use external dependencies. This will also entail massive refactorings, but the overall design should
+be more or less minimally impacted. 
 
 
 

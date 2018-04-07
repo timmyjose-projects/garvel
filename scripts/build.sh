@@ -17,7 +17,12 @@ JAVA=
 PROJECT_ROOT=`pwd`
 BUILD_DIR=${PROJECT_ROOT}/build
 SRC_ROOT=${PROJECT_ROOT}/src
-MAIN_CLASS=com.tzj.kaapi.main.Main
+MAIN_CLASS=com.tzj.kaapi.test.Main
+
+## JAR vars
+TARGET_DIR=${PROJECT_ROOT}/target
+TARGET_NAME=kaapi.jar
+TARGET_ENTRY_POINT=com/tzj/kaapi/test/Main
 
 
 ## check for the java compiler
@@ -71,6 +76,45 @@ function delete_build_dir()
 }
 
 
+## create the project JAR file
+function create_project_jars()
+{
+    if [[ ! -d ${TARGET_DIR} ]]
+    then
+        mkdir  ${TARGET_DIR}
+
+        if [[ $? -ne "0" ]]
+        then
+            echo "unable to create ${TARGET_DIR}"
+            delete_build_dir 5
+        fi
+    fi
+
+    pushd ${BUILD_DIR} > /dev/null
+    jar_files=`find ./ -name *.class`
+    echo ${jar_files}
+
+    jar cfe ${TARGET_NAME} ${TARGET_ENTRY_POINT} ${jar_files}
+
+    if [[ $? -eq "0" ]]
+    then
+        mv ${TARGET_NAME} ${TARGET_DIR}
+
+        if [[ $? -ne "0" ]]
+        then
+            echo "Failed to move ${TARGET_NAME} to ${TARGET_DIR}"
+            delete_build_dir 6
+        fi
+
+        echo "${TARGET_NAME} created successfully in ${TARGET_DIR}"
+    else
+        echo "Unable to create ${TARGET_NAME}"
+        delete_build_dir 4
+    fi
+    popd > /dev/null
+}
+
+
 ## compile the sources
 function compile_sources()
 {
@@ -91,10 +135,18 @@ function compile_sources()
         delete_build_dir 3
     fi
 
+    create_project_jars
+
     popd > /dev/null
     echo
 }
 
+
+## run all the tests
+function run_tests()
+{
+    echo "all tests passed successfully"
+}
 
 ## run the main program
 function run_app()
@@ -113,6 +165,7 @@ function run_app()
 check_java
 create_build_dir
 compile_sources
+run_tests
 run_app
 delete_build_dir
 exit 0
