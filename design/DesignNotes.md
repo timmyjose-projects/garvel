@@ -99,21 +99,21 @@ moderately flexible variations in approaches:
 
 ```
 $ kaapi
-A Java package manager and dependency manager inspired by Cargo, the Rust package manager.
+A Java package manager and dependency manager
 
 Usage:
     kaapi [OPTIONS] [COMMAND]
 
 Options:
-    -h, --help          Display this message and exit
-    -V, --version       Print version info and exit
-    --list              List installed commands
-    -v, --verbose ...   Use verbose output 
-    -q, --quiet         No output printed to stdout
-    --frozen            Require Kaapi.lock and cache are up to date
-    --locked            Require Kaapi.lock is up to date
+    -v, --verbose       Use verbose output 
+    -q, --quiet         No output printed to stdout (default)
+
+Note that you can specify either `--verbose` or `--quiet` but not both. 
 
 Some common kaapi commands are (see all commands with --list):
+    help        Display this help and exit
+    version     Display version info and exit
+    list        List all the available commands
     build       Compile the current project
     clean       Remove the target directory
     doc         Build this project's and its dependencies' documentation
@@ -121,7 +121,7 @@ Some common kaapi commands are (see all commands with --list):
     init        Create a new kaapi project in an existing directory
     run         Build and execute src/Main.java
     test        Run the tests
-    bench       Run the benchmarks [optional]
+    bench       Run the benchmarks
     update      Update dependencies listed in Kaapi.lock
     search      Search registry for JARs/Modules
     publish     Package and upload this project to the registry (maybe have something like kaapi.io?)
