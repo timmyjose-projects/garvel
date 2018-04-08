@@ -1,7 +1,7 @@
 # Design Document
 
 This document in intended to be a regularly updated document listing the process of development
-of the `kaapi` project.
+of the `garvel` project.
 
 First off, let us begin with a brief discussion of the goals of this project, and then start filling out the prerequisites
 (as well as the required knowledge) to begin creating this project.
@@ -30,7 +30,7 @@ efficient or quickest way of getting this project going, but there are a couple 
 
 Considering that the Maven repository is the biggest repository of Java artifacts in the world, my 
 initial idea is to pull in dependencies from the Maven repository till such time as a repository can exist (if ever) for
- `kaapi`, much like what `crates.io` does for Rust.
+ `garvel`, much like what `crates.io` does for Rust.
 
 
 ### Prerequisite Knowledge
@@ -52,7 +52,7 @@ moderately flexible variations in approaches:
       * need to check licensing and legal angles to ensure that there is no violation. 
         
      For Cargo, a deep understanding of its architecture, design, and implementation will come in
-     rather useful for implementing `kaapi`. This does **not** entail re-writing the Cargo codebase
+     rather useful for implementing `garvel`. This does **not** entail re-writing the Cargo codebase
      in Java. It simply means potentially re-using some good designs from Cargo, at the very least.
      
   * I do not intend to use any build manager for this project. Rather, I will be writing custom
@@ -72,7 +72,7 @@ moderately flexible variations in approaches:
   needs more deliberation. 
   
   * Sufficient knowledge of user-level permissions on Windows, Linux, and macOS for creating 
-  `kaapi` specific configuration files, directories, as well as caches. 
+  `garvel` specific configuration files, directories, as well as caches. 
   
   * In order to check if the project needs rebuilding, a very efficient diffing algorithm will come
     in handy. Preliminary tests suggest that a simple linear scan of the files (with a buffer size
@@ -95,14 +95,14 @@ moderately flexible variations in approaches:
 
 
 
-## Tentative Kaapi interface
+## Tentative garvel interface
 
 ```
-$ kaapi
+$ garvel
 A Java package manager and dependency manager
 
 Usage:
-    kaapi [OPTIONS] [COMMAND]
+    garvel [OPTIONS] [COMMAND]
 
 Options:
     -v, --verbose       Use verbose output 
@@ -110,33 +110,33 @@ Options:
 
 Note that you can specify either `--verbose` or `--quiet` but not both. 
 
-Some common kaapi commands are (see all commands with --list):
+Some common garvel commands are (see all commands with --list):
     help        Display this help and exit
     version     Display version info and exit
     list        List all the available commands
     build       Compile the current project
     clean       Remove the target directory
     doc         Build this project's and its dependencies' documentation
-    new         Create a new kaapi project
-    init        Create a new kaapi project in an existing directory
+    new         Create a new garvel project
+    init        Create a new garvel project in an existing directory
     run         Build and execute src/Main.java
     test        Run the tests
     bench       Run the benchmarks
-    update      Update dependencies listed in Kaapi.lock
+    update      Update dependencies listed in garvel.lock
     search      Search registry for JARs/Modules
-    publish     Package and upload this project to the registry (maybe have something like kaapi.io?)
+    publish     Package and upload this project to the registry (maybe have something like garvel.io?)
 
-See 'kaapi help <command>' for more information on a specific command.
+See 'garvel help <command>' for more information on a specific command.
 ```
 
 
 ## Project layout
 
 ```
-$ kaapi new foo
+$ garvel new foo
 
 foo
-├── Kaapi.toml
+├── Garvel.toml
 └── src
     └── Lib.java
 
@@ -144,10 +144,10 @@ foo
 ```
 
 ```
-$ kaapi new --bin bar
+$ garvel new --bin bar
 
 bar
-├── Kaapi.toml
+├── Garvel.toml
 └── src
     └── Main.java
 
@@ -156,7 +156,7 @@ bar
 
 
 ```
-$ cat Kaapi.toml
+$ cat Garvel.toml
 [package]
 name = "bar"
 version = "0.1.0" (use semver)
@@ -167,7 +167,6 @@ authors = ["tzj"]
 
 
 ### Progress 
-
 
 My intention is to write the basic functionality from scratch, bootstrap the project, and then
 use external dependencies. This will also entail massive refactorings, but the overall design should

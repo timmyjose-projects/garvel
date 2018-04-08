@@ -1,11 +1,11 @@
 #!/bin/sh
 
 
-################################################
-##                                            ##
-## build script for kaapi (UNIX-like systems) ##
-##                                            ##
-################################################
+#################################################
+##                                             ##
+## build script for garvel (UNIX-like systems) ##
+##                                             ##
+#################################################
 
 
 ## base vars
@@ -17,12 +17,12 @@ JAVA=
 PROJECT_ROOT=`pwd`
 BUILD_DIR=${PROJECT_ROOT}/build
 SRC_ROOT=${PROJECT_ROOT}/src
-MAIN_CLASS=com.tzj.kaapi.test.Main
+MAIN_CLASS=Main
 
 ## JAR vars
 TARGET_DIR=${PROJECT_ROOT}/target
-TARGET_NAME=kaapi.jar
-TARGET_ENTRY_POINT=com/tzj/kaapi/test/Main
+TARGET_NAME=garvel.jar
+TARGET_ENTRY_POINT=com/tzj/garvel/test/Main
 
 
 ## check for the java compiler
@@ -151,12 +151,12 @@ function run_tests()
 ## run the main program
 function run_app()
 {
-    pushd ${BUILD_DIR} > /dev/null
+    pushd ${TARGET_DIR} > /dev/null
 
     echo "running the app"
     echo
 
-    ${JAVA} -cp ${CLASSPATH} ${MAIN_CLASS}
+    ${JAVA} -jar ${TARGET_NAME}
 
     popd > /dev/null
     echo
