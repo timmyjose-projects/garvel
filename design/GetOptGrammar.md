@@ -1,9 +1,9 @@
-### Grammar for parsing command-line options in kaapi
+### Grammar for parsing command-line options in garvel
 
 The EBNF-like grammar is given as follows:
 
 ```
-program ::= kaapi [option] command 
+program ::= garvel [option] command 
 ```
 
 ```
