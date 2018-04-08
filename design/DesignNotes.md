@@ -82,6 +82,10 @@ moderately flexible variations in approaches:
     
   * This is a minor point, but command-line options parsing needs to be robust and efficient. Implementing a custom parser
     for this seems to be in the offing.
+    
+  * A major requirement is to thoroughly understand the implication of using `JavaCompiler` to compile source code (of the
+    projects that is, not the `garvel` project itself); A fallback mechanism/option to using the system `javac` explicitly
+    would be desirable.   
 
   * Another semi-minor point is to ensure that semantic versioning is properly handled (level of support can be increased
     over releases, in terms of the number of usecases handled).
@@ -172,6 +176,12 @@ My intention is to write the basic functionality from scratch, bootstrap the pro
 use external dependencies. This will also entail massive refactorings, but the overall design should
 be more or less minimally impacted. 
 
+Right now, I am in the exploratory phase where I am trying to get a good understanding of the whole idea. 
+Once a less-than-nebulous overall view is available, then a checklist will be created to properly monitor
+progress. Considering that major refactorings may take place, I am not too keen at this juncture to proceed
+in a rigid manner. As my understanding of the problem increases, the design will be tweaked accordingly.
+To this end, however, it is imperative to have a basic solid understanding of the foundational ideas, and 
+then real work can proceed. This should be explicitly marked with an official sign-off.
 
 
 

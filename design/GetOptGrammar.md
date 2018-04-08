@@ -1,5 +1,6 @@
 ### Grammar for parsing command-line options in garvel
 
+
 The EBNF-like grammar is given as follows:
 
 ```
@@ -12,27 +13,31 @@ option ::= -v | --verbose | -q | --quiet
 
 ```
 command ::= helpCommand | versionCommand | listCommand 
-         | newCommand | initCommand | updateCommand 
-         | buildCommand | cleanCommand | runCommand 
-         | testCommand | docCommand | benchCommand 
-         | publishCommand             
+           | newCommand | initCommand | updateCommand 
+           | buildCommand | cleanCommand | runCommand 
+           | testCommand | docCommand | benchCommand 
+           | publishCommand             
 ```
 
 ```
-helpCommand ::= help helpCommand 
+helpCommand ::= subCommand 
 ```
 
 ```
-versionCommand ::= Identifier 
+versionCommand ::= versionOption (versionOption)*
 ```
 
 ```
-listCommand ::= Identifier (Identifier)*
+listCommand ::= epsilon
 
 ```
 
 ```
 newCommand ::= newOption (newOption)* path
+```
+
+```
+newOption ::= --vcs Identifier* | --bin | --lib | --name Identifier* | - (h | -help)
 ```
 
 ```
@@ -49,6 +54,22 @@ buildCommand ::= buildOption (buildOption)*
 
 ```
 cleanCommand ::= cleanOption (cleanOption)*
+```
+
+```
+runCommand ::= runOption (runOption)* 
+```
+
+```
+testCommand ::= TBD
+```
+
+```
+benchCommand ::= TBD
+```
+
+```
+publishCommand ::= publishOption (publishOption)*
 ```
 
 ```
