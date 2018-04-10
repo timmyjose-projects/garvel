@@ -97,6 +97,9 @@ moderately flexible variations in approaches:
     not averse to adopting a `rustdoc` style documentation support. IMPORTANT: check with the Rust team
     if their OS licence allows for it.
 
+  * Follow the SPI model to expose the core functionality to the CLI. This would also allow seamless integration of a GUI
+    component later on, if needed. The same model can be followed internally in other modules - need to explore this
+    further. @TODO
 
 
 ## Tentative garvel interface
@@ -183,7 +186,11 @@ in a rigid manner. As my understanding of the problem increases, the design will
 To this end, however, it is imperative to have a basic solid understanding of the foundational ideas, and 
 then real work can proceed. This should be explicitly marked with an official sign-off.
 
-
+Regarding minimum JDK support, after much consideration, I have decided to set JDK 7 as the minimum supported JDK.
+Even if some market analyses show that JDK 8 is the most commonly used JDK today, it would still make sense to write
+code that will still work with JDK 7. So that means features like lambdas and stream are off limits for the `garvel`
+source code itself. This should lead to minimal reductions in productivity in any case. If needed, the code can easily
+be updated to make use of JDK 8+ features later on, but this is not very likely.
 
 
 
