@@ -1,4 +1,4 @@
-package com.tzj.garvel.common.utils;
+package com.tzj.garvel.common.util;
 
 public final class StringHelper {
     private StringHelper() {}
