@@ -36,5 +36,14 @@ with the SPI model.
 **Proxy** - might come in useful for implementing networking and vcs functionality.
 
 
+#### SSL certificates
+
+Create and store SSL certificate for downloading external artifacts.
 
 
+
+#### Features for v1.0
+
+  * Support for `new`, `clean`, `build`, `test`, and `run` for simple projects.
+  * CLI support for the above features.
+  * Implement a strict semantic versioning grammar.

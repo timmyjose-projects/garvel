@@ -63,12 +63,14 @@ moderately flexible variations in approaches:
           platform-specific details (at least for the three major platforms - Windows, Linux, 
           and macOS).
           
-  * In the vein of Cargo, I plan to use [TOML](https://github.com/toml-lang/toml) as the configuration language of choice.
-    I need to understand this format so that I can implement a parser for at least a *strict subset* of TOML.
+  * I plan to use a restricted subset of [json](https://www.json.org/ as the configuration language of choice. 
+    the `init` and `new` commands will create the skeleton of the `Garvel.gl` file in the project root directory. 
+    The template will be fixed to begin with, but may be changed for more options later on. Java properties files 
+    were considered, but expressing dependencies in a nested manner would be cumbersome, if not downright unusable.    
   
-  * I plan to use the TOML configuration to retrieve Maven repositories and store them in the local
+  * I plan to use the json configuration to retrieve Maven repositories and store them in the local
   cache, and so that will require fast, efficient and robust networking and retrying capabilities. 
-  Downloading arttifacts in parallel would also be highly desirable, but complex enough that this
+  Downloading artifacts in parallel would also be highly desirable, but complex enough that this
   needs more deliberation. 
   
   * Sufficient knowledge of user-level permissions on Windows, Linux, and macOS for creating 
@@ -143,7 +145,7 @@ See 'garvel help <command>' for more information on a specific command.
 $ garvel new foo
 
 foo
-├── Garvel.toml
+├── Garvel.gl
 └── src
     └── Lib.java
 
@@ -154,22 +156,33 @@ foo
 $ garvel new --bin bar
 
 bar
-├── Garvel.toml
+├── Garvel.gl
 └── src
     └── Main.java
 
 1 directory, 2 files
 ```
 
-
 ```
-$ cat Garvel.toml
-[package]
-name = "bar"
-version = "0.1.0" (use semver)
-authors = ["tzj"]
+$ cat Garvel.gl
+{
+    project_metadata: {
+        name : HelloWorld,
+        version: 0.0.1,
+        description": A simple hello, world project!,
+    },
 
-[dependencies]
+    build_config: {
+        src_root: com/tzj/garvel/src/,
+        classpath: [.],
+    }
+
+    test_config : {
+        test_root: com/tzj/garvel/test,
+        classpath: [.],
+        bench: true
+    },
+}
 ```
 
 
