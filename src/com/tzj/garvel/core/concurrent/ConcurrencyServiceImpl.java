@@ -1,13 +1,13 @@
 package com.tzj.garvel.core.concurrent;
 
-import com.tzj.garvel.core.concurrent.spi.ConcurrentService;
+import com.tzj.garvel.core.concurrent.spi.ConcurrencyService;
 import com.tzj.garvel.core.concurrent.spi.GarvelJob;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public enum ConcurrentServiceImpl implements ConcurrentService {
+public enum ConcurrencyServiceImpl implements ConcurrencyService {
     INSTANCE;
 
     private ExecutorService service;
