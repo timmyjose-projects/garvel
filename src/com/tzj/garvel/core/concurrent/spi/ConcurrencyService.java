@@ -6,7 +6,7 @@ import java.util.concurrent.Future;
 public interface ConcurrencyService<V> {
     ExecutorService getExecutor();
 
-    Future<V> submitTask(GarvelJob<V> job);
+    Future<V> submitJob(Job<V> job);
 
     void shutdown();
 }

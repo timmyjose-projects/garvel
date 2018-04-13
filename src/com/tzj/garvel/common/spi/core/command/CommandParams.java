@@ -1,4 +1,4 @@
 package com.tzj.garvel.common.spi.core.command;
 
-public abstract class GarvelCommandParams {
+public abstract class CommandParams {
 }

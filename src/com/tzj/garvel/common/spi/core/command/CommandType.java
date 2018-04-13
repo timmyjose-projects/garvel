@@ -1,6 +1,6 @@
 package com.tzj.garvel.common.spi.core.command;
 
-public enum GarvelCommandType {
+public enum CommandType {
     NEW,
     INIT,
     CLEAN,

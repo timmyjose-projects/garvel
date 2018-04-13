@@ -1,14 +1,14 @@
 package com.tzj.garvel.core;
 
 import com.tzj.garvel.common.spi.core.CoreService;
-import com.tzj.garvel.common.spi.core.command.GarvelCommandParams;
-import com.tzj.garvel.common.spi.core.command.GarvelCommandResult;
-import com.tzj.garvel.common.spi.core.command.GarvelCommandType;
-import com.tzj.garvel.core.engine.GarvelCommand;
-import com.tzj.garvel.core.engine.command.GarvelBuildCommand;
-import com.tzj.garvel.core.engine.command.GarvelCleanCommand;
-import com.tzj.garvel.core.engine.command.GarvelInitCommand;
-import com.tzj.garvel.core.engine.command.GarvelNewCommand;
+import com.tzj.garvel.common.spi.core.command.CommandParams;
+import com.tzj.garvel.common.spi.core.command.CommandResult;
+import com.tzj.garvel.common.spi.core.command.CommandType;
+import com.tzj.garvel.core.engine.Command;
+import com.tzj.garvel.core.engine.command.BuildCommand;
+import com.tzj.garvel.core.engine.command.CleanCommand;
+import com.tzj.garvel.core.engine.command.InitCommand;
+import com.tzj.garvel.core.engine.command.NewCommand;
 
 /**
  * This class represents the core of the garvel package manager.
@@ -20,21 +20,21 @@ public enum CoreServiceImpl implements CoreService {
     INSTANCE;
 
     @Override
-    public GarvelCommandResult runCommand(final GarvelCommandType type, final GarvelCommandParams cmdParams) {
-        GarvelCommand command = null;
+    public CommandResult runCommand(final CommandType type, final CommandParams cmdParams) {
+        Command command = null;
 
         switch (type) {
             case NEW:
-                command = new GarvelNewCommand();
+                command = new NewCommand();
                 break;
             case INIT:
-                command = new GarvelInitCommand();
+                command = new InitCommand();
                 break;
             case BUILD:
-                command = new GarvelBuildCommand();
+                command = new BuildCommand();
                 break;
             case CLEAN:
-                command = new GarvelCleanCommand();
+                command = new CleanCommand();
                 break;
             default:
                 throw new IllegalStateException("TODO");

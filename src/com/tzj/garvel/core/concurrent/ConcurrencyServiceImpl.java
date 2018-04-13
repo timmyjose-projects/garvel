@@ -1,7 +1,7 @@
 package com.tzj.garvel.core.concurrent;
 
 import com.tzj.garvel.core.concurrent.spi.ConcurrencyService;
-import com.tzj.garvel.core.concurrent.spi.GarvelJob;
+import com.tzj.garvel.core.concurrent.spi.Job;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,7 +23,7 @@ public enum ConcurrencyServiceImpl implements ConcurrencyService {
     }
 
     @Override
-    public Future submitTask(final GarvelJob job) {
+    public Future submitJob(final Job job) {
         return service.submit(job);
     }
 
