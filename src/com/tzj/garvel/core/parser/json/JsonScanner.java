@@ -3,7 +3,7 @@ package com.tzj.garvel.core.parser.json;
 import com.tzj.garvel.core.parser.common.CharWrapper;
 import com.tzj.garvel.core.parser.common.Lexer;
 import com.tzj.garvel.core.parser.exception.LexerException;
-import com.tzj.garvel.core.parser.exception.ScannerException;
+import com.tzj.garvel.core.parser.exception.JsonScannerException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +23,12 @@ public class JsonScanner {
     private StringBuffer currentSpelling;
     private CharWrapper currentChar;
 
-    public JsonScanner(final String filename) throws ScannerException {
+    public JsonScanner(final String filename) throws JsonScannerException {
         this.filename = filename;
         try {
             this.lexer = new Lexer(filename);
         } catch (LexerException e) {
-            throw new ScannerException(String.format("Error while creating a lexer for %s", filename));
+            throw new JsonScannerException(String.format("Error while creating a lexer for %s", filename));
         }
 
         this.tokens = new ArrayList<>();
@@ -46,7 +46,7 @@ public class JsonScanner {
             while (scanner.hasMoreTokens()) {
                 System.out.println(scanner.scan());
             }
-        } catch (ScannerException e) {
+        } catch (JsonScannerException e) {
             e.printStackTrace();
         }
     }
@@ -55,9 +55,9 @@ public class JsonScanner {
         currentChar = lexer.nextCharacter();
     }
 
-    void skip(final char expectedChar) throws ScannerException {
+    void skip(final char expectedChar) throws JsonScannerException {
         if (currentChar.c() != expectedChar) {
-            throw new ScannerException(String.format("Scanner Error at line %d, column %d while scanning %s, expected to skip %c, found %s",
+            throw new JsonScannerException(String.format("Scanner Error at line %d, column %d while scanning %s, expected to skip %c, found %s",
                     currentChar.line(), currentChar.column(), filename, expectedChar, currentChar.c()));
         }
         currentChar = lexer.nextCharacter();
@@ -68,14 +68,14 @@ public class JsonScanner {
         currentChar = lexer.nextCharacter();
     }
 
-    void take(final char expectedChar) throws ScannerException {
+    void take(final char expectedChar) throws JsonScannerException {
         if (currentChar.c() != expectedChar) {
-            throw new ScannerException(String.format("Scanner Error at line %d, col %d while scanning %s: expected to take %c, found %c",
+            throw new JsonScannerException(String.format("Scanner Error at line %d, col %d while scanning %s: expected to take %c, found %c",
                     currentChar.line(), currentChar.column(), filename, expectedChar, currentChar.c()));
         }
     }
 
-    private void scanAll() throws ScannerException {
+    private void scanAll() throws JsonScannerException {
         currentChar = lexer.nextCharacter();
 
         while (lexer.hasMoreCharacters()) {
@@ -89,7 +89,7 @@ public class JsonScanner {
         }
     }
 
-    private JsonTokenType scanToken() throws ScannerException {
+    private JsonTokenType scanToken() throws JsonScannerException {
         JsonTokenType kind = null;
 
         switch (currentChar.c()) {
@@ -166,7 +166,7 @@ public class JsonScanner {
             break;
 
             default:
-                throw new ScannerException(String.format("Scanner Error at line %d, col %d while scanning %s: %c cannot start a valid token",
+                throw new JsonScannerException(String.format("Scanner Error at line %d, col %d while scanning %s: %c cannot start a valid token",
                         currentChar.line(), currentChar.column(), filename, currentChar.c()));
         }
 
@@ -289,9 +289,9 @@ public class JsonScanner {
         return idx < tokens.size();
     }
 
-    public JsonToken scan() throws ScannerException {
+    public JsonToken scan() throws JsonScannerException {
         if (!hasMoreTokens()) {
-            throw new ScannerException(String.format("No more tokens in the token stream while scanning %s", filename));
+            throw new JsonScannerException(String.format("No more tokens in the token stream while scanning %s", filename));
         }
 
         return nextToken();
