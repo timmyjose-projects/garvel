@@ -1,7 +1,7 @@
 package com.tzj.garvel.core.concurrent;
 
-import com.tzj.garvel.core.concurrent.spi.ConcurrencyService;
-import com.tzj.garvel.core.concurrent.spi.Job;
+import com.tzj.garvel.core.concurrent.api.ConcurrencyService;
+import com.tzj.garvel.core.concurrent.api.Job;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

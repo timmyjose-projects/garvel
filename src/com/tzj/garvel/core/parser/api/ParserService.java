@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.parser.spi;
+package com.tzj.garvel.core.parser.api;
 
 public interface ParserService {
     JsonParser getJsonParser();

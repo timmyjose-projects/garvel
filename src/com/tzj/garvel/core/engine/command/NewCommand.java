@@ -4,7 +4,7 @@ import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
 import com.tzj.garvel.common.spi.core.command.result.NewCommandResult;
 import com.tzj.garvel.core.CoreModuleLoader;
-import com.tzj.garvel.core.concurrent.spi.Job;
+import com.tzj.garvel.core.concurrent.api.Job;
 import com.tzj.garvel.core.engine.Command;
 import com.tzj.garvel.core.engine.job.NewJob;
 

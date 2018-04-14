@@ -1,7 +1,7 @@
 package com.tzj.garvel.core.compiler.system;
 
-import com.tzj.garvel.core.compiler.spi.CompilationResult;
-import com.tzj.garvel.core.compiler.spi.Compiler;
+import com.tzj.garvel.core.compiler.api.CompilationResult;
+import com.tzj.garvel.core.compiler.api.Compiler;
 
 import java.util.List;
 

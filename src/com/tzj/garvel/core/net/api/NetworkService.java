@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.net.spi;
+package com.tzj.garvel.core.net.api;
 
 public interface NetworkService {
     void downloadTextFIle(final String url);

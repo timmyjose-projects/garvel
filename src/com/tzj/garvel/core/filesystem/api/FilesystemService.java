@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.filesystem.spi;
+package com.tzj.garvel.core.filesystem.api;
 
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 

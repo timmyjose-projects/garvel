@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.parser.spi;
+package com.tzj.garvel.core.parser.api;
 
 public interface SemverParser {
     void parse();

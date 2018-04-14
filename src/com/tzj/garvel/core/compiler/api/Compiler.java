@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.compiler.spi;
+package com.tzj.garvel.core.compiler.api;
 
 import java.util.List;
 

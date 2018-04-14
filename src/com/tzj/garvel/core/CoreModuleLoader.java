@@ -1,35 +1,18 @@
 package com.tzj.garvel.core;
 
-import com.tzj.garvel.core.compiler.spi.CompilerService;
-import com.tzj.garvel.core.concurrent.spi.ConcurrencyService;
-import com.tzj.garvel.core.filesystem.spi.FilesystemService;
-import com.tzj.garvel.core.net.spi.NetworkService;
-import com.tzj.garvel.core.parser.spi.ParserService;
-
-import java.util.ServiceLoader;
+import com.tzj.garvel.core.compiler.CompilerServiceImpl;
+import com.tzj.garvel.core.compiler.api.CompilerService;
+import com.tzj.garvel.core.concurrent.ConcurrencyServiceImpl;
+import com.tzj.garvel.core.concurrent.api.ConcurrencyService;
+import com.tzj.garvel.core.filesystem.FilesystemServiceImpl;
+import com.tzj.garvel.core.filesystem.api.FilesystemService;
+import com.tzj.garvel.core.net.NetworkServiceImpl;
+import com.tzj.garvel.core.net.api.NetworkService;
+import com.tzj.garvel.core.parser.ParserServiceImpl;
+import com.tzj.garvel.core.parser.api.ParserService;
 
 public enum CoreModuleLoader {
     INSTANCE;
-
-
-    private static <T> T loadFirstNonNull(Class<T> clazz, final String moduleName) {
-        ServiceLoader<T> loader = ServiceLoader.load(clazz);
-
-        T service = null;
-        for (T t : loader) {
-            if (t != null) {
-                service = t;
-                break;
-            }
-        }
-
-        if (service == null) {
-            throw new IllegalStateException("Unable to load " + moduleName);
-        }
-
-        return service;
-    }
-
 
     /**
      * Generic concurrency framework.
@@ -37,7 +20,7 @@ public enum CoreModuleLoader {
      * @return
      */
     public ConcurrencyService getConcurrencyFramework() {
-        return loadFirstNonNull(ConcurrencyService.class, "Concurrency Framework");
+        return ConcurrencyServiceImpl.INSTANCE;
     }
 
     /**
@@ -46,7 +29,7 @@ public enum CoreModuleLoader {
      * @return
      */
     public ParserService getParserFramework() {
-        return loadFirstNonNull(ParserService.class, "Parsing Framework");
+        return ParserServiceImpl.INSTANCE;
     }
 
     /**
@@ -55,7 +38,7 @@ public enum CoreModuleLoader {
      * @return
      */
     public CompilerService getCompilerFramework() {
-        return loadFirstNonNull(CompilerService.class, "Compiler Framework");
+        return CompilerServiceImpl.INSTANCE;
     }
 
     /**
@@ -64,7 +47,7 @@ public enum CoreModuleLoader {
      * @return
      */
     public FilesystemService getFileSystemFramework() {
-        return loadFirstNonNull(FilesystemService.class, "File System Framework");
+        return FilesystemServiceImpl.INSTANCE;
     }
 
     /**
@@ -73,6 +56,6 @@ public enum CoreModuleLoader {
      * @return
      */
     public NetworkService getNetworkFramework() {
-        return loadFirstNonNull(NetworkService.class, "Network Framework");
+        return NetworkServiceImpl.INSTANCE;
     }
 }

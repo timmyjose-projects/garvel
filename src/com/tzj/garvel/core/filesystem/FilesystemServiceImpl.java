@@ -2,14 +2,16 @@ package com.tzj.garvel.core.filesystem;
 
 import com.tzj.garvel.common.GarvelConstants;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
-import com.tzj.garvel.core.filesystem.spi.FilesystemService;
+import com.tzj.garvel.core.filesystem.api.FilesystemService;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class FilesystemServiceImpl implements FilesystemService {
+public enum FilesystemServiceImpl implements FilesystemService {
+    INSTANCE;
+
     @Override
     public BufferedReader newBufferedReader(final String filename) throws FilesystemFrameworkException {
         BufferedReader reader = null;

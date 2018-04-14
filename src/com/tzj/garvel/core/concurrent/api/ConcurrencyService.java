@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.concurrent.spi;
+package com.tzj.garvel.core.concurrent.api;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
