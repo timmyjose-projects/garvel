@@ -10,12 +10,12 @@ public enum ParserServiceImpl implements ParserService {
     INSTANCE;
 
     @Override
-    public JsonParser getJsonParser() {
-        return JsonParserImpl.INSTANCE;
+    public JsonParser getJsonParser(final String filename) {
+        return new JsonParserImpl(filename);
     }
 
     @Override
     public SemverParser getSemVerParser() {
-        return SemverParserImpl.INSTANCE;
+        return new SemverParserImpl();
     }
 }

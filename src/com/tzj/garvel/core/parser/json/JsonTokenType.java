@@ -2,7 +2,6 @@ package com.tzj.garvel.core.parser.json;
 
 public enum JsonTokenType {
     STRING("<string>"),
-    INLITERAL("<integer-literal>"),
     COMMA(","),
     COLON(":"),
     LEFT_BRACE("{"),

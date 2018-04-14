@@ -21,12 +21,13 @@
             "log4j" : "*" # latest version
         },
 
+        # empty properties are not allowed
         "lib": {
-
+            "path" : "/lib"
         },
 
         "bin": {
-
+            "class" : "/bin/Main"
         }
     }
 

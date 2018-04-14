@@ -19,7 +19,10 @@ public class JsonScanner {
 
     private JsonTokenType currentKind;
     private StringBuffer currentSpelling;
+
     private CharWrapper currentChar;
+    private int currentLine;
+    private int currentColumn;
 
     public JsonScanner(final String filename) throws JsonScannerException {
         this.filename = filename;
@@ -49,10 +52,19 @@ public class JsonScanner {
         }
     }
 
+    /**
+     * Skipe the current character unconditionally.
+     */
     void skipIt() {
         currentChar = lexer.nextCharacter();
     }
 
+    /**
+     * Skip the current character after ensuring it is the expected character.
+     *
+     * @param expectedChar
+     * @throws JsonScannerException
+     */
     void skip(final char expectedChar) throws JsonScannerException {
         if (currentChar.c() != expectedChar) {
             throw new JsonScannerException(String.format("Scanner Error at line %d, column %d while scanning %s, expected to skip %c, found %s",
@@ -61,11 +73,20 @@ public class JsonScanner {
         currentChar = lexer.nextCharacter();
     }
 
+    /**
+     * Add the current character to currentSpelling unconditionally.
+     */
     void takeIt() {
         currentSpelling.append(currentChar.c());
         currentChar = lexer.nextCharacter();
     }
 
+    /**
+     * Add the current character to currentSpelling after ensuring it is the expected character.
+     *
+     * @param expectedChar
+     * @throws JsonScannerException
+     */
     void take(final char expectedChar) throws JsonScannerException {
         if (currentChar.c() != expectedChar) {
             throw new JsonScannerException(String.format("Scanner Error at line %d, col %d while scanning %s: expected to take %c, found %c",
@@ -88,12 +109,21 @@ public class JsonScanner {
 
             currentSpelling = new StringBuffer();
             currentKind = scanToken();
-            tokens.add(new JsonToken(currentKind, currentSpelling.toString()));
+            tokens.add(new JsonToken(currentKind, currentSpelling.toString(), currentLine, currentColumn));
         }
     }
 
+    /**
+     * Return the type of the current token.
+     *
+     * @return
+     * @throws JsonScannerException
+     */
     private JsonTokenType scanToken() throws JsonScannerException {
         JsonTokenType kind = null;
+
+        currentLine = currentChar.line();
+        currentColumn = currentChar.column();
 
         switch (currentChar.c()) {
             case '\"': {
@@ -105,25 +135,6 @@ public class JsonScanner {
 
                 skip('\"');
                 kind = JsonTokenType.STRING;
-            }
-            break;
-
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9': {
-                takeIt();
-
-                while (isDigit(currentChar.c())) {
-                    takeIt();
-                }
-                kind = JsonTokenType.INLITERAL;
             }
             break;
 
@@ -174,24 +185,6 @@ public class JsonScanner {
         }
 
         return kind;
-    }
-
-    private boolean isDigit(final char c) {
-        switch (c) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                return true;
-            default:
-                return false;
-        }
     }
 
     private boolean isStringCharacter(final char c) {
@@ -259,18 +252,18 @@ public class JsonScanner {
             case '8':
             case '9':
             case SPACE:
-            case '.':
-            case ':':
-            case ';':
-            case '-':
-            case '*':
-            case '/':
-            case ',':
-            case '_':
-            case '!':
-            case '^':
-            case '~':
-            case '@':
+            case PERIOD:
+            case COLON:
+            case SEMICOLON:
+            case DASH:
+            case ASTERISK:
+            case FORWARD_SLASH:
+            case COMMA:
+            case UNDERSCORE:
+            case BANG:
+            case CARET:
+            case TILDE:
+            case AMPERSAND:
                 return true;
 
             default:

@@ -2,7 +2,6 @@
 
 ```
 Json ::= Object
-         | Array
 ```
 
 ```
