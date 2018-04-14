@@ -47,3 +47,12 @@ Create and store SSL certificate for downloading external artifacts.
   * Support for `new`, `clean`, `build`, `test`, and `run` for simple projects.
   * CLI support for the above features.
   * Implement a strict semantic versioning grammar.
+  
+  
+#### TODO
+
+ * Update `categories` in `Garvel.gl` file to match against a fixed set of categories.
+ * semver support for tilde and caret semantics.
+ * extended semver support for wildcard semantics.
+ * extend support for specifying local dependencies as well as git/github repos as dependencies.
+   

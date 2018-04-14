@@ -8,9 +8,7 @@ import com.tzj.garvel.core.parser.exception.JsonScannerException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tzj.garvel.common.GarvelConstants.EOI;
-import static com.tzj.garvel.common.GarvelConstants.EOL;
-import static com.tzj.garvel.common.GarvelConstants.SPACE;
+import static com.tzj.garvel.common.GarvelConstants.*;
 
 public class JsonScanner {
     private String filename;
@@ -75,11 +73,16 @@ public class JsonScanner {
         }
     }
 
+    /**
+     * Populate the tokens list.
+     *
+     * @throws JsonScannerException
+     */
     private void scanAll() throws JsonScannerException {
         currentChar = lexer.nextCharacter();
 
         while (lexer.hasMoreCharacters()) {
-            while (currentChar.c() == SPACE || currentChar.c() == EOL) {
+            while (currentChar.c() == OCTOTHORPE || currentChar.c() == SPACE || currentChar.c() == EOL) {
                 scanSeparator();
             }
 
@@ -257,10 +260,17 @@ public class JsonScanner {
             case '9':
             case SPACE:
             case '.':
+            case ':':
+            case ';':
+            case '-':
+            case '*':
             case '/':
             case ',':
             case '_':
             case '!':
+            case '^':
+            case '~':
+            case '@':
                 return true;
 
             default:
@@ -268,8 +278,32 @@ public class JsonScanner {
         }
     }
 
-    private void scanSeparator() {
+    private boolean isGraphic(final char c) {
+        switch (c) {
+            case EOL:
+            case EOI:
+                return false;
+
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * This JSON veriant supports comments using the `#` character.
+     */
+    private void scanSeparator() throws JsonScannerException {
         switch (currentChar.c()) {
+            case OCTOTHORPE: {
+                skipIt();
+
+                while (isGraphic(currentChar.c())) {
+                    skipIt();
+                }
+                skip(EOL);
+            }
+            break;
+
             case SPACE:
             case EOL:
                 skipIt();

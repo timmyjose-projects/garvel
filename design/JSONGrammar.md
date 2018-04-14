@@ -19,7 +19,6 @@ Pair ::= String ':' Value
 
 ```
 Value ::= String
-          | IntegerLiteral
           | Object
           | Array
 ```          
@@ -33,11 +32,7 @@ Elements ::= Value (',' Elements)*
 ```
 
 ```
-String ::= " (Letter|Digit|COMMA)* "
-```
-
-```
-IntegerLiteral ::= Digit (Digit)*
+String ::= " (Letter|Digit)* "
 ```
 
 ```
@@ -45,6 +40,6 @@ Digit ::=  [0-9]
 ```
 
 ```
-Letter ::= [a-zA-Z]
+Letter ::= [a-zA-Z,./_!~^:;-*@]
 ```
           
