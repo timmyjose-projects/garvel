@@ -1,8 +1,9 @@
-package com.tzj.garvel.core.parser.common;
+package com.tzj.garvel.core.parser.json;
 
 import com.tzj.garvel.common.GarvelConstants;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
+import com.tzj.garvel.core.parser.common.CharWrapper;
 import com.tzj.garvel.core.parser.exception.LexerException;
 
 import java.io.BufferedReader;
@@ -11,17 +12,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SourceFile {
+public class JsonSourceFile {
     String filename;
     List<CharWrapper> stream;
 
-    public SourceFile(final String filename) throws LexerException {
+    public JsonSourceFile(final String filename) {
         this.filename = filename;
         this.stream = new ArrayList<>();
         fillStream();
     }
 
-    private void fillStream() throws LexerException {
+    private void fillStream() {
         try {
             BufferedReader reader = CoreModuleLoader.INSTANCE.getFileSystemFramework().newBufferedReader(filename);
 
@@ -38,9 +39,9 @@ public class SourceFile {
             }
             stream.add(new CharWrapper(GarvelConstants.EOI, -1, -1));
         } catch (FilesystemFrameworkException e) {
-            throw new LexerException(String.format("Error while trying to load %s for lexing. Message: %s", e.getLocalizedMessage()));
+            throw new LexerException(String.format("Error while trying to load %s for lexing. Message: %s", filename, e.getLocalizedMessage()));
         } catch (IOException e) {
-            throw new LexerException(String.format("Error while trying to lex file %s. Message: %s", e.getLocalizedMessage()));
+            throw new LexerException(String.format("Error while trying to lex file %s. Message: %s", filename, e.getLocalizedMessage()));
         }
     }
 

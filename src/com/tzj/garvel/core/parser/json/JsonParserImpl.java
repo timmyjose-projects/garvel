@@ -1,12 +1,9 @@
 package com.tzj.garvel.core.parser.json;
 
-import com.tzj.garvel.core.parser.api.ast.*;
+import com.tzj.garvel.core.parser.api.ast.json.*;
 import com.tzj.garvel.core.parser.exception.JsonParserException;
 import com.tzj.garvel.core.parser.api.JsonParser;
 import com.tzj.garvel.core.parser.exception.JsonScannerException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.tzj.garvel.core.parser.json.JsonTokenType.STRING;
 

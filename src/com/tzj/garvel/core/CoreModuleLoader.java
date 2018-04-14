@@ -13,6 +13,7 @@ import com.tzj.garvel.core.net.api.NetworkService;
 import com.tzj.garvel.core.parser.ParserServiceImpl;
 import com.tzj.garvel.core.parser.api.ParserService;
 
+
 public enum CoreModuleLoader {
     INSTANCE;
 

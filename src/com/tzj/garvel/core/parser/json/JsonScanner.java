@@ -1,7 +1,6 @@
 package com.tzj.garvel.core.parser.json;
 
 import com.tzj.garvel.core.parser.common.CharWrapper;
-import com.tzj.garvel.core.parser.common.Lexer;
 import com.tzj.garvel.core.parser.exception.LexerException;
 import com.tzj.garvel.core.parser.exception.JsonScannerException;
 
@@ -12,7 +11,7 @@ import static com.tzj.garvel.common.GarvelConstants.*;
 
 public class JsonScanner {
     private String filename;
-    private Lexer lexer;
+    private JsonLexer lexer;
 
     private List<JsonToken> tokens;
     private int idx;
@@ -27,19 +26,18 @@ public class JsonScanner {
     public JsonScanner(final String filename) throws JsonScannerException {
         this.filename = filename;
         try {
-            this.lexer = new Lexer(filename);
+            this.lexer = new JsonLexer(filename);
         } catch (LexerException e) {
             throw new JsonScannerException(String.format("Error while creating a lexer for %s", filename));
         }
 
         this.tokens = new ArrayList<>();
-
         scanAll();
     }
 
     // test
     public static void main(String[] args) {
-        final String filename = System.getProperty("user.dir") + "/src/com/tzj/garvel/playground/misc/Garvel.gl.sample";
+        final String filename = System.getProperty("user.dir") + "/src/com/tzj/garvel/playground/misc/Garvel_single.gl.sample";
 
         try {
             JsonScanner scanner = new JsonScanner(filename);

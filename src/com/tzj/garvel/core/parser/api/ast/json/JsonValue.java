@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.parser.api.ast;
+package com.tzj.garvel.core.parser.api.ast.json;
 
 public abstract class JsonValue extends JsonAST {
 }

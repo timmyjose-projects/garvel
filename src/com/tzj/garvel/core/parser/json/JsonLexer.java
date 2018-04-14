@@ -1,17 +1,17 @@
-package com.tzj.garvel.core.parser.common;
+package com.tzj.garvel.core.parser.json;
 
-import com.tzj.garvel.core.parser.exception.LexerException;
+import com.tzj.garvel.core.parser.common.CharWrapper;
 
 import java.util.List;
 
-public class Lexer {
+public class JsonLexer {
     private String filename;
     private List<CharWrapper> charStream;
     private int idx;
 
-    public Lexer(final String filename) throws LexerException {
+    public JsonLexer(final String filename) {
         this.filename = filename;
-        this.charStream = (new SourceFile(filename)).getStream();
+        this.charStream = (new JsonSourceFile(filename)).getStream();
     }
 
     public boolean hasMoreCharacters() {

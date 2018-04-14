@@ -15,7 +15,7 @@ public enum ParserServiceImpl implements ParserService {
     }
 
     @Override
-    public SemverParser getSemVerParser() {
-        return new SemverParserImpl();
+    public SemverParser getSemVerParser(final String semverString) {
+        return new SemverParserImpl(semverString);
     }
 }

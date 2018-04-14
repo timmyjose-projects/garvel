@@ -22,4 +22,9 @@ public class CharWrapper {
     public int column() {
         return column;
     }
+
+    @Override
+    public String toString() {
+        return "{ " + c + ", " + line + ", " + column + " }";
+    }
 }
