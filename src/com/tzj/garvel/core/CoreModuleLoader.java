@@ -4,6 +4,8 @@ import com.tzj.garvel.core.compiler.CompilerServiceImpl;
 import com.tzj.garvel.core.compiler.api.CompilerService;
 import com.tzj.garvel.core.concurrent.ConcurrencyServiceImpl;
 import com.tzj.garvel.core.concurrent.api.ConcurrencyService;
+import com.tzj.garvel.core.config.ConfigManagerServiceImpl;
+import com.tzj.garvel.core.config.api.ConfigManagerService;
 import com.tzj.garvel.core.filesystem.FilesystemServiceImpl;
 import com.tzj.garvel.core.filesystem.api.FilesystemService;
 import com.tzj.garvel.core.net.NetworkServiceImpl;
@@ -57,5 +59,14 @@ public enum CoreModuleLoader {
      */
     public NetworkService getNetworkFramework() {
         return NetworkServiceImpl.INSTANCE;
+    }
+
+    /**
+     * Handler for all configuration-related functionality.
+     *
+     * @return
+     */
+    public ConfigManagerService getConfigManager() {
+        return ConfigManagerServiceImpl.INSTANCE;
     }
 }
