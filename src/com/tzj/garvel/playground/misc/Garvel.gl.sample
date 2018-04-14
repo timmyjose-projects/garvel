@@ -1,20 +1,18 @@
-# Tentative configuration format for garvel projects
-
 {
-    project_metadata: {
-        name : HelloWorld,
-        version: 0.0.1,
-        description": A simple hello, world project!,
+    "project_metadata": {
+        "name" : "HelloWorld",
+        "version": "0.0.1",
+        "description": "A simple hello, world project!",
     },
 
-    build_config: {
-        src_root: com/tzj/garvel/src/,
-        classpath: [.],
-    }
+    "build_config": {
+        "src_root": "com/tzj/garvel/src/",
+        "classpath": ["."],
+    },
 
-    test_config : {
-        test_root: com/tzj/garvel/test,
-        classpath: [.],
-        bench: true
+    "test_config" : {
+        "test_root": "com/tzj/garvel/test",
+        "classpath": ["."],
+        "bench": "true"
     },
 }

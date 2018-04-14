@@ -6,7 +6,7 @@ Json ::= Object
 ```
 
 ```
-Object ::= '{' ( (epsilon | Members) '}' )
+Object ::= '{' ( (epsilon | Members) '}' 
 ```
 
 ```
@@ -19,7 +19,7 @@ Pair ::= String ':' Value
 
 ```
 Value ::= String
-          | Number
+          | IntegerLiteral
           | Object
           | Array
 ```          
@@ -33,11 +33,11 @@ Elements ::= Value (',' Elements)*
 ```
 
 ```
-String ::= Letter (Letter|Digit)*
+String ::= " (Letter|Digit|COMMA)* "
 ```
 
 ```
-Number ::= Digit (Digit)*
+IntegerLiteral ::= Digit (Digit)*
 ```
 
 ```

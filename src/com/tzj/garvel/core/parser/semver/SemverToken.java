@@ -1,15 +1,15 @@
-package com.tzj.garvel.core.parser.json;
+package com.tzj.garvel.core.parser.semver;
 
-public class JsonToken {
-    private JsonTokenType kind;
+public class SemverToken {
+    private SemverTokenType kind;
     private String spelling;
 
-    public JsonToken(final JsonTokenType kind, final String spelling) {
+    public SemverToken(final SemverTokenType kind, final String spelling) {
         this.kind = kind;
         this.spelling = spelling;
     }
 
-    public JsonTokenType kind() {
+    public SemverTokenType kind() {
         return kind;
     }
 

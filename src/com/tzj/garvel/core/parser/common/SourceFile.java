@@ -6,6 +6,7 @@ import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 import com.tzj.garvel.core.parser.exception.LexerException;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

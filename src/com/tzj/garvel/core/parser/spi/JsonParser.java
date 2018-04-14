@@ -6,6 +6,4 @@ import java.util.List;
 
 public interface JsonParser {
     void parse(final String filename) throws JsonParserException;
-
-    void parse(final List<String> filenames) throws JsonParserException;
 }
