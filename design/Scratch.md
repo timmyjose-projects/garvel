@@ -55,4 +55,5 @@ Create and store SSL certificate for downloading external artifacts.
  * semver support for tilde and caret semantics.
  * extended semver support for wildcard semantics.
  * extend support for specifying local dependencies as well as git/github repos as dependencies.
+ * implement proper error handling in the CLI module.
    
