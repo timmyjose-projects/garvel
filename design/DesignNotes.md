@@ -125,15 +125,9 @@ Some common garvel commands are (see all commands with --list):
     list        List all the available commands
     build       Compile the current project
     clean       Remove the target directory
-    doc         Build this project's and its dependencies' documentation
     new         Create a new garvel project
-    init        Create a new garvel project in an existing directory
     run         Build and execute src/Main.java
     test        Run the tests
-    bench       Run the benchmarks
-    update      Update dependencies listed in garvel.lock
-    search      Search registry for JARs/Modules
-    publish     Package and upload this project to the registry (maybe have something like garvel.io?)
 
 See 'garvel help <command>' for more information on a specific command.
 ```

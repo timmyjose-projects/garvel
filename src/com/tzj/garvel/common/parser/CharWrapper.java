@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.parser.common;
+package com.tzj.garvel.common.parser;
 
 public class CharWrapper {
     private char c;

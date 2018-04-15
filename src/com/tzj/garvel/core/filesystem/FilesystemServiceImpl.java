@@ -1,6 +1,6 @@
 package com.tzj.garvel.core.filesystem;
 
-import com.tzj.garvel.common.GarvelConstants;
+import com.tzj.garvel.common.parser.GarvelConstants;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 import com.tzj.garvel.core.filesystem.api.FilesystemService;
 

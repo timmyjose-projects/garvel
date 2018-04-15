@@ -1,13 +1,13 @@
 package com.tzj.garvel.core.parser.json;
 
-import com.tzj.garvel.core.parser.common.CharWrapper;
+import com.tzj.garvel.common.parser.CharWrapper;
 import com.tzj.garvel.core.parser.exception.LexerException;
 import com.tzj.garvel.core.parser.exception.JsonScannerException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tzj.garvel.common.GarvelConstants.*;
+import static com.tzj.garvel.common.parser.GarvelConstants.*;
 
 public class JsonScanner {
     private String filename;

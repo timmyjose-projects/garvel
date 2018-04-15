@@ -1,6 +1,6 @@
 package com.tzj.garvel.core.parser.json;
 
-import com.tzj.garvel.core.parser.common.CharWrapper;
+import com.tzj.garvel.common.parser.CharWrapper;
 
 import java.util.List;
 

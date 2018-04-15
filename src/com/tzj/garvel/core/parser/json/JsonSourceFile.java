@@ -1,13 +1,12 @@
 package com.tzj.garvel.core.parser.json;
 
-import com.tzj.garvel.common.GarvelConstants;
+import com.tzj.garvel.common.parser.GarvelConstants;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
-import com.tzj.garvel.core.parser.common.CharWrapper;
+import com.tzj.garvel.common.parser.CharWrapper;
 import com.tzj.garvel.core.parser.exception.LexerException;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

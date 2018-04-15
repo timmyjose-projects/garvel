@@ -1,4 +1,4 @@
-package com.tzj.garvel.common;
+package com.tzj.garvel.common.parser;
 
 public class GarvelConstants {
     public static final char OCTOTHORPE = '#';

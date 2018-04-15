@@ -1,12 +1,12 @@
 package com.tzj.garvel.core.parser.semver;
 
-import com.tzj.garvel.core.parser.common.CharWrapper;
+import com.tzj.garvel.common.parser.CharWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tzj.garvel.common.GarvelConstants.EOI;
-import static com.tzj.garvel.common.GarvelConstants.EOL;
+import static com.tzj.garvel.common.parser.GarvelConstants.EOI;
+import static com.tzj.garvel.common.parser.GarvelConstants.EOL;
 
 public class SemverLexer {
     private List<CharWrapper> stream;
