@@ -35,7 +35,7 @@ public class CLIScanner {
 
     // test
     public static void main(String[] args) {
-        final String text = "garvel --verbose --vcs git new foo";
+        final String text = "garvel new --verbose --vcs git --lib foo";
 
         CLIScanner scanner = new CLIScanner(text);
         while (scanner.hasMoreTokens()) {

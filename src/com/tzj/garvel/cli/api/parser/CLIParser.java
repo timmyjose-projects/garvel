@@ -1,7 +1,7 @@
 package com.tzj.garvel.cli.api.parser;
 
-import com.tzj.garvel.cli.api.parser.ast.CLIAst;
+import com.tzj.garvel.cli.api.parser.ast.Program;
 
 public interface CLIParser {
-    CLIAst parse(final String[] args);
+    Program parse(final String[] args);
 }

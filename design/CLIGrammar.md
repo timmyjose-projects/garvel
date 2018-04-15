@@ -11,7 +11,7 @@ Program ::= [(-v | --verbose) | (-q | --quiet)] Command
 Command ::= help CommandName
            | list 
            | version
-           | new [--vcs Identifier | --vcs Identifier --bin | --vcs Identifier --lib] PATH
+           | new [--vcs Identifier | --vcs Identifier --bin | --vcs Identifier --lib | --bin | --lib] PATH
            | build
            | clean
            | run
