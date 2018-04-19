@@ -1,12 +1,14 @@
 package com.tzj.garvel.core.concurrent;
 
 import com.tzj.garvel.core.concurrent.api.ConcurrencyService;
-import com.tzj.garvel.core.concurrent.api.Job;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
+/**
+ * A simple wrapper over an ExecutorService.
+ *
+ */
 public enum ConcurrencyServiceImpl implements ConcurrencyService {
     INSTANCE;
 
@@ -20,17 +22,5 @@ public enum ConcurrencyServiceImpl implements ConcurrencyService {
             service = Executors.newCachedThreadPool();
         }
         return service;
-    }
-
-    @Override
-    public Future submitJob(final Job job) {
-        return service.submit(job);
-    }
-
-    @Override
-    public void shutdown() {
-        if (!service.isShutdown()) {
-            service.shutdownNow();
-        }
     }
 }

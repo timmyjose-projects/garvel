@@ -14,8 +14,8 @@ import java.util.concurrent.Future;
 public class NewCommand implements Command {
     @Override
     public CommandResult execute(final CommandParams params) {
-        final Job<CommandResult> job = new NewJob<>();
-        final Future<NewCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().submitJob(job);
+        final Job<NewCommandResult> job = new NewJob();
+        final Future<NewCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().submit(job);
 
         NewCommandResult cmdRes = null;
         try {

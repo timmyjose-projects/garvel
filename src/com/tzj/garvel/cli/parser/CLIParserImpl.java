@@ -85,9 +85,10 @@ public enum CLIParserImpl implements CLIParser {
                 // default quiet
                 program = new Program(false, true, command);
             }
+            break;
 
             default: {
-                // @TODO error-handling with meaningul error messages
+                // @TODO error-handling with meaningful error messages
                 throw new RuntimeException(String.format("CLI Parser Error at col %d. %s cannot start a valid garvel command",
                         currentToken.column(), currentToken.kind()));
             }
@@ -281,6 +282,12 @@ public enum CLIParserImpl implements CLIParser {
         return id;
     }
 
+    /**
+     * Entry-point for the Garvel CLI.
+     *
+     * @param args
+     * @return the program AST
+     */
     @Override
     public Program parse(final String[] args) {
         StringBuffer line = new StringBuffer();
@@ -295,7 +302,6 @@ public enum CLIParserImpl implements CLIParser {
 
         final Program program = parseProgram();
         accept(EOT);
-
 
         return program;
     }

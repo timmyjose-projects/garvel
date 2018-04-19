@@ -1,5 +1,6 @@
 package com.tzj.garvel.core;
 
+import com.tzj.garvel.common.spi.core.command.CommandResult;
 import com.tzj.garvel.core.compiler.CompilerServiceImpl;
 import com.tzj.garvel.core.compiler.api.CompilerService;
 import com.tzj.garvel.core.concurrent.ConcurrencyServiceImpl;

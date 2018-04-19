@@ -1,8 +1,8 @@
 package com.tzj.garvel.core.parser.exception;
 
-import com.tzj.garvel.common.spi.error.GarvelCheckedException;
-
 public class SemverParserException extends ParserException {
+    private static final long serialVersionUID = -8811288071266660790L;
+
     public SemverParserException(final String errorMessage) {
         super(errorMessage);
     }

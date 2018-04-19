@@ -159,23 +159,38 @@ bar
 
 ```
 $ cat Garvel.gl
+# Sample template for Garvel.gl
+
 {
-    project_metadata: {
-        name : HelloWorld,
-        version: 0.0.1,
-        description": A simple hello, world project!,
-    },
+    "project": {
+        "package": {
+            "name" : "HelloWorld",
+            "version" : "0.1.0",
+            "authors" : [ "me@me.com" ],
+            "description" : "A simple Hello, world project!",
+            "homepage" : "http://example.com/hello_world",
+            "readme" : "https://example.com/hello_world/readme.html",
+            "keywords" : [ "basic", "hello world"],
+            "categories" : [ "standalone", "jar" ],
+            "licence" : "MIT",
+            "licence-file": "custom-licence-path",
+            "classpath" : [ "./" ] # apart from the dependencies
+        },
 
-    build_config: {
-        src_root: com/tzj/garvel/src/,
-        classpath: [.],
+        "dependencies": {
+            "junit" : "4.1.2", # exact version
+            "log4j" : "*" # latest version
+        },
+
+        # empty properties are not allowed
+        "lib": {
+            "path" : "/lib"
+        },
+
+        "bin": {
+            "class" : "/bin/Main"
+        }
     }
-
-    test_config : {
-        test_root: com/tzj/garvel/test,
-        classpath: [.],
-        bench: true
-    },
 }
 ```
 
