@@ -1,7 +1,5 @@
 package com.tzj.garvel.cli.api.parser.scanner;
 
-import com.tzj.garvel.cli.exception.CLIScannerException;
-
 import java.util.Objects;
 
 public class CLIToken {
