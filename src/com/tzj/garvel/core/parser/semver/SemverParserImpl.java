@@ -3,7 +3,6 @@ package com.tzj.garvel.core.parser.semver;
 import com.tzj.garvel.core.parser.api.SemverParser;
 import com.tzj.garvel.core.parser.api.ast.semver.*;
 import com.tzj.garvel.core.parser.exception.SemverParserException;
-import org.omg.CORBA.portable.IDLEntity;
 
 public class SemverParserImpl implements SemverParser {
     private SemverScanner scanner;
