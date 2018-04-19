@@ -2,7 +2,6 @@ package com.tzj.garvel.cli.parser.scanner;
 
 import com.tzj.garvel.cli.api.parser.scanner.CLIToken;
 import com.tzj.garvel.cli.api.parser.scanner.CLITokenType;
-import com.tzj.garvel.cli.exception.CLIScannerException;
 import com.tzj.garvel.cli.parser.scanner.lexer.CLILexer;
 import com.tzj.garvel.common.parser.CharWrapper;
 
@@ -53,8 +52,6 @@ public class CLIScanner {
 
     private void skip(final char expectedChar) {
         if (currentChar.c() != expectedChar) {
-            // error - replace RTE with meaningul error handling
-
             throw new RuntimeException(String.format("CLI Scanner Error at col %d. Expected to skip %c, found %c",
                     currentChar.column(), expectedChar, currentChar.c()));
         }
@@ -315,8 +312,7 @@ public class CLIScanner {
 
     public CLIToken scan() {
         if (!hasMoreTokens()) {
-            // error
-            throw new RuntimeException("CLI Scanenr Error: no more tokens in the token stream!");
+            throw new RuntimeException("CLI Scanner Error: no more tokens in the token stream!");
         }
 
         return nextToken();

@@ -1,6 +1,5 @@
 package com.tzj.garvel.cli.parser.scanner.lexer;
 
-import com.tzj.garvel.cli.exception.CLILexerException;
 import com.tzj.garvel.common.parser.CharWrapper;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class SourceFile {
 
     private void fillStream() {
         if (line == null || line.isEmpty()) {
-            throw new CLILexerException("CLI Lexer Error: No string provided for lexing");
+            throw new RuntimeException("CLI Lexer Error: No string provided for lexing");
         }
         stream = new ArrayList<>();
 

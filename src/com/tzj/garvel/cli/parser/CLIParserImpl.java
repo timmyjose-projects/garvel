@@ -1,9 +1,12 @@
 package com.tzj.garvel.cli.parser;
 
+import com.tzj.garvel.cli.ModuleLoader;
 import com.tzj.garvel.cli.api.parser.CLIParser;
 import com.tzj.garvel.cli.api.parser.ast.*;
 import com.tzj.garvel.cli.api.parser.scanner.CLIToken;
 import com.tzj.garvel.cli.api.parser.scanner.CLITokenType;
+import com.tzj.garvel.cli.exception.CLIErrorHandler;
+import com.tzj.garvel.cli.exception.CLIException;
 import com.tzj.garvel.cli.parser.scanner.CLIScanner;
 
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.EOT;
@@ -36,10 +39,9 @@ public enum CLIParserImpl implements CLIParser {
      *
      * @param expectedKind
      */
-    private void accept(final CLITokenType expectedKind) {
+    private void accept(final CLITokenType expectedKind) throws CLIException {
         if (currentToken.kind() != expectedKind) {
-            //error
-            throw new RuntimeException(String.format("CLI Parser Error at col %d. Expected to accept token of kind %s, found token of kind %s",
+            throw new CLIException(String.format("CLI Parser Error at col %d. Expected to accept token of kind %s, found token of kind %s",
                     currentToken.column(), expectedKind, currentToken.kind()));
         }
 
@@ -58,7 +60,11 @@ public enum CLIParserImpl implements CLIParser {
      * @return
      */
     Program parseProgram() {
-        accept(CLITokenType.GARVEL);
+        try {
+            accept(CLITokenType.GARVEL);
+        } catch (CLIException e) {
+            CLIErrorHandler.exit();
+        }
 
         Program program = null;
 
@@ -88,9 +94,7 @@ public enum CLIParserImpl implements CLIParser {
             break;
 
             default: {
-                // @TODO error-handling with meaningful error messages
-                throw new RuntimeException(String.format("CLI Parser Error at col %d. %s cannot start a valid garvel command",
-                        currentToken.column(), currentToken.kind()));
+                CLIErrorHandler.errorAndExit(String.format("Error: Found %s, which is not a valid option or command"));
             }
         }
 
@@ -161,9 +165,8 @@ public enum CLIParserImpl implements CLIParser {
                             break;
 
                             default: {
-                                // error
-                                throw new RuntimeException(String.format("CLI Parser Error at col %d. Either %s, %s, or a valid PATH  must follow --vcs",
-                                        currentToken.column(), CLITokenType.BIN, CLITokenType.LIB));
+                                CLIErrorHandler.errorAndExit(String.format("Error: Either %s, %s, or a valid PATH  must follow --vcs",
+                                        CLITokenType.BIN, CLITokenType.LIB));
                             }
                         }
                     }
@@ -194,9 +197,8 @@ public enum CLIParserImpl implements CLIParser {
                     break;
 
                     default: {
-                        // error
-                        throw new RuntimeException(String.format("CLI Parser Error at col %d. Expected %s, %s, or %s, found %s",
-                                currentToken.column(), CLITokenType.VCS, CLITokenType.BIN, CLITokenType.LIB, currentToken.kind()));
+                        CLIErrorHandler.errorAndExit(String.format("Error: Either %s, %s, or %s must follow the `new` command",
+                                CLITokenType.VCS, CLITokenType.BIN, CLITokenType.LIB));
                     }
                 }
             }
@@ -227,9 +229,15 @@ public enum CLIParserImpl implements CLIParser {
             break;
 
             default: {
-                //proper error-handling - also use Utils' Levenshtein distance to provide suggestions.
-                throw new RuntimeException(String.format("CLI Parser Error at col %d. %s is not a valid command.",
-                        currentToken.column(), currentToken.kind()));
+                final String bestMatch = ModuleLoader.INSTANCE.getUtils().findLevenshteinMatch(currentToken.spelling());
+
+                if (bestMatch != null) {
+                    CLIErrorHandler.errorAndExit(String.format("%s is not a valid command.\n Did you mean %s?",
+                            currentToken.spelling(), ModuleLoader.INSTANCE.getUtils().findLevenshteinMatch(currentToken.spelling())));
+                } else {
+                    CLIErrorHandler.errorAndExit(String.format("%s is not a valid command.",
+                            currentToken.spelling()));
+                }
             }
         }
 
@@ -301,7 +309,11 @@ public enum CLIParserImpl implements CLIParser {
         currentToken = scanner.scan();
 
         final Program program = parseProgram();
-        accept(EOT);
+        try {
+            accept(EOT);
+        } catch (CLIException e) {
+            // do nothing here
+        }
 
         return program;
     }

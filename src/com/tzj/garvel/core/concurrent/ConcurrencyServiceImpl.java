@@ -19,7 +19,7 @@ public enum ConcurrencyServiceImpl implements ConcurrencyService {
         // different strategies can be adopted based
         // on project parameters later on
         if (this.service == null) {
-            service = Executors.newCachedThreadPool();
+            service = Executors.newSingleThreadExecutor();
         }
         return service;
     }

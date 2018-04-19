@@ -52,7 +52,7 @@ public class CLI {
     /**
      * Print the usage message and exit with error code 1.
      */
-    private static void displayUsageAndExit() {
+    public static void displayUsageAndExit() {
         System.err.println(USAGE);
         System.exit(1);
     }
