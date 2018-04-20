@@ -169,9 +169,13 @@ function run_tests()
     echo "[ Running tests ]"
     echo
 
-    `garvel new foo`
+    `garvel version` >/dev/null
+    check_success "test_version" $?
+    echo "test_version... success"
+
+    `garvel new foo` >/dev/null
     check_success "test_new" $?
-    echo "test_new.... success"
+    echo "test_new... success"
 
     echo "[ All tests passed successfully ]"
 }
@@ -189,7 +193,7 @@ function create_garvel_script()
     touch ${TARGET_DIR}/${GARVEL_WRAPPER}
     echo '#!/bin/sh' >> ${TARGET_DIR}/${GARVEL_WRAPPER}
     echo >> ${TARGET_DIR}/${GARVEL_WRAPPER}
-    echo "java -jar ${TARGET_DIR}/${TARGET_NAME}" >> ${TARGET_DIR}/${GARVEL_WRAPPER}
+    echo "java -jar ${TARGET_DIR}/${TARGET_NAME} \$@" >> ${TARGET_DIR}/${GARVEL_WRAPPER}
 
     chmod +ux ${TARGET_DIR}/${GARVEL_WRAPPER}
     echo "[ Finished creating wrapper script ${GARVL_WRAPPER} for ${PROJECT_NAME} in ${TARGET_DIR} ]"

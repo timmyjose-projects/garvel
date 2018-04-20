@@ -19,7 +19,11 @@ Command ::= help CommandName
 ```
 
 ```
-CommandName ::= Identifier
+CommandName ::= CommandIdentifier
+```
+
+```
+CommandIdentifier ::= "help" | "list" | "version" | "new" | "build" | "clean" | "run" | "test"
 ```
 
 ```

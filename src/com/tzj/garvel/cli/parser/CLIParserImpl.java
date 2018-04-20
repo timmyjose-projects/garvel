@@ -8,6 +8,7 @@ import com.tzj.garvel.cli.api.parser.scanner.CLITokenType;
 import com.tzj.garvel.cli.exception.CLIErrorHandler;
 import com.tzj.garvel.cli.exception.CLIException;
 import com.tzj.garvel.cli.parser.scanner.CLIScanner;
+import com.tzj.garvel.common.spi.core.VCSType;
 
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.EOT;
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.IDENTIFIER;
@@ -21,7 +22,9 @@ public enum CLIParserImpl implements CLIParser {
 
     // test
     public static void main(String[] args) {
-        final String[] input = new String[]{"garvel", "--verbose", "new", "--vcs", "git", "--lib", "foo"};
+        //final String[] input = new String[]{"garvel", "--verbose", "new", "--vcs", "git", "--lib", "foo"};
+        //final String[] input = new String[]{"garvel", "help", "new"};
+        final String[] input = new String[] { "garvel", "run" };
 
         Program program = CLIParserImpl.INSTANCE.parse(input);
         System.out.println(program);
@@ -60,18 +63,12 @@ public enum CLIParserImpl implements CLIParser {
      * @return
      */
     Program parseProgram() {
-        try {
-            accept(CLITokenType.GARVEL);
-        } catch (CLIException e) {
-            CLIErrorHandler.exit();
-        }
-
         Program program = null;
 
         switch (currentToken.kind()) {
             case VERBOSE: {
                 acceptIt();
-                final Command command = parseCommand();
+                final CommandAst command = parseCommand();
 
                 program = new Program(true, false, command);
             }
@@ -79,14 +76,21 @@ public enum CLIParserImpl implements CLIParser {
 
             case QUIET: {
                 acceptIt();
-                final Command command = parseCommand();
+                final CommandAst command = parseCommand();
 
                 program = new Program(false, true, command);
             }
             break;
 
-            case IDENTIFIER: {
-                final Command command = parseCommand();
+            case HELP:
+            case LIST:
+            case VERSION:
+            case NEW:
+            case BUILD:
+            case CLEAN:
+            case RUN:
+            case TEST: {
+                final CommandAst command = parseCommand();
 
                 // default quiet
                 program = new Program(false, true, command);
@@ -94,7 +98,7 @@ public enum CLIParserImpl implements CLIParser {
             break;
 
             default: {
-                CLIErrorHandler.errorAndExit(String.format("Error: Found %s, which is not a valid option or command"));
+                CLIErrorHandler.errorAndExit(String.format("Error: Found %s, which is not a valid option or command", currentToken.spelling()));
             }
         }
 
@@ -107,26 +111,26 @@ public enum CLIParserImpl implements CLIParser {
      *
      * @return
      */
-    private Command parseCommand() {
-        Command command = null;
+    private CommandAst parseCommand() {
+        CommandAst command = null;
 
         switch (currentToken.kind()) {
             case HELP: {
                 acceptIt();
-                final CommandName commandName = parseCommandName();
-                command = new HelpCommand();
+                final CommandNameAst commandName = parseCommandName();
+                command = new HelpCommandAst(commandName);
             }
             break;
 
             case LIST: {
                 acceptIt();
-                command = new ListCommand();
+                command = new ListCommandAst();
             }
             break;
 
             case VERSION: {
                 acceptIt();
-                command = new VersionCommand();
+                command = new VersionCommandAst();
             }
             break;
 
@@ -137,14 +141,14 @@ public enum CLIParserImpl implements CLIParser {
                     case VCS: {
                         acceptIt();
 
-                        final VCS vcs = parseVCS();
+                        final VCSAst vcs = parseVCS();
 
                         switch (currentToken.kind()) {
                             case BIN: {
                                 acceptIt();
 
                                 final Path path = parsePath();
-                                command = new NewCommand(vcs, true, false, path);
+                                command = new NewCommandAst(vcs, true, false, path);
                             }
                             break;
 
@@ -152,7 +156,7 @@ public enum CLIParserImpl implements CLIParser {
                                 acceptIt();
 
                                 final Path path = parsePath();
-                                command = new NewCommand(vcs, false, true, path);
+                                command = new NewCommandAst(vcs, false, true, path);
                             }
                             break;
 
@@ -160,7 +164,7 @@ public enum CLIParserImpl implements CLIParser {
                                 final Path path = parsePath();
 
                                 // default bin
-                                command = new NewCommand(vcs, true, false, path);
+                                command = new NewCommandAst(vcs, true, false, path);
                             }
                             break;
 
@@ -176,7 +180,7 @@ public enum CLIParserImpl implements CLIParser {
                         acceptIt();
 
                         final Path path = parsePath();
-                        command = new NewCommand(new VCS(new Identifier(VCSType.NONE.toString())), true, false, path);
+                        command = new NewCommandAst(new VCSAst(new Identifier(VCSType.NONE.toString())), true, false, path);
                     }
                     break;
 
@@ -184,7 +188,7 @@ public enum CLIParserImpl implements CLIParser {
                         acceptIt();
 
                         final Path path = parsePath();
-                        command = new NewCommand(new VCS(new Identifier(VCSType.NONE.toString())), false, true, path);
+                        command = new NewCommandAst(new VCSAst(new Identifier(VCSType.NONE.toString())), false, true, path);
                     }
                     break;
 
@@ -192,7 +196,7 @@ public enum CLIParserImpl implements CLIParser {
                         final Path path = parsePath();
 
                         // bin is default
-                        command = new NewCommand(new VCS(new Identifier(VCSType.NONE.toString())), true, false, path);
+                        command = new NewCommandAst(new VCSAst(new Identifier(VCSType.NONE.toString())), true, false, path);
                     }
                     break;
 
@@ -206,25 +210,25 @@ public enum CLIParserImpl implements CLIParser {
 
             case BUILD: {
                 acceptIt();
-                command = new BuildCommand();
+                command = new BuildCommandAst();
             }
             break;
 
             case CLEAN: {
                 acceptIt();
-                command = new CleanCommand();
+                command = new CleanCommandAst();
             }
             break;
 
             case RUN: {
                 acceptIt();
-                command = new RunCommand();
+                command = new RunCommandAst();
             }
             break;
 
             case TEST: {
                 acceptIt();
-                command = new TestCommand();
+                command = new TestCommandAst();
             }
             break;
 
@@ -258,8 +262,8 @@ public enum CLIParserImpl implements CLIParser {
      *
      * @return
      */
-    private VCS parseVCS() {
-        return new VCS(parseIdentifier());
+    private VCSAst parseVCS() {
+        return new VCSAst(parseIdentifier());
     }
 
     /**
@@ -267,8 +271,38 @@ public enum CLIParserImpl implements CLIParser {
      *
      * @return
      */
-    private CommandName parseCommandName() {
-        return new CommandName(parseIdentifier());
+    private CommandNameAst parseCommandName() {
+        return new CommandNameAst(parseCommandIdentifier());
+    }
+
+    /**
+     * CommandIdentifier ::= "help" | "list" | "version" | "new" | "build" | "clean" | "run" | "test"
+     *
+     * @return
+     */
+    private Identifier parseCommandIdentifier() {
+        Identifier commandName = null;
+
+        switch (currentToken.kind()) {
+            case HELP:
+            case LIST:
+            case VERSION:
+            case NEW:
+            case BUILD:
+            case CLEAN:
+            case RUN:
+            case TEST: {
+                commandName = new Identifier(currentToken.spelling());
+                currentToken = scanner.scan();
+            }
+            break;
+
+            default:
+                CLIErrorHandler.errorAndExit(String.format("Error: %s is not a valid argument for the `help` command\nRun `garvel list` to see " +
+                        " the valid list of command names", currentToken.spelling()));
+        }
+
+        return commandName;
     }
 
     /**

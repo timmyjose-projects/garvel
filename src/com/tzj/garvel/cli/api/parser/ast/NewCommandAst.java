@@ -1,17 +1,19 @@
 package com.tzj.garvel.cli.api.parser.ast;
 
+import com.tzj.garvel.core.engine.command.NewCommand;
+
 import java.util.Objects;
 
-public class NewCommand extends Command {
-    private VCS vcs;
+public class NewCommandAst extends CommandAst {
+    private VCSAst vcs;
     private boolean bin;
     private boolean lib;
     private Path path;
 
-    public NewCommand() {
+    public NewCommandAst() {
     }
 
-    public NewCommand(final VCS vcs, final boolean bin, final boolean lib, final Path path) {
+    public NewCommandAst(final VCSAst vcs, final boolean bin, final boolean lib, final Path path) {
         this.vcs = vcs;
         this.bin = bin;
         this.lib = lib;
@@ -24,7 +26,7 @@ public class NewCommand extends Command {
 
     @Override
     public String toString() {
-        return "NewCommand{" +
+        return "NewCommandAst{" +
                 "vcs=" + vcs +
                 ", bin=" + bin +
                 ", lib=" + lib +
@@ -35,7 +37,7 @@ public class NewCommand extends Command {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final NewCommand that = (NewCommand) o;
+        final NewCommandAst that = (NewCommandAst) o;
         return bin == that.bin &&
                 lib == that.lib &&
                 Objects.equals(vcs, that.vcs);
@@ -46,12 +48,12 @@ public class NewCommand extends Command {
         return Objects.hash(vcs, bin, lib);
     }
 
-    public VCS getVcs() {
+    public VCSAst getVcs() {
 
         return vcs;
     }
 
-    public void setVcs(final VCS vcs) {
+    public void setVcs(final VCSAst vcs) {
         this.vcs = vcs;
     }
 

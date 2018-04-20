@@ -5,11 +5,12 @@ import java.util.Objects;
 public class Program extends CLIAst {
     private boolean verbose;
     private boolean quiet;
-    private Command command;
+    private CommandAst command;
+
     public Program() {
     }
 
-    public Program(final boolean verbose, final boolean quiet, final Command command) {
+    public Program(final boolean verbose, final boolean quiet, final CommandAst command) {
         this.verbose = verbose;
         this.quiet = quiet;
         this.command = command;
@@ -36,7 +37,6 @@ public class Program extends CLIAst {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(verbose, quiet, command);
     }
 
@@ -44,23 +44,15 @@ public class Program extends CLIAst {
         return verbose;
     }
 
-    public void setVerbose(final boolean verbose) {
-        this.verbose = verbose;
-    }
-
     public boolean isQuiet() {
         return quiet;
     }
 
-    public void setQuiet(final boolean quiet) {
-        this.quiet = quiet;
-    }
-
-    public Command getCommand() {
+    public CommandAst getCommand() {
         return command;
     }
 
-    public void setCommand(final Command command) {
+    public void setCommand(final CommandAst command) {
         this.command = command;
     }
 }

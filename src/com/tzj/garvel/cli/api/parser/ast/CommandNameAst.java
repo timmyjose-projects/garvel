@@ -2,17 +2,16 @@ package com.tzj.garvel.cli.api.parser.ast;
 
 import java.util.Objects;
 
-public class VCS extends CLIAst {
+public class CommandNameAst extends CLIAst {
     private Identifier id;
 
-    public VCS(final Identifier id) {
-
+    public CommandNameAst(final Identifier id) {
         this.id = id;
     }
 
     @Override
     public String toString() {
-        return "VCS{" +
+        return "CommandNameAst{" +
                 "id=" + id +
                 '}';
     }
@@ -21,8 +20,8 @@ public class VCS extends CLIAst {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final VCS vcs = (VCS) o;
-        return Objects.equals(id, vcs.id);
+        final CommandNameAst that = (CommandNameAst) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

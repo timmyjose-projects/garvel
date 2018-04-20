@@ -37,16 +37,19 @@ public class CLI {
      */
     public static void main(String[] args) {
         if (args.length == 0) {
+            System.out.println("Here");
             displayUsageAndExit();
         }
 
         final CLIParser parser = ModuleLoader.INSTANCE.getParser();
-        final CLIAst ast = parser.parse(args);
+        final CLIAst program = parser.parse(args);
 
-        final CLICoreService service = ModuleLoader.INSTANCE.getCoreService();
-        final CLICommand command = service.getCommand(ast);
+        final CLICoreService service = ModuleLoader.INSTANCE.getCLICoreService();
+        service.checkGarveEssentials();
+        final CLICommand command = service.getCommand(program);
 
-        command.executeRemote();
+        command.execute();
+        service.cleanup();
     }
 
     /**

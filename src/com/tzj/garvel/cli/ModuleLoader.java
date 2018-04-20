@@ -18,7 +18,7 @@ public enum ModuleLoader {
      *
      * @return
      */
-    public CLICoreService getCoreService() {
+    public CLICoreService getCLICoreService() {
         return CLICoreServiceImpl.INSTANCE;
     }
 

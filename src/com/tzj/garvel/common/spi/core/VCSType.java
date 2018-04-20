@@ -1,4 +1,4 @@
-package com.tzj.garvel.cli.api.parser.ast;
+package com.tzj.garvel.common.spi.core;
 
 public enum VCSType {
     NONE("none"),
