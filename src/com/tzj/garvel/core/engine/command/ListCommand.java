@@ -1,5 +1,6 @@
 package com.tzj.garvel.core.engine.command;
 
+import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
 import com.tzj.garvel.common.spi.core.command.result.ListCommandResult;
@@ -13,7 +14,7 @@ import java.util.concurrent.Future;
 
 public class ListCommand implements Command {
     @Override
-    public CommandResult execute(final CommandParams params) {
+    public CommandResult execute(final CommandParams params) throws CommandException {
         final Job<ListCommandResult> job = new ListJob();
         final Future<ListCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().submit(job);
 
@@ -21,10 +22,8 @@ public class ListCommand implements Command {
 
         try {
             cmdRes = task.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new CommandException("Internal error while executing command");
         }
 
         return cmdRes;

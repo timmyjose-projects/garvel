@@ -21,10 +21,9 @@ public class CLIVersionCommand extends CLICommand {
         VersionCommandResult version = null;
         try {
             version = (VersionCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.VERSION, params);
+            System.out.println(version.getVersionSemverString());
         } catch (CommandException e) {
             CLIErrorHandler.errorAndExit("Unable to fetch version. Reason = " + e.getLocalizedMessage());
         }
-
-        System.out.println(version.getVersionSemverString());
     }
 }
