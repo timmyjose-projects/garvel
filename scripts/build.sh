@@ -47,7 +47,6 @@ function check_java()
             JAVA=java
         fi
     fi
-    echo
 }
 
 
@@ -66,7 +65,8 @@ function delete_target_dir()
 ## create the main build directory
 function create_build_dir()
 {
-    echo "creating build directory"
+    echo "[ Creating build directory ]"
+    echo
     mkdir -p ${BUILD_DIR}
 
     if [[ $? -ne "0" ]]
@@ -74,44 +74,49 @@ function create_build_dir()
         echo "Failed to create directory ${BUILD_DIR}. Please check that you have sufficient permissions."
         exit 2
     fi
+    echo "[ Created build directory ]"
 }
 
 
 ## create the project JAR file
 function create_project_jars()
 {
+    echo
+    echo "[ Creating project JAR ${TARGET_NAME} ]"
+
     if [[ ! -d ${TARGET_DIR} ]]
     then
         mkdir  ${TARGET_DIR}
 
-        if [[ $? -ne "0" ]]
+        if [[ "$?" -ne "0" ]]
         then
-            echo "unable to create ${TARGET_DIR}"
+            echo "Unable to create ${TARGET_DIR}"
             delete_build_dir 5
         fi
     fi
 
     pushd ${BUILD_DIR} > /dev/null
-    jar_files=`find ./ -name *.class`
-    echo ${jar_files}
+    CLASS_FILES=`find ./ -name *.class`
 
-    jar cfe ${TARGET_NAME} ${TARGET_ENTRY_POINT} ${jar_files}
+    jar cfe ${TARGET_NAME} ${TARGET_ENTRY_POINT} ${CLASS_FILES}
 
-    if [[ $? -eq "0" ]]
+    if [[ "$?" -eq "0" ]]
     then
         mv ${TARGET_NAME} ${TARGET_DIR}
 
-        if [[ $? -ne "0" ]]
+        if [[ "$?" -ne "0" ]]
         then
             echo "Failed to move ${TARGET_NAME} to ${TARGET_DIR}"
             delete_build_dir 6
         fi
 
-        echo "${TARGET_NAME} created successfully in ${TARGET_DIR}"
+        echo
+        echo "[ Created project JAR ${TARGET_NAME} in ${TARGET_DIR} ]"
     else
-        echo "Unable to create ${TARGET_NAME}"
+        echo "[ Unable to create ${TARGET_NAME} ]"
         delete_build_dir 4
     fi
+
     popd > /dev/null
 }
 
@@ -123,9 +128,11 @@ function compile_sources()
     pushd ${SRC_ROOT} > /dev/null
 
     files=`find ./ -name *.java`
-    echo "compiling"
+    echo "[ Compiling source files "
+    echo
     echo "${files}"
-    echo "to ${BUILD_DIR}"
+    echo
+    echo "to ${BUILD_DIR} ]"
     echo
 
     ${JAVAC} ${JAVAC_FLAGS} -d ${BUILD_DIR} ${files} > /dev/null
@@ -136,13 +143,15 @@ function compile_sources()
         delete_build_dir 3
     fi
 
+    echo "[ Finished compiling source files ]"
+
     create_project_jars
 
     popd > /dev/null
     echo
 }
 
-## check if test was succesful
+## check if test was successful
 function check_success
 {
     if [[ "$2" -ne "0" ]]
@@ -157,22 +166,21 @@ function check_success
 function run_tests()
 {
     echo
-    echo "Running tests"
+    echo "[ Running tests ]"
     echo
 
     `garvel new foo`
     check_success "test_new" $?
     echo "test_new.... success"
 
-    echo "All tests passed successfully"
+    echo "[ All tests passed successfully ]"
 }
 
 ## create a wrapper for the garvel jar file
 function create_garvel_script()
 {
+    echo "[ Creating wrapper script for ${PROJECT_NAME} ]"
     echo
-    echo "Creating wrapper script for garvel"
-
     if [[ -z ${TARGET_DIR} ]]
     then
         create_target_dir
@@ -184,25 +192,30 @@ function create_garvel_script()
     echo "java -jar ${TARGET_DIR}/${TARGET_NAME}" >> ${TARGET_DIR}/${GARVEL_WRAPPER}
 
     chmod +ux ${TARGET_DIR}/${GARVEL_WRAPPER}
-    echo "Finished creating wrapper script for garvel at ${TARGET_DIR}"
+    echo "[ Finished creating wrapper script ${GARVL_WRAPPER} for ${PROJECT_NAME} in ${TARGET_DIR} ]"
     echo "Add the following line to your bashrc or bash_profile file:"
-    echo "\"alias ${PROJECT_NAME}=${TARGET_DIR}/${GARVEL_WRAPPER}\""
+    echo "    \"alias ${PROJECT_NAME}=${TARGET_DIR}/${GARVEL_WRAPPER}\""
     echo
 }
 
 ## delete build data (takes exit code as input)
 function delete_build_dir()
 {
-    echo "Deleting build directory"
+    echo "[ Deleting build directory ]"
     echo
     if [[ -e ${BUILD_DIR} ]]
     then
         rm -rf ${BUILD_DIR}
+        if [[ "$1" -ne "0" ]]
+        then
+            echo "[ Finished deleting build directory. Exiting with error code $1 ]"
+            echo
+        else
+            echo "[ Finished deleting build directory. Build was successful. ]"
+            echo
+        fi
         exit $1
     fi
-    echo
-
-    echo "Finished deleting build directory"
 }
 
 
@@ -215,6 +228,4 @@ create_build_dir
 compile_sources
 #run_tests
 create_garvel_script
-delete_build_dir
-exit 0
-
+delete_build_dir 0

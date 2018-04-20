@@ -17,7 +17,7 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
  * semver support for tilde and caret semantics.
  * extended semver support for wildcard semantics.
  * extend support for specifying local dependencies as well as git/github repos as dependencies.
- * implement proper error handling in the CLI module.
+ * ~~implement proper error handling in the CLI module~~.
  * new command.
  * build command.
  * test command.
