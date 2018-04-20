@@ -1,5 +1,6 @@
 package com.tzj.garvel.core.parser;
 
+import com.tzj.garvel.core.parser.api.TOMLParser;
 import com.tzj.garvel.core.parser.json.JsonParserImpl;
 import com.tzj.garvel.core.parser.semver.SemverParserImpl;
 import com.tzj.garvel.core.parser.api.JsonParser;
@@ -17,5 +18,10 @@ public enum ParserServiceImpl implements ParserService {
     @Override
     public SemverParser getSemVerParser(final String semverString) {
         return new SemverParserImpl(semverString);
+    }
+
+    @Override
+    public TOMLParser getTOMLParser(final String filename) {
+        return null;
     }
 }

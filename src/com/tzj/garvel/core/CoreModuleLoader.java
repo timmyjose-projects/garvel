@@ -1,6 +1,8 @@
 package com.tzj.garvel.core;
 
 import com.tzj.garvel.common.spi.core.command.CommandResult;
+import com.tzj.garvel.core.cache.CacheManagerServiceImpl;
+import com.tzj.garvel.core.cache.api.CacheManagerService;
 import com.tzj.garvel.core.compiler.CompilerServiceImpl;
 import com.tzj.garvel.core.compiler.api.CompilerService;
 import com.tzj.garvel.core.concurrent.ConcurrencyServiceImpl;
@@ -70,5 +72,14 @@ public enum CoreModuleLoader {
      */
     public ConfigManagerService getConfigManager() {
         return ConfigManagerServiceImpl.INSTANCE;
+    }
+
+    /**
+     * Return the Cache Manager that holds the parsed configuration data.
+     *
+     * @return
+     */
+    public CacheManagerService getCacheManager() {
+        return CacheManagerServiceImpl.INSTANCE;
     }
 }

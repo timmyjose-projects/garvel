@@ -1,0 +1,32 @@
+# Configuration file for a runnable project
+# The keys are fixed. Customise the values.
+# Empty keys are not allowed.
+
+[project]
+
+name = "HelloWorld"
+version = "0.1.0"
+classpath = [ "./" ] # apart from the dependencies
+authors = [ "me@me.com" ]
+description = "A simple Hello, world project!"
+homepage = "http://example.com/hello_world"
+readme = "https://example.com/hello_world/readme.html"
+keywords = [ "basic", "hello world"]
+categories = [ "standalone", "jar" ]
+licence = "MIT"
+licence-file =  "custom-licence-path"
+
+[dependencies]
+
+junit = "4.1.2" # exact version
+log4j = "*" # latest version
+
+# where the JAR file will be deployed
+[lib]
+
+path = "/lib"
+
+# targets for `garvel run --bin`
+[bin]
+
+targets =  [ "/bin/one/Main", "/bin/two/Main", "/bin/three/Client" ]

@@ -5,8 +5,13 @@ import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
 import com.tzj.garvel.common.spi.core.command.CommandType;
+import com.tzj.garvel.common.spi.error.GarvelCheckedException;
 import com.tzj.garvel.core.engine.Command;
 import com.tzj.garvel.core.engine.command.*;
+import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
+
+import java.io.File;
+import java.nio.file.Paths;
 
 /**
  * This class represents the core of the garvel package manager.
@@ -59,8 +64,29 @@ public enum CoreServiceImpl implements CoreService {
      * 2. Parse the configuration file and populate the cache.
      */
     @Override
-    public void setup() {
+    public void setup() throws GarvelCheckedException {
+        // ensure that the garvel directory already exists
+        if (!checkGarvelDir()) {
+            makeGarvelDir();
+        }
 
+        // parse the Garvel.gl file and populate the cache
+        CoreModuleLoader.INSTANCE.getCacheManager().populateCache();
+
+    }
+
+    private void makeGarvelDir() throws FilesystemFrameworkException {
+        final String fullPath = GarvelCoreConstants.GARVEL_HOME_DIR + File.separator + GarvelCoreConstants.GARVEL_DIR;
+        CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(fullPath);
+    }
+
+    private boolean checkGarvelDir() throws GarvelCheckedException {
+        if (GarvelCoreConstants.GARVEL_HOME_DIR == null) {
+            throw new GarvelCheckedException("Unable to resolve user's home directory. Aborting...");
+        }
+
+        final String fullPath = GarvelCoreConstants.GARVEL_HOME_DIR + File.separator + GarvelCoreConstants.GARVEL_DIR;
+        return CoreModuleLoader.INSTANCE.getFileSystemFramework().checkDirectoryExists(fullPath);
     }
 
     @Override

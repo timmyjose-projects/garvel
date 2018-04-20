@@ -2,7 +2,9 @@ package com.tzj.garvel.cli.core;
 
 import com.tzj.garvel.cli.api.core.*;
 import com.tzj.garvel.cli.api.parser.ast.*;
+import com.tzj.garvel.cli.exception.CLIErrorHandler;
 import com.tzj.garvel.common.spi.core.CoreServiceLoader;
+import com.tzj.garvel.common.spi.error.GarvelCheckedException;
 
 public enum CLICoreServiceImpl implements CLICoreService {
     INSTANCE;
@@ -43,7 +45,12 @@ public enum CLICoreServiceImpl implements CLICoreService {
      */
     @Override
     public void checkGarveEssentials() {
-        CoreServiceLoader.INSTANCE.getCoreService().setup();
+        try {
+            CoreServiceLoader.INSTANCE.getCoreService().setup();
+        } catch (GarvelCheckedException e) {
+            //log error (TODO)
+            CLIErrorHandler.exit("Garvel setup failed.");
+        }
     }
 
     @Override

@@ -1,4 +1,6 @@
-# Sample template for Garvel.gl
+# Configuration file for a runnable project
+# The keys are fixed. Customise the values.
+# Empty keys are not allowed.
 
 {
     "project": {
@@ -21,11 +23,12 @@
             "log4j" : "*" # latest version
         },
 
-        # empty properties are not allowed
-        "lib": {
+       # where the JAR file will be deployed
+         "lib": {
             "path" : "/lib"
         },
 
+       # targets for `garvel run --bin`
         "bin": {
             "targets": [ "/bin/one/Main", "/bin/two/Main", "/bin/three/Client" ]
         }

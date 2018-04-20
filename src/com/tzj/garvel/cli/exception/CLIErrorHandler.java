@@ -12,8 +12,8 @@ public class CLIErrorHandler {
         System.exit(1);
     }
 
-    public static void exit() {
-        System.err.println("Error: Invalid command!");
+    public static void exit(final String message) {
+        System.out.println(message);
         CLI.displayUsageAndExit();
     }
 }
