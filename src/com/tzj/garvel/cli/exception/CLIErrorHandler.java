@@ -8,7 +8,8 @@ import com.tzj.garvel.cli.CLI;
 public class CLIErrorHandler {
     public static void errorAndExit(final String format) {
         System.err.println(format);
-        CLI.displayUsageAndExit();
+        System.out.printf("\nRun \"garvel list\" to see the list of installed commands\n");
+        System.exit(1);
     }
 
     public static void exit() {

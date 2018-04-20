@@ -24,7 +24,7 @@ public enum CLIParserImpl implements CLIParser {
     public static void main(String[] args) {
         //final String[] input = new String[]{"garvel", "--verbose", "new", "--vcs", "git", "--lib", "foo"};
         //final String[] input = new String[]{"garvel", "help", "new"};
-        final String[] input = new String[] { "garvel", "run" };
+        final String[] input = new String[]{"garvel", "run"};
 
         Program program = CLIParserImpl.INSTANCE.parse(input);
         System.out.println(program);
@@ -98,7 +98,15 @@ public enum CLIParserImpl implements CLIParser {
             break;
 
             default: {
-                CLIErrorHandler.errorAndExit(String.format("Error: Found %s, which is not a valid option or command", currentToken.spelling()));
+                final String bestMatch = ModuleLoader.INSTANCE.getUtils().findLevenshteinMatch(currentToken.spelling());
+
+                if (bestMatch != null) {
+                    CLIErrorHandler.errorAndExit(String.format("\"%s\" is not a valid command.\n Did you mean \"%s\"?",
+                            currentToken.spelling(), ModuleLoader.INSTANCE.getUtils().findLevenshteinMatch(currentToken.spelling())));
+                } else {
+                    CLIErrorHandler.errorAndExit(String.format("%s is not a valid command.",
+                            currentToken.spelling()));
+                }
             }
         }
 
@@ -231,18 +239,6 @@ public enum CLIParserImpl implements CLIParser {
                 command = new TestCommandAst();
             }
             break;
-
-            default: {
-                final String bestMatch = ModuleLoader.INSTANCE.getUtils().findLevenshteinMatch(currentToken.spelling());
-
-                if (bestMatch != null) {
-                    CLIErrorHandler.errorAndExit(String.format("%s is not a valid command.\n Did you mean %s?",
-                            currentToken.spelling(), ModuleLoader.INSTANCE.getUtils().findLevenshteinMatch(currentToken.spelling())));
-                } else {
-                    CLIErrorHandler.errorAndExit(String.format("%s is not a valid command.",
-                            currentToken.spelling()));
-                }
-            }
         }
 
         return command;

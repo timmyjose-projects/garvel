@@ -11,7 +11,7 @@ public enum UtilServiceImpl implements UtilService {
     INSTANCE;
 
     private static final Set<String> validCommands;
-    private static final double LEVENSHTEIN_THRESHOLD = 0.75;
+    private static final double LEVENSHTEIN_THRESHOLD = 0.66;
 
     static {
         validCommands = new HashSet<>();
@@ -19,6 +19,7 @@ public enum UtilServiceImpl implements UtilService {
         validCommands.add("help");
         validCommands.add("version");
         validCommands.add("init");
+        validCommands.add("list");
         validCommands.add("new");
         validCommands.add("clean");
         validCommands.add("build");
@@ -33,7 +34,7 @@ public enum UtilServiceImpl implements UtilService {
         final int m = Math.max(xlen, ylen);
 
         final int l = levenshtein(x.toLowerCase(), xlen, y.toLowerCase(), ylen);
-        final double p = (1.0 - (double) l / m) * 100.0;
+        final double p = (1.0 - (double) l / m);
 
         return p;
     }
@@ -93,7 +94,11 @@ public enum UtilServiceImpl implements UtilService {
             }
         }
 
-        return currCommand;
+        if (maxp > LEVENSHTEIN_THRESHOLD) {
+            return currCommand;
+        }
+
+        return null;
     }
 }
 
