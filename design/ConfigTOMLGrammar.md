@@ -5,8 +5,8 @@ Config ::= Project-Section  Dependencies-Section [ Bin-Section ]
 ```
 
 ```
-Project-Section ::= '[' PROJECT ']' (NAME '=' Identifier) (VERSION = SemverString) 
-            [ CLASSPATH = '[' ClassPathString (, ClassPathString)* ']') ]
+Project-Section ::= '[' PROJECT ']' (NAME '=' Identifier) (VERSION = Identifier) 
+            [ CLASSPATH = '[' Identifier (, Identifier)* ']') ]
             [ AUTHORS = '[' Identifier (, Identifier)* ']' ]
             [ DESCRIPTION = Identifier  EOL]
             [ HOMEPAGE = UrlString  EOL]
@@ -27,10 +27,6 @@ Dependency-Pair ::= Identifier '=' SemverString
 ```
 
 ```
-SemverString ::= # refer to SemverGrammar.md
-```
-
-```
 Bin-Section ::= '[' BIN ']' Bin-Pair (, Bin-Pair)*
 ```
 
@@ -39,15 +35,11 @@ Bin-Pair ::= Identifier  '=' ClassPathString
 ```
 
 ```
-ClassPathString ::= [a-zA-Z0-9_/:\;]
+Identifier ::= '"' Letter (Letter | Digit)* '"'
 ```
 
 ```
-Identifier ::= Letter (Letter | Digit)*
-```
-
-```
-Letter ::= [a-zA-Z_]
+Letter ::= [a-zA-Z_+-:/;]
 ```
 
 ```

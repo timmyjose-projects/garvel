@@ -21,7 +21,7 @@ licence-file =  "custom-licence-path"
 [dependencies]
 
 junit = "4.1.2", # exact version
-log4j = "*", # latest version
+log4j = "1.2.7", # latest version
 
 
 # targets for `garvel run --bin`
@@ -31,5 +31,5 @@ log4j = "*", # latest version
 [bin]
 
 "one" = "/bin/one/Main",
-"two" = ""/bin/two/Main",
+"two" = "/bin/two/Main",
 "three" = "/bin/three/Client"

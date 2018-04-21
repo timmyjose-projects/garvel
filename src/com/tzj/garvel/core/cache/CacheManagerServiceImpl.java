@@ -6,7 +6,6 @@ import com.tzj.garvel.core.cache.api.CacheEntry;
 import com.tzj.garvel.core.cache.api.CacheMainKey;
 import com.tzj.garvel.core.cache.api.CacheManagerService;
 import com.tzj.garvel.core.cache.exception.CacheManagerException;
-import com.tzj.garvel.core.parser.api.ast.json.JsonObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,21 +27,6 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
     public void populateCache() throws CacheManagerException {
         configCache = new HashMap<>();
         dependenciesCache = new HashMap<>();
-
-        final JsonObject configJson = CoreModuleLoader.INSTANCE
-                .getParserFramework()
-                .getJsonParser(GarvelCoreConstants.GARVEL_CONFIG_FILE)
-                .parse();
-
-        populateConfigCache(configJson);
-        populateDependenciesCache(configJson);
-    }
-
-    private void populateDependenciesCache(final JsonObject configJson) {
-
-    }
-
-    private void populateConfigCache(final JsonObject configJson) {
 
     }
 }

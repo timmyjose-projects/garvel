@@ -1,80 +1,96 @@
-package com.tzj.garvel.core.parser.semver;
+package com.tzj.garvel.core.parser.toml;
 
 import com.tzj.garvel.common.parser.CharWrapper;
 import com.tzj.garvel.core.parser.exception.LexerException;
-import com.tzj.garvel.core.parser.exception.SemverScannerException;
+import com.tzj.garvel.core.parser.exception.TOMLScannerException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tzj.garvel.common.parser.GarvelConstants.EOI;
-import static com.tzj.garvel.common.parser.GarvelConstants.EOL;
-import static com.tzj.garvel.common.parser.GarvelConstants.SPACE;
+import static com.tzj.garvel.common.parser.GarvelConstants.*;
+import static com.tzj.garvel.core.parser.toml.TOMLTokenType.EQUAL;
 
-public class SemverScanner {
-    private String filename;
-    private SemverLexer lexer;
+public class TOMLScanner {
+    private TOMLLexer lexer;
 
-    private List<SemverToken> tokens;
+    private List<TOMLToken> tokens;
     private int idx;
 
-    private SemverTokenType currentKind;
+    private TOMLTokenType currentKind;
     private StringBuffer currentSpelling;
-
     private CharWrapper currentChar;
+    private int currentLine;
     private int currentColumn;
 
-    public SemverScanner(final String filename) throws SemverScannerException {
-        this.filename = filename;
-        this.lexer = new SemverLexer(filename);
+    public TOMLScanner(final String filename) throws LexerException, TOMLScannerException {
+        this.lexer = new TOMLLexer(filename);
         this.tokens = new ArrayList<>();
+        this.idx = 0;
+        this.currentLine = -1;
+        this.currentColumn = -1;
+
         scanAll();
     }
 
     // test
     public static void main(String[] args) {
-        final String semver = "garvel 0.1.0-nightly+beta";
+        final String filename = System.getProperty("user.dir") + "/src/com/tzj/garvel/common/templates/garvel-bin.gl";
+        try {
+            TOMLScanner scanner = new TOMLScanner(filename);
 
-        SemverScanner scanner = new SemverScanner(semver);
-        while (scanner.hasMoreTokens()) {
-            System.out.println(scanner.scan());
+            while (scanner.hasMoreTokens()) {
+                System.out.println(scanner.scan());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Unconditionally skip to the next character in the character stream.
-     */
-    private void skipIt() {
-        currentChar = lexer.nextCharacter();
-    }
-
-    /**
-     * Unconditionally append the current character to currentSpelling.
-     */
     private void takeIt() {
         currentSpelling.append(currentChar.c());
         currentChar = lexer.nextCharacter();
     }
 
-    /**
-     * Construct the token list.
-     */
-    private void scanAll() {
+    private void take(final char expectedChar) throws TOMLScannerException {
+        if (currentChar.c() != expectedChar) {
+            throw new TOMLScannerException(String.format("line: %d, column: %d, expected to accept %c, found %c",
+                    currentChar.line(), currentChar.column(), expectedChar, currentChar.c()));
+        }
+
+        currentSpelling.append(currentChar.c());
+        currentChar = lexer.nextCharacter();
+    }
+
+    private void skipIt() {
+        currentChar = lexer.nextCharacter();
+    }
+
+    private void skip(final char expectedChar) throws TOMLScannerException {
+        if (currentChar.c() != expectedChar) {
+            throw new TOMLScannerException(String.format("line: %d, col: %d, expected to skip %c, found %c",
+                    currentChar.line(), currentChar.column(), expectedChar, currentChar.c()));
+        }
+
+        currentChar = lexer.nextCharacter();
+    }
+
+    private void scanAll() throws TOMLScannerException {
         currentChar = lexer.nextCharacter();
 
         while (lexer.hasMoreCharacters()) {
-            while (currentChar.c() == SPACE || currentChar.c() == EOL) {
+            while (currentChar.c() == OCTOTHORPE || currentChar.c() == SPACE || currentChar.c() == EOL) {
                 scanSeparator();
             }
 
             currentSpelling = new StringBuffer();
             currentKind = scanToken();
-            tokens.add(new SemverToken(currentKind, currentSpelling.toString(), currentColumn));
+            tokens.add(new TOMLToken(currentKind, currentSpelling.toString(), currentLine, currentColumn));
         }
     }
 
-    private SemverTokenType scanToken() {
-        SemverTokenType kind = null;
+    private TOMLTokenType scanToken() throws TOMLScannerException {
+        TOMLTokenType kind = null;
+        currentLine = currentChar.line();
         currentColumn = currentChar.column();
 
         switch (currentChar.c()) {
@@ -129,63 +145,64 @@ public class SemverScanner {
             case 'W':
             case 'X':
             case 'Y':
-            case 'Z': {
+            case 'Z':
+            case '_':
+            case '/':
+            case '.': {
                 takeIt();
 
                 while (isLetter(currentChar.c()) || isDigit(currentChar.c())) {
                     takeIt();
                 }
 
-                kind = SemverTokenType.IDENTIFIER;
+                kind = TOMLTokenType.IDENTIFIER;
             }
             break;
 
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9': {
+            case '"': {
                 takeIt();
 
-                while (isDigit(currentChar.c())) {
+                while (isLetter(currentChar.c()) || isDigit(currentChar.c())) {
                     takeIt();
                 }
+                take(DOUBLE_QUOTE);
 
-                kind = SemverTokenType.INTLITERAL;
+                kind = TOMLTokenType.IDENTIFIER;
             }
             break;
 
-            case '.': {
+            case '[': {
                 takeIt();
-                kind = SemverTokenType.PERIOD;
+                kind = TOMLTokenType.LEFT_BRACKET;
             }
             break;
 
-            case '-': {
+            case ']': {
                 takeIt();
-                kind = SemverTokenType.DASH;
+                kind = TOMLTokenType.RIGHT_BRACKET;
             }
             break;
 
-            case '+': {
+            case ',': {
                 takeIt();
-                kind = SemverTokenType.PLUS;
+                kind = TOMLTokenType.COMMA;
+            }
+            break;
+
+            case '=': {
+                takeIt();
+                kind = EQUAL;
             }
             break;
 
             case EOI: {
-                kind = SemverTokenType.EOT;
+                kind = TOMLTokenType.EOT;
             }
             break;
 
             default:
-                throw new SemverScannerException(String.format("Semver Scanner Error at column %d. %c cannot start a valid token",
-                        currentChar.column(), currentChar.c()));
+                throw new TOMLScannerException(String.format("line: %d, col: %d, %c cannot start a valid token",
+                        currentChar.line(), currentChar.column(), currentChar.c()));
         }
 
         return kind;
@@ -204,14 +221,13 @@ public class SemverScanner {
             case '8':
             case '9':
                 return true;
-
             default:
                 return false;
         }
     }
 
     private boolean isLetter(final char c) {
-        switch (c) {
+        switch (currentChar.c()) {
             case 'a':
             case 'b':
             case 'c':
@@ -264,24 +280,47 @@ public class SemverScanner {
             case 'X':
             case 'Y':
             case 'Z':
+            case '_':
+            case '/':
+            case ':':
+            case ';':
+            case '-':
+            case '+':
+            case '.':
+            case '@':
+            case SPACE:
+            case COMMA:
+            case '!':
                 return true;
-
             default:
                 return false;
+
         }
     }
 
-    private void scanSeparator() {
+    private void scanSeparator() throws TOMLScannerException {
         switch (currentChar.c()) {
-            case SPACE:
-            case EOL: {
+            case OCTOTHORPE: {
                 skipIt();
-
-                while (currentChar.c() == SPACE || currentChar.c() == EOL) {
+                while (isGraphic(currentChar.c())) {
                     skipIt();
                 }
+                skip(EOL);
             }
             break;
+            case SPACE:
+            case EOL:
+                skipIt();
+                break;
+        }
+    }
+
+    private boolean isGraphic(final char c) {
+        switch (c) {
+            case EOL:
+                return false;
+            default:
+                return true;
         }
     }
 
@@ -289,14 +328,14 @@ public class SemverScanner {
         return idx < tokens.size();
     }
 
-    private SemverToken nextToken() {
+    private TOMLToken nextToken() {
         idx++;
         return tokens.get(idx - 1);
     }
 
-    public SemverToken scan() throws SemverScannerException {
+    public TOMLToken scan() throws TOMLScannerException {
         if (!hasMoreTokens()) {
-            throw new SemverScannerException("No more tokens in the token stream");
+            throw new TOMLScannerException("No more tokens!");
         }
 
         return nextToken();

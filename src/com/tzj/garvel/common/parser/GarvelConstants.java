@@ -15,6 +15,7 @@ public class GarvelConstants {
     public static final char AMPERSAND = '@';
     public static final char UNDERSCORE = '_';
     public static final char FORWARD_SLASH = '/';
+    public static final char DOUBLE_QUOTE = '"';
 
     public static final char EOL = '\n';
     public static final char EOI = '\u0000';
