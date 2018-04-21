@@ -8,6 +8,13 @@ public class NameAst extends TOMLAst {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "NameAst{" +
+                "name=" + name +
+                '}';
+    }
+
     public Identifier getName() {
         return name;
     }

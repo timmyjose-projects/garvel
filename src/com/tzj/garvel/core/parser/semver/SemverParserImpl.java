@@ -4,6 +4,8 @@ import com.tzj.garvel.core.parser.api.SemverParser;
 import com.tzj.garvel.core.parser.api.ast.semver.*;
 import com.tzj.garvel.core.parser.exception.SemverParserException;
 
+import static com.tzj.garvel.core.parser.semver.SemverTokenType.PERIOD;
+
 public class SemverParserImpl implements SemverParser {
     private SemverScanner scanner;
 
@@ -14,7 +16,7 @@ public class SemverParserImpl implements SemverParser {
     }
 
     // test
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SemverParserException {
         final String semverString = "0.1.0-nightly+beta";
 
         SemverParser parser = new SemverParserImpl(semverString);
@@ -28,7 +30,7 @@ public class SemverParserImpl implements SemverParser {
         currentToken = scanner.scan();
     }
 
-    private void accept(final SemverTokenType expectedKind) {
+    private void accept(final SemverTokenType expectedKind) throws SemverParserException {
         if (currentToken.kind() != expectedKind) {
             throw new SemverParserException(String.format("Semver Parser error at col %d. Expected to accept token of kind %s, found token of kind %s",
                     currentToken.columnNumber(), expectedKind, currentToken.kind()));
@@ -46,7 +48,7 @@ public class SemverParserImpl implements SemverParser {
      *
      * @return
      */
-    private Semver parseSemver() {
+    private Semver parseSemver() throws SemverParserException {
         Semver semver = null;
 
         final Version version = parseVersion();
@@ -86,10 +88,10 @@ public class SemverParserImpl implements SemverParser {
      *
      * @return
      */
-    private Build parseBuild() {
+    private Build parseBuild() throws SemverParserException {
         Build build1 = parseSimpleBuild();
 
-        while (currentToken.kind() == SemverTokenType.PERIOD) {
+        while (currentToken.kind() == PERIOD) {
             acceptIt();
             final Build build2 = parseSimpleBuild();
             build1 = new SequentialBuild(build1, build2);
@@ -98,11 +100,11 @@ public class SemverParserImpl implements SemverParser {
         return build1;
     }
 
-    private Build parseSimpleBuild() {
+    private Build parseSimpleBuild() throws SemverParserException {
         return new SimpleBuild(parseIdentifier());
     }
 
-    private Identifier parseIdentifier() {
+    private Identifier parseIdentifier() throws SemverParserException {
         if (currentToken.kind() != SemverTokenType.IDENTIFIER) {
             throw new SemverParserException(String.format("Semver Parser Error at col %d. Expected a %s, found %s",
                     currentToken.columnNumber(), SemverTokenType.IDENTIFIER, currentToken.kind()));
@@ -114,7 +116,7 @@ public class SemverParserImpl implements SemverParser {
         return id;
     }
 
-    private IntegerLiteral parseIntegerLiteral() {
+    private IntegerLiteral parseIntegerLiteral() throws SemverParserException {
         if (currentToken.kind() != SemverTokenType.INTLITERAL) {
             throw new SemverParserException(String.format("Semver Parser Error at col %d. Expected a %s, found %s",
                     currentToken.columnNumber(), SemverTokenType.INTLITERAL, currentToken.kind()));
@@ -131,19 +133,20 @@ public class SemverParserImpl implements SemverParser {
      *
      * @return
      */
-    private PreRelease parsePreRelease() {
+    private PreRelease parsePreRelease() throws SemverParserException {
         PreRelease preRelease1 = parseSimplePreRelease();
 
-        while (currentToken.kind() == SemverTokenType.PERIOD) {
+        while (currentToken.kind() == PERIOD) {
             acceptIt();
-            final PreRelease preRelease2 = parseSimplePreRelease();
+            final PreRelease preRelease2;
+            preRelease2 = parseSimplePreRelease();
             preRelease1 = new SequentialPreRelease(preRelease1, preRelease2);
         }
 
         return preRelease1;
     }
 
-    private PreRelease parseSimplePreRelease() {
+    private PreRelease parseSimplePreRelease() throws SemverParserException {
         return new SimplePreRelease(parseIdentifier());
     }
 
@@ -152,30 +155,30 @@ public class SemverParserImpl implements SemverParser {
      *
      * @return
      */
-    private Version parseVersion() {
+    private Version parseVersion() throws SemverParserException {
         final Major major = parseMajor();
-        accept(SemverTokenType.PERIOD);
+        accept(PERIOD);
         final Minor minor = parseMinor();
-        accept(SemverTokenType.PERIOD);
+        accept(PERIOD);
         final Patch patch = parsePatch();
 
         return new Version(major, minor, patch);
     }
 
-    private Patch parsePatch() {
+    private Patch parsePatch() throws SemverParserException {
         return new Patch(parseIntegerLiteral());
     }
 
-    private Minor parseMinor() {
+    private Minor parseMinor() throws SemverParserException {
         return new Minor(parseIntegerLiteral());
     }
 
-    private Major parseMajor() {
+    private Major parseMajor() throws SemverParserException {
         return new Major(parseIntegerLiteral());
     }
 
     @Override
-    public Semver parse() {
+    public Semver parse() throws SemverParserException {
         currentToken = scanner.scan();
         Semver semver = parseSemver();
         accept(SemverTokenType.EOT);

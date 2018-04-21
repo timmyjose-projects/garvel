@@ -10,6 +10,13 @@ public class ClassPathAst extends ProjectMetadataAst {
         this.classPath = classPath;
     }
 
+    @Override
+    public String toString() {
+        return "ClassPathAst{" +
+                "classPath=" + classPath +
+                '}';
+    }
+
     public List<Identifier> getClassPath() {
         return classPath;
     }

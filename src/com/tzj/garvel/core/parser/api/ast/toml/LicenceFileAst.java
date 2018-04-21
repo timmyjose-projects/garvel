@@ -1,15 +1,15 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
-public class LicenceFile extends ProjectMetadataAst {
+public class LicenceFileAst extends ProjectMetadataAst {
     private Identifier licenceFile;
 
-    public LicenceFile(final Identifier licenceFile) {
+    public LicenceFileAst(final Identifier licenceFile) {
         this.licenceFile = licenceFile;
     }
 
     @Override
     public String toString() {
-        return "LicenceFile{" +
+        return "LicenceFileAst{" +
                 "licenceFile=" + licenceFile +
                 '}';
     }

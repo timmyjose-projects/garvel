@@ -26,6 +26,10 @@ public class ProjectSectionAst extends TOMLAst {
         return optionals;
     }
 
+    public void setOptionals(final Set<ProjectMetadataAst> optionals) {
+        this.optionals = optionals;
+    }
+
     @Override
     public String toString() {
         return "ProjectSectionAst{" +
@@ -33,9 +37,5 @@ public class ProjectSectionAst extends TOMLAst {
                 ", version=" + version +
                 ", optionals=" + optionals +
                 '}';
-    }
-
-    public void addOptional(ProjectMetadataAst ast) {
-        optionals.add(ast);
     }
 }

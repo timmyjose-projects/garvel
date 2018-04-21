@@ -5,23 +5,23 @@
 # project metadata
 [project]
 
-name = "HelloWorld",
-version = "0.1.0",
-classpath = [ "./" ], # apart from the dependencies
-authors = [ "me@me.com" ],
-description = "A simple Hello, world project!",
-homepage = "http://example.com/hello_world",
-readme = "https://example.com/hello_world/readme.html",
-keywords = [ "basic", "hello world"],
-categories = [ "standalone", "jar" ],
-licence = "MIT",
+name = "HelloWorld"
+version = "0.1.0"
+classpath = [ "./" ] # apart from the dependencies
+authors = [ "me@me.com" ]
+description = "A simple Hello, world project!"
+homepage = "http://example.com/hello_world"
+readme = "https://example.com/hello_world/readme.html"
+keywords = [ "basic", "hello world"]
+categories = [ "standalone", "jar" ]
+licence = "MIT"
 licence-file =  "custom-licence-path"
 
 # the external dependencies for this project
 [dependencies]
 
-junit = "4.1.2", # exact version
-log4j = "1.2.7", # latest version
+junit = "4.1.2" # exact version
+log4j = "1.2.7" # latest version
 
 
 # targets for `garvel run --bin`
@@ -30,6 +30,6 @@ log4j = "1.2.7", # latest version
 # at least one bin target required
 [bin]
 
-"one" = "/bin/one/Main",
-"two" = "/bin/two/Main",
-"three" = "/bin/three/Client"
+one = "/bin/one/Main"
+two = "/bin/two/Main"
+three = "/bin/three/Client"

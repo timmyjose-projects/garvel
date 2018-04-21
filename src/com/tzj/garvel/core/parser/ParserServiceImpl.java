@@ -1,6 +1,7 @@
 package com.tzj.garvel.core.parser;
 
 import com.tzj.garvel.core.parser.api.TOMLParser;
+import com.tzj.garvel.core.parser.exception.TOMLParserException;
 import com.tzj.garvel.core.parser.semver.SemverParserImpl;
 import com.tzj.garvel.core.parser.api.ParserService;
 import com.tzj.garvel.core.parser.api.SemverParser;
@@ -15,7 +16,7 @@ public enum ParserServiceImpl implements ParserService {
     }
 
     @Override
-    public TOMLParser getTOMLParser(final String filename) {
+    public TOMLParser getTOMLParser(final String filename) throws TOMLParserException {
         return new TOMLParserImpl(filename);
     }
 }

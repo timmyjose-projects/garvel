@@ -6,4 +6,8 @@ public class TOMLParserException extends ParserException {
     public TOMLParserException(final String errorMessage) {
         super(errorMessage);
     }
+
+    public TOMLParserException() {
+        super();
+    }
 }

@@ -6,4 +6,8 @@ public class GarvelCheckedException extends Exception {
     public GarvelCheckedException(final String errorMessage) {
         super(errorMessage);
     }
+
+    public GarvelCheckedException() {
+        super();
+    }
 }

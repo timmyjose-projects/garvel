@@ -84,7 +84,7 @@ public class TOMLScanner {
 
             currentSpelling = new StringBuffer();
             currentKind = scanToken();
-            tokens.add(new TOMLToken(currentKind, currentSpelling.toString(), currentLine, currentColumn));
+            tokens.add(new TOMLToken(currentKind, currentSpelling.toString().trim(), currentLine, currentColumn));
         }
     }
 

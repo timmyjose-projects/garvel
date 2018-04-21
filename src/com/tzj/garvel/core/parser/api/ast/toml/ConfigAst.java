@@ -2,10 +2,10 @@ package com.tzj.garvel.core.parser.api.ast.toml;
 
 public class ConfigAst extends TOMLAst {
     ProjectSectionAst project;
-    DependencyPairsAst dependencies;
-    BinPairsAst bin;
+    DependenciesSectionAst dependencies;
+    BinSectionAst bin;
 
-    public ConfigAst(final ProjectSectionAst project, final DependencyPairsAst dependencies) {
+    public ConfigAst(final ProjectSectionAst project, final DependenciesSectionAst dependencies) {
         this.project = project;
         this.dependencies = dependencies;
     }
@@ -14,15 +14,15 @@ public class ConfigAst extends TOMLAst {
         return project;
     }
 
-    public DependencyPairsAst getDependencies() {
+    public DependenciesSectionAst getDependencies() {
         return dependencies;
     }
 
-    public BinPairsAst getBin() {
+    public BinSectionAst getBin() {
         return bin;
     }
 
-    public void setBin(final BinPairsAst bin) {
+    public void setBin(final BinSectionAst bin) {
         this.bin = bin;
     }
 
