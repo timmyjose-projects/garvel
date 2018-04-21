@@ -1,12 +1,13 @@
-### Grammar for the Garvel config (restricted TOML)
+### Grammar for the Garvel config (restricted TOML format)
 
 ```
-Config ::= Project-Section  Dependencies-Section Lib-Section [ Bin-Section ]
+Config ::= Project-Section  Dependencies-Section [ Bin-Section ]
 ```
 
 ```
-Project-Section ::= '[' PROJECT ']' (NAME = Identifier) (VERSION = SemverString) (CLASSPATH = '[' ClassPathString (, ClassPathString)* ']')
-            (AUTHORS = '[' Identifier (, Identifier)* ']')
+Project-Section ::= '[' PROJECT ']' (NAME '=' Identifier) (VERSION = SemverString) 
+            [ CLASSPATH = '[' ClassPathString (, ClassPathString)* ']') ]
+            [ AUTHORS = '[' Identifier (, Identifier)* ']' ]
             [ DESCRIPTION = Identifier  EOL]
             [ HOMEPAGE = UrlString  EOL]
             [ README = UrlString EOL] 
@@ -18,15 +19,23 @@ Project-Section ::= '[' PROJECT ']' (NAME = Identifier) (VERSION = SemverString)
 ```
 
 ```
-Dependencies-Section ::= Dependency-Pair (EOL Dependency-Pair)* EOL
+Dependencies-Section ::= '[' DEPENDENCIES ']' Dependency-Pair (, Dependency-Pair)*
 ```
 
 ```
-Dependency-Pair ::= Identifier '=' SemverString EOL
+Dependency-Pair ::= Identifier '=' SemverString
 ```
 
 ```
 SemverString ::= # refer to SemverGrammar.md
+```
+
+```
+Bin-Section ::= '[' BIN ']' Bin-Pair (, Bin-Pair)*
+```
+
+```
+Bin-Pair ::= Identifier  '=' ClassPathString 
 ```
 
 ```

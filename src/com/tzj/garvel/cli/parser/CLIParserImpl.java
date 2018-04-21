@@ -22,9 +22,9 @@ public enum CLIParserImpl implements CLIParser {
 
     // test
     public static void main(String[] args) {
-        //final String[] input = new String[]{"garvel", "--verbose", "new", "--vcs", "git", "--lib", "foo"};
-        //final String[] input = new String[]{"garvel", "help", "new"};
-        final String[] input = new String[]{"garvel", "run"};
+        //final String[] input = new String[]{"--verbose", "new", "--vcs", "git", "foo"};
+        final String[] input = new String[]{"help", "new"};
+        //final String[] input = new String[]{"--verbose", "run", "one"};
 
         Program program = CLIParserImpl.INSTANCE.parse(input);
         System.out.println(program);
@@ -148,69 +148,21 @@ public enum CLIParserImpl implements CLIParser {
                 switch (currentToken.kind()) {
                     case VCS: {
                         acceptIt();
-
                         final VCSAst vcs = parseVCS();
-
-                        switch (currentToken.kind()) {
-                            case BIN: {
-                                acceptIt();
-
-                                final Path path = parsePath();
-                                command = new NewCommandAst(vcs, true, false, path);
-                            }
-                            break;
-
-                            case LIB: {
-                                acceptIt();
-
-                                final Path path = parsePath();
-                                command = new NewCommandAst(vcs, false, true, path);
-                            }
-                            break;
-
-                            case IDENTIFIER: {
-                                final Path path = parsePath();
-
-                                // default bin
-                                command = new NewCommandAst(vcs, true, false, path);
-                            }
-                            break;
-
-                            default: {
-                                CLIErrorHandler.errorAndExit(String.format("Error: Either %s, %s, or a valid PATH  must follow --vcs",
-                                        CLITokenType.BIN, CLITokenType.LIB));
-                            }
-                        }
-                    }
-                    break;
-
-                    case BIN: {
-                        acceptIt();
-
                         final Path path = parsePath();
-                        command = new NewCommandAst(new VCSAst(new Identifier(VCSType.NONE.toString())), true, false, path);
-                    }
-                    break;
-
-                    case LIB: {
-                        acceptIt();
-
-                        final Path path = parsePath();
-                        command = new NewCommandAst(new VCSAst(new Identifier(VCSType.NONE.toString())), false, true, path);
+                        command = new NewCommandAst(vcs, path);
                     }
                     break;
 
                     case IDENTIFIER: {
                         final Path path = parsePath();
-
-                        // bin is default
-                        command = new NewCommandAst(new VCSAst(new Identifier(VCSType.NONE.toString())), true, false, path);
+                        command = new NewCommandAst(new VCSAst(new Identifier(VCSType.NONE.toString())), path);
                     }
                     break;
 
                     default: {
-                        CLIErrorHandler.errorAndExit(String.format("Error: Either %s, %s, or %s must follow the `new` command",
-                                CLITokenType.VCS, CLITokenType.BIN, CLITokenType.LIB));
+                        CLIErrorHandler.errorAndExit(String.format("Error: Either %s, or the PATH must follow the `new` command",
+                                CLITokenType.VCS));
                     }
                 }
             }
@@ -230,7 +182,8 @@ public enum CLIParserImpl implements CLIParser {
 
             case RUN: {
                 acceptIt();
-                command = new RunCommandAst();
+                final TargetNameAst target = parseTargetName();
+                command = new RunCommandAst(target);
             }
             break;
 
@@ -242,6 +195,19 @@ public enum CLIParserImpl implements CLIParser {
         }
 
         return command;
+    }
+
+    /**
+     * TargetName ::= Identifier
+     *
+     * @return
+     */
+    private TargetNameAst parseTargetName() {
+        if (currentToken.kind() != CLITokenType.IDENTIFIER) {
+            CLIErrorHandler.errorAndExit("Missing target name for `garvel run` command");
+        }
+
+        return new TargetNameAst(parseIdentifier());
     }
 
     /**
@@ -268,6 +234,21 @@ public enum CLIParserImpl implements CLIParser {
      * @return
      */
     private CommandNameAst parseCommandName() {
+        switch (currentToken.kind()) {
+            case HELP:
+            case LIST:
+            case VERSION:
+            case NEW:
+            case CLEAN:
+            case BUILD:
+            case RUN:
+            case TEST:
+                break;
+            default:
+                CLIErrorHandler.errorAndExit("Missing target name for `garvel run` command");
+
+        }
+
         return new CommandNameAst(parseCommandIdentifier());
     }
 

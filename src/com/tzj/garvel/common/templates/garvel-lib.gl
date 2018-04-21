@@ -1,31 +1,28 @@
-# Configuration file for standalone library.
+# Configuration file for a runnable project
 # The keys are fixed. Customise the values.
 # Empty keys are not allowed.
 
-{
-    "project": {
-        "package": {
-            "name" : "HelloWorld",
-            "version" : "0.1.0",
-            "authors" : [ "me@me.com" ],
-            "description" : "A simple Hello, world project!",
-            "homepage" : "http://example.com/hello_world",
-            "readme" : "https://example.com/hello_world/readme.html",
-            "keywords" : [ "basic", "hello world"],
-            "categories" : [ "standalone", "jar" ],
-            "licence" : "MIT",
-            "licence-file": "custom-licence-path",
-            "classpath" : [ "./" ] # apart from the dependencies
-        },
+# project metadata
+# fixed keys, of which
+# `name`, and `version` are compulsory.
+[project]
 
-        "dependencies": {
-            "junit" : "4.1.2", # exact version
-            "log4j" : "*" # latest version
-        },
+name = "HelloWorld",
+version = "0.1.0",
+classpath = [ "./" ], # apart from the dependencies
+authors = [ "me@me.com" ],
+description = "A simple Hello, world project!",
+homepage = "http://example.com/hello_world",
+readme = "https://example.com/hello_world/readme.html",
+keywords = [ "basic", "hello world"],
+categories = [ "standalone", "jar" ],
+licence = "MIT",
+licence-file =  "custom-licence-path"
 
-        # where the JAR file will be deployed
-        "lib": {
-            "path" : "/lib"
-        },
-    }
-}
+# the external dependencies for this project
+[dependencies]
+
+junit = "4.1.2", # exact version
+log4j = "*", # latest version
+
+

@@ -11,10 +11,10 @@ Program ::= [(-v | --verbose) | (-q | --quiet)] Command
 Command ::= help CommandName
            | list 
            | version
-           | new [--vcs Identifier | --vcs Identifier --bin | --vcs Identifier --lib | --bin | --lib] PATH
+           | new [--vcs Identifier] PATH
            | build
            | clean
-           | run
+           | run TargetName
            | test
 ```
 
@@ -25,6 +25,11 @@ CommandName ::= CommandIdentifier
 ```
 CommandIdentifier ::= "help" | "list" | "version" | "new" | "build" | "clean" | "run" | "test"
 ```
+
+```
+TargetName ::= Identifier 
+```
+
 
 ```
 PATH ::= Identifier

@@ -197,7 +197,7 @@ function create_garvel_script()
 
     chmod +ux ${TARGET_DIR}/${GARVEL_WRAPPER}
     echo "[ Finished creating wrapper script ${GARVL_WRAPPER} for ${PROJECT_NAME} in ${TARGET_DIR} ]"
-    echo "Add the following line to your bashrc or bash_profile file:"
+    echo "Add the following line to your .bashrc or .bash_profile file:"
     echo "    \"alias ${PROJECT_NAME}=${TARGET_DIR}/${GARVEL_WRAPPER}\""
     echo
 }

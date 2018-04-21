@@ -29,5 +29,9 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
  * bench command.
  * Create and store SSL certificate for downloading external artifacts.
  * Update build scripts to handle proper targets - build, clean, test, deploy (generate JAR). 
- * Replace JSON parser with a strict TOML-like configuration file and parser (?)  
+ * Replace JSON parser with a strict TOML-like configuration file and parser (?)
+ * For v1.0, simply use the `Garvel.gl` file as a marker for dependencies, and have a lean JAR for
+   the project. In later versions, linking a fat JAR (static linking) should be possible using a
+   custom classloader (or any other suitable mechanism). 
+   
    

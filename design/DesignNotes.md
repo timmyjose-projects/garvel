@@ -141,9 +141,9 @@ $ garvel new foo
 foo
 ├── Garvel.gl
 └── src
-    └── Lib.java
+└── tests
 
-1 directory, 2 files
+2 directory, 2 files
 ```
 
 ```
@@ -152,46 +152,51 @@ $ garvel new --bin bar
 bar
 ├── Garvel.gl
 └── src
-    └── Main.java
+└── tests
 
 1 directory, 2 files
 ```
 
 ```
 $ cat Garvel.gl
-# Sample template for Garvel.gl
+# Configuration file for a runnable project
+# The keys are fixed. Customise the values.
+# Empty keys are not allowed.
 
-{
-    "project": {
-        "package": {
-            "name" : "HelloWorld",
-            "version" : "0.1.0",
-            "authors" : [ "me@me.com" ],
-            "description" : "A simple Hello, world project!",
-            "homepage" : "http://example.com/hello_world",
-            "readme" : "https://example.com/hello_world/readme.html",
-            "keywords" : [ "basic", "hello world"],
-            "categories" : [ "standalone", "jar" ],
-            "licence" : "MIT",
-            "licence-file": "custom-licence-path",
-            "classpath" : [ "./" ] # apart from the dependencies
-        },
+# project metadata
+[project]
 
-        "dependencies": {
-            "junit" : "4.1.2", # exact version
-            "log4j" : "*" # latest version
-        },
+name = "HelloWorld",
+version = "0.1.0",
+classpath = [ "./" ], # apart from the dependencies
+authors = [ "me@me.com" ],
+description = "A simple Hello, world project!",
+homepage = "http://example.com/hello_world",
+readme = "https://example.com/hello_world/readme.html",
+keywords = [ "basic", "hello world"],
+categories = [ "standalone", "jar" ],
+licence = "MIT",
+licence-file =  "custom-licence-path"
 
-        # empty properties are not allowed
-        "lib": {
-            "path" : "/lib"
-        },
+# the external dependencies for this project
+# only exact version supported for now,
+# but different options can be provdided later
+[dependencies]
 
-        "bin": {
-            "class" : "/bin/Main"
-        }
-    }
-}
+junit = "4.1.2",
+log4j = "1.2.17", 
+
+
+# targets for `garvel run --bin`
+# optional section, but required for `garvel run`
+# "target_name" : "path" format
+# if given, at least one target must
+# be specified
+[bin]
+
+"one" = "/bin/one/Main",
+"two" = ""/bin/two/Main",
+"three" = "/bin/three/Client"
 ```
 
 

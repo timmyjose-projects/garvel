@@ -6,11 +6,8 @@ import java.util.Map;
 public enum CLITokenType {
     IDENTIFIER("<identifier>"),
     VERBOSE("--verbose"),
-    GARVEL("garvel"),
     VCS("--vcs"),
     QUIET("--quiet"),
-    BIN("--bin"),
-    LIB("--lib"),
     HELP("help"),
     VERSION("version"),
     LIST("list"),
@@ -27,14 +24,11 @@ public enum CLITokenType {
     static {
         keywordMap = new HashMap<>();
 
-        keywordMap.put(GARVEL.description, GARVEL);
         keywordMap.put("-v", VERBOSE);
         keywordMap.put(VERBOSE.description, VERBOSE);
         keywordMap.put("-q", QUIET);
         keywordMap.put(QUIET.description, QUIET);
         keywordMap.put(VCS.description, VCS);
-        keywordMap.put(BIN.description, BIN);
-        keywordMap.put(LIB.description, LIB);
         keywordMap.put(HELP.description, HELP);
         keywordMap.put(VERSION.description, VERSION);
         keywordMap.put(LIST.description, LIST);
