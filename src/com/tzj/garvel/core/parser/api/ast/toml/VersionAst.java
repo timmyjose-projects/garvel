@@ -1,6 +1,8 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
-public class VersionAst extends TOMLAst {
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
+public class VersionAst implements TOMLAst {
     private Identifier version;
 
     public VersionAst(final Identifier version) {
@@ -16,5 +18,10 @@ public class VersionAst extends TOMLAst {
 
     public Identifier getVersion() {
         return version;
+    }
+
+    @Override
+    public void accept(final TOMLAstVisitor visitor) {
+        visitor.visit(this);
     }
 }

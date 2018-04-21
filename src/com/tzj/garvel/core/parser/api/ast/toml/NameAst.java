@@ -1,10 +1,11 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
-public class NameAst extends TOMLAst {
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
+public class NameAst implements TOMLAst {
     private Identifier name;
 
     public NameAst(final Identifier name) {
-
         this.name = name;
     }
 
@@ -17,5 +18,10 @@ public class NameAst extends TOMLAst {
 
     public Identifier getName() {
         return name;
+    }
+
+    @Override
+    public void accept(final TOMLAstVisitor visitor) {
+        visitor.visit(this);
     }
 }

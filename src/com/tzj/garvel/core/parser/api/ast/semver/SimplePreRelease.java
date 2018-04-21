@@ -1,5 +1,7 @@
 package com.tzj.garvel.core.parser.api.ast.semver;
 
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverASTVisitor;
+
 import java.util.Objects;
 
 public class SimplePreRelease extends PreRelease {
@@ -26,12 +28,15 @@ public class SimplePreRelease extends PreRelease {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id);
     }
 
     public Identifier getId() {
-
         return id;
+    }
+
+    @Override
+    public void accept(final SemverASTVisitor visitor) {
+        visitor.visit(this);
     }
 }

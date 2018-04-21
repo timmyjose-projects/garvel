@@ -17,7 +17,7 @@ public class SemverParserImpl implements SemverParser {
 
     // test
     public static void main(String[] args) throws SemverParserException {
-        final String semverString = "0.1.0-nightly+beta";
+        final String semverString = "4.1.2";
 
         SemverParser parser = new SemverParserImpl(semverString);
         Semver semver = parser.parse();
@@ -74,6 +74,9 @@ public class SemverParserImpl implements SemverParser {
                 semver = new SemverVersionBuild(version, build);
             }
             break;
+            case EOT:
+                semver = new SemverVersion(version);
+                break;
 
             default:
                 throw new SemverParserException(String.format("Semver Parser Error at col %d. %s cannot start a valid semver string",

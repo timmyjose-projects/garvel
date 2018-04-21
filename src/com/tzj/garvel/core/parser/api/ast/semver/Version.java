@@ -1,8 +1,10 @@
 package com.tzj.garvel.core.parser.api.ast.semver;
 
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverASTVisitor;
+
 import java.util.Objects;
 
-public class Version extends SemverAST {
+public class Version implements SemverAST {
     private Major major;
     private Minor minor;
     private Patch patch;
@@ -47,5 +49,12 @@ public class Version extends SemverAST {
 
     public Patch getPatch() {
         return patch;
+    }
+
+    @Override
+    public void accept(final SemverASTVisitor visitor) {
+        visitor.visit(major);
+        visitor.visit(minor);
+        visitor.visit(patch);
     }
 }

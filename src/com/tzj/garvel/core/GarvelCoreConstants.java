@@ -10,13 +10,13 @@ import java.util.List;
 public class GarvelCoreConstants {
     public static final String GARVEL_HOME_DIR = System.getProperty("user.home");
 
+    public static final String GARVEL_PROJECT_ROOT = System.getProperty("user.dir");
+
     public static final String GARVEL_DIR = ".garvel";
 
     public static final String POSIX_PERMISSIONS = "rwxr-xr-x";
 
     public static final String GARVEL_CONFIG_FILE = "Garvel.gl";
-
-    public static final String GARVEL_LOCK_FILE = "Garvel.lock";
 
     // this should be moved to an external file that can be auto-incremented
     // with each build (post bootstrap of garvel to garvel)

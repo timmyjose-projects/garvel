@@ -1,5 +1,7 @@
 package com.tzj.garvel.core.parser.api.ast.semver;
 
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverASTVisitor;
+
 import java.util.Objects;
 
 public class SemverVersionPreRelease extends Semver {
@@ -40,5 +42,11 @@ public class SemverVersionPreRelease extends Semver {
 
     public PreRelease getPreRelease() {
         return preRelease;
+    }
+
+    @Override
+    public void accept(final SemverASTVisitor visitor) {
+        visitor.visit(version);
+        visitor.visit(preRelease);
     }
 }

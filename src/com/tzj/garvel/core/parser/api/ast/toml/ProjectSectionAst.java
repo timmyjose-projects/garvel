@@ -1,9 +1,11 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
 import java.util.HashSet;
 import java.util.Set;
 
-public class ProjectSectionAst extends TOMLAst {
+public class ProjectSectionAst implements TOMLAst {
     private NameAst name;
     private VersionAst version;
     private Set<ProjectMetadataAst> optionals;
@@ -37,5 +39,17 @@ public class ProjectSectionAst extends TOMLAst {
                 ", version=" + version +
                 ", optionals=" + optionals +
                 '}';
+    }
+
+    @Override
+    public void accept(final TOMLAstVisitor visitor) {
+        name.accept(visitor);
+        version.accept(visitor);
+
+        if (optionals != null) {
+            for (ProjectMetadataAst option : optionals) {
+                option.accept(visitor);
+            }
+        }
     }
 }

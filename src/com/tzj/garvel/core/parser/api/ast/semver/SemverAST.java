@@ -1,4 +1,7 @@
 package com.tzj.garvel.core.parser.api.ast.semver;
 
-public abstract class SemverAST {
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverASTVisitor;
+
+public interface SemverAST {
+    void accept(SemverASTVisitor visitor);
 }

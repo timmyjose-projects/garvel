@@ -2,7 +2,7 @@ package com.tzj.garvel.core.parser.api.ast.semver;
 
 import java.util.Objects;
 
-public class Identifier extends SemverAST {
+public class Identifier {
     private String spelling;
 
     public Identifier(final String spelling) {

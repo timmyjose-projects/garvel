@@ -1,13 +1,23 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
-public class DependencyPairAst extends TOMLAst {
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverKey;
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class DependencyPairAst implements TOMLAst {
     private Identifier key;
-    private Identifier value;
+    private Map<SemverKey, List<String>> value;
 
-    public DependencyPairAst(final Identifier key, final Identifier value) {
-
+    public DependencyPairAst(final Identifier key) {
         this.key = key;
-        this.value = value;
+        this.value = new HashMap<>();
+    }
+
+    public Map<SemverKey, List<String>> getValue() {
+        return value;
     }
 
     @Override
@@ -22,7 +32,8 @@ public class DependencyPairAst extends TOMLAst {
         return key;
     }
 
-    public Identifier getValue() {
-        return value;
+    @Override
+    public void accept(final TOMLAstVisitor visitor) {
+        visitor.visit(this);
     }
 }

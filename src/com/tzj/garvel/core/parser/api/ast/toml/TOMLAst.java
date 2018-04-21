@@ -1,4 +1,7 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
-public abstract class TOMLAst {
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
+public interface TOMLAst {
+    void accept(TOMLAstVisitor visitor);
 }

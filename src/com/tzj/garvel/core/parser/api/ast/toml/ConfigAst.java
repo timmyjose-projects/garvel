@@ -1,9 +1,11 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
-public class ConfigAst extends TOMLAst {
-    ProjectSectionAst project;
-    DependenciesSectionAst dependencies;
-    BinSectionAst bin;
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
+public class ConfigAst implements TOMLAst {
+    private ProjectSectionAst project;
+    private DependenciesSectionAst dependencies;
+    private BinSectionAst bin;
 
     public ConfigAst(final ProjectSectionAst project, final DependenciesSectionAst dependencies) {
         this.project = project;
@@ -33,5 +35,17 @@ public class ConfigAst extends TOMLAst {
                 ", dependencies=" + dependencies +
                 ", bin=" + bin +
                 '}';
+    }
+
+    @Override
+    public void accept(final TOMLAstVisitor visitor) {
+        // direct the traversal for the visitor
+
+        project.accept(visitor);
+        dependencies.accept(visitor);
+
+        if (bin != null) {
+            bin.accept(visitor);
+        }
     }
 }

@@ -1,7 +1,13 @@
 package com.tzj.garvel.core.parser.toml;
 
+import com.tzj.garvel.core.CoreModuleLoader;
+import com.tzj.garvel.core.parser.api.SemverParser;
 import com.tzj.garvel.core.parser.api.TOMLParser;
+import com.tzj.garvel.core.parser.api.ast.semver.Semver;
 import com.tzj.garvel.core.parser.api.ast.toml.*;
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverASTVisitor;
+import com.tzj.garvel.core.parser.api.visitor.toml.SemverASTTOMLVisitor;
+import com.tzj.garvel.core.parser.exception.SemverParserException;
 import com.tzj.garvel.core.parser.exception.TOMLParserException;
 import com.tzj.garvel.core.parser.exception.TOMLScannerException;
 
@@ -12,6 +18,9 @@ import java.util.Set;
 
 import static com.tzj.garvel.core.parser.toml.TOMLTokenType.*;
 
+/**
+ * Parser for the Garvel.gl configuration file.
+ */
 public class TOMLParserImpl implements TOMLParser {
     private TOMLScanner scanner;
     private TOMLToken currentToken;
@@ -198,6 +207,8 @@ public class TOMLParserImpl implements TOMLParser {
 
     /**
      * DependencyPair ::= Identifier'=' Identifier
+     * <p>
+     * We also need to ensure that the value is a valid semver string.
      *
      * @return
      */
@@ -225,7 +236,21 @@ public class TOMLParserImpl implements TOMLParser {
                     currentToken.line(), currentToken.column(), currentToken.spelling()));
         }
 
-        return new DependencyPairAst(key, value);
+        // invoke the SemverParser and retrieve the Semver AST
+        final DependencyPairAst dependency = new DependencyPairAst(key);
+        final String valueSpelling = value.spelling();
+        final String trimmedSpelling = valueSpelling.substring(1, valueSpelling.length() - 1);
+        final SemverParser parser = CoreModuleLoader.INSTANCE.getParserFramework().getSemVerParser(trimmedSpelling);
+        try {
+            final Semver semver = parser.parse();
+            final SemverASTVisitor tomlVisitor = new SemverASTTOMLVisitor(dependency);
+            semver.accept(tomlVisitor);
+        } catch (SemverParserException e) {
+            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected to find a valid dependency value (semver string), found \"%s\"",
+                    currentToken.line(), currentToken.column(), currentToken.spelling()));
+        }
+
+        return dependency;
     }
 
     /**

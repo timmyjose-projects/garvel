@@ -1,8 +1,10 @@
 package com.tzj.garvel.core.parser.api.ast.semver;
 
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverASTVisitor;
+
 import java.util.Objects;
 
-public class Patch extends SemverAST {
+public class Patch implements SemverAST {
     private IntegerLiteral patch;
 
     public Patch(final IntegerLiteral patch) {
@@ -33,5 +35,10 @@ public class Patch extends SemverAST {
 
     public IntegerLiteral getPatch() {
         return patch;
+    }
+
+    @Override
+    public void accept(final SemverASTVisitor visitor) {
+        visitor.visit(this);
     }
 }

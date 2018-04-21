@@ -2,7 +2,7 @@ package com.tzj.garvel.core.parser.api.ast.semver;
 
 import java.util.Objects;
 
-public class IntegerLiteral extends SemverAST {
+public class IntegerLiteral {
     private String spelling;
 
     public IntegerLiteral(final String spelling) {

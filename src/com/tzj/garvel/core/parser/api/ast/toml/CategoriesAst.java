@@ -1,5 +1,7 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
 import java.util.List;
 
 public class CategoriesAst extends ProjectMetadataAst {
@@ -18,5 +20,10 @@ public class CategoriesAst extends ProjectMetadataAst {
 
     public List<Identifier> getCategories() {
         return categories;
+    }
+
+    @Override
+    public void accept(final TOMLAstVisitor visitor) {
+        visitor.visit(this);
     }
 }

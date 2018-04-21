@@ -23,7 +23,11 @@ Dependencies-Section ::= '[' DEPENDENCIES ']' Dependency-Pair (, Dependency-Pair
 ```
 
 ```
-Dependency-Pair ::= Identifier '=' SemverString
+Dependency-Pair ::= Identifier '=' Semver
+```
+
+```
+Semver ::= // refer to SemverGrammar.md
 ```
 
 ```

@@ -1,8 +1,10 @@
 package com.tzj.garvel.core.parser.api.ast.semver;
 
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverASTVisitor;
+
 import java.util.Objects;
 
-public class Major extends SemverAST {
+public class Major implements SemverAST {
     private IntegerLiteral literal;
 
     public Major(final IntegerLiteral literal) {
@@ -31,5 +33,10 @@ public class Major extends SemverAST {
 
     public IntegerLiteral getLiteral() {
         return literal;
+    }
+
+    @Override
+    public void accept(final SemverASTVisitor visitor) {
+        visitor.visit(this);
     }
 }

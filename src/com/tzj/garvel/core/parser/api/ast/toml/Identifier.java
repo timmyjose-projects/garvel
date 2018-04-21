@@ -1,10 +1,11 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
-public class Identifier extends TOMLAst {
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
+public class Identifier {
     private String spelling;
 
     public Identifier(final String spelling) {
-
         this.spelling = spelling;
     }
 
@@ -15,7 +16,7 @@ public class Identifier extends TOMLAst {
                 '}';
     }
 
-    public String getSpelling() {
+    public String spelling() {
         return spelling;
     }
 }

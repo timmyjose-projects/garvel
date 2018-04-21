@@ -1,4 +1,4 @@
 package com.tzj.garvel.core.parser.api.ast.semver;
 
-public class Semver extends SemverAST {
+public abstract class Semver implements SemverAST {
 }

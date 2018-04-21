@@ -1,5 +1,7 @@
 package com.tzj.garvel.core.parser.api.ast.semver;
 
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverASTVisitor;
+
 import java.util.Objects;
 
 public class SequentialBuild extends Build {
@@ -41,5 +43,11 @@ public class SequentialBuild extends Build {
 
     public Build getBuild2() {
         return build2;
+    }
+
+    @Override
+    public void accept(final SemverASTVisitor visitor) {
+        visitor.visit(build1);
+        visitor.visit(build2);
     }
 }

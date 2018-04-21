@@ -1,5 +1,7 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
 public class HomepageAst extends ProjectMetadataAst {
     private Identifier homepage;
 
@@ -16,5 +18,10 @@ public class HomepageAst extends ProjectMetadataAst {
 
     public Identifier getHomepage() {
         return homepage;
+    }
+
+    @Override
+    public void accept(final TOMLAstVisitor visitor) {
+        visitor.visit(this);
     }
 }

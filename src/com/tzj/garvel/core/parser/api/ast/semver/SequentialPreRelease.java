@@ -1,5 +1,7 @@
 package com.tzj.garvel.core.parser.api.ast.semver;
 
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverASTVisitor;
+
 import java.util.Objects;
 
 public class SequentialPreRelease extends PreRelease {
@@ -41,5 +43,11 @@ public class SequentialPreRelease extends PreRelease {
 
     public PreRelease getPreRelease2() {
         return preRelease2;
+    }
+
+    @Override
+    public void accept(final SemverASTVisitor visitor) {
+        visitor.visit(preRelease1);
+        visitor.visit(preRelease2);
     }
 }

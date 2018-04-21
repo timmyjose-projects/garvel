@@ -1,5 +1,7 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
 public class LicenceFileAst extends ProjectMetadataAst {
     private Identifier licenceFile;
 
@@ -16,5 +18,10 @@ public class LicenceFileAst extends ProjectMetadataAst {
 
     public Identifier getLicenceFile() {
         return licenceFile;
+    }
+
+    @Override
+    public void accept(final TOMLAstVisitor visitor) {
+        visitor.visit(this);
     }
 }

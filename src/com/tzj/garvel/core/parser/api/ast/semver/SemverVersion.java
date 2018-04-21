@@ -1,5 +1,7 @@
 package com.tzj.garvel.core.parser.api.ast.semver;
 
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverASTVisitor;
+
 import java.util.Objects;
 
 public class SemverVersion extends Semver {
@@ -31,5 +33,10 @@ public class SemverVersion extends Semver {
 
     public Version getVersion() {
         return version;
+    }
+
+    @Override
+    public void accept(final SemverASTVisitor visitor) {
+        visitor.visit(version);
     }
 }

@@ -1,6 +1,8 @@
 package com.tzj.garvel.core.parser.api.ast.toml;
 
-public class BinPairAst extends TOMLAst {
+import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
+
+public class BinPairAst implements TOMLAst {
     private Identifier key;
     private Identifier value;
 
@@ -23,5 +25,10 @@ public class BinPairAst extends TOMLAst {
 
     public Identifier getValue() {
         return value;
+    }
+
+    @Override
+    public void accept(final TOMLAstVisitor visitor) {
+        visitor.visit(this);
     }
 }
