@@ -8,13 +8,13 @@ Config ::= Project-Section  Dependencies-Section [ Bin-Section ]
 Project-Section ::= '[' PROJECT ']' (NAME '=' Identifier) (VERSION = Identifier) 
             [ CLASSPATH = '[' Identifier (, Identifier)* ']') ]
             [ AUTHORS = '[' Identifier (, Identifier)* ']' ]
-            [ DESCRIPTION = Identifier  EOL]
-            [ HOMEPAGE = UrlString  EOL]
-            [ README = UrlString EOL] 
-            [ KEYWORDS = Identifier (, Identifier)* EOL]
-            [ CATEGORIES = Identifier (, Identifier)* EOL]
-            [ LICENCE = Identifier EOL]
-            [ LICENCE-FILE = Identifier EOL]
+            [ DESCRIPTION = Identifier ]
+            [ HOMEPAGE = Identifier ]
+            [ README = Identifier ] 
+            [ KEYWORDS = '[' Identifier (, Identifier)* ']' ]
+            [ CATEGORIES = '[' Identifier (, Identifier)* ']' ]
+            [ LICENCE = Identifier ]
+            [ LICENCE-FILE = Identifier ]
             
 ```
 

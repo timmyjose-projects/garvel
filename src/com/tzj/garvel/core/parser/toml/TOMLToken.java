@@ -18,19 +18,19 @@ public class TOMLToken {
         this.column = column;
     }
 
-    public TOMLTokenType getKind() {
+    public TOMLTokenType kind() {
         return kind;
     }
 
-    public String getSpelling() {
+    public String spelling() {
         return spelling;
     }
 
-    public int getLine() {
+    public int line() {
         return line;
     }
 
-    public int getColumn() {
+    public int column() {
         return column;
     }
 
