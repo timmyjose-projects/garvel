@@ -16,7 +16,7 @@ public class CLI {
             "\tgarvel [OPTIONS] [COMMAND]\n\n" +
             "Options:\n" +
             "\t-v, --verbose       Use verbose output\n" +
-            "\t -q, --quiet         No output printed to stdout (default)\n\n" +
+            "\t-q, --quiet        No output printed to stdout (default)\n\n" +
             "Note that you can specify either `--verbose` or `--quiet` but not both.\n\n" +
             "Some common garvel commands are (see all commands with --list):" +
             "\thelp        Display this help and exit\n" +
@@ -37,7 +37,6 @@ public class CLI {
      */
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.out.println("Here");
             displayUsageAndExit();
         }
 

@@ -7,16 +7,23 @@
 ##                                             ##
 #################################################
 
+# setup paths correctly so that the script
+# can be invoked from any directory
+curr_dir=$(dirname -- "$0")
+cd -- ${curr_dir}
+cd ../
+PROJECT_ROOT=`pwd`
+echo ${PROJECT_ROOT}
+
 
 ## base vars
 JAVAC=
-JAVAC_FLAGS="-Xlint"
+JAVAC_FLAGS="-Xlint -source 1.7 -target 1.7"
 CLASSPATH="."
 JAVA=
 
 ## project vars
 PROJECT_NAME=garvel
-PROJECT_ROOT=`pwd`
 BUILD_DIR=${PROJECT_ROOT}/build
 SRC_ROOT=${PROJECT_ROOT}/src
 MAIN_CLASS=Main
@@ -190,10 +197,17 @@ function create_garvel_script()
         create_target_dir
     fi
 
-    touch ${TARGET_DIR}/${GARVEL_WRAPPER}
-    echo '#!/bin/sh' >> ${TARGET_DIR}/${GARVEL_WRAPPER}
-    echo >> ${TARGET_DIR}/${GARVEL_WRAPPER}
-    echo "java -jar ${TARGET_DIR}/${TARGET_NAME} \$@" >> ${TARGET_DIR}/${GARVEL_WRAPPER}
+    script_path="${TARGET_DIR}/${GARVEL_WRAPPER}"
+    touch ${script_path}
+    echo '#!/bin/sh' >> ${script_path}
+    echo >> ${script_path}
+
+    # setup so that the script can be invoked from anywhere
+    echo "script_dir=\$(dirname -- "\$0")" >> ${script_path}
+    echo "cd -- \${script_dir}" >> ${script_path}
+    echo "cd ../" >> ${script_path}
+    echo >> ${script_path}
+    echo "java -jar ${TARGET_DIR}/${TARGET_NAME} \$@" >> ${script_path}
 
     chmod +ux ${TARGET_DIR}/${GARVEL_WRAPPER}
     echo "[ Finished creating wrapper script ${GARVL_WRAPPER} for ${PROJECT_NAME} in ${TARGET_DIR} ]"
@@ -226,6 +240,7 @@ function delete_build_dir()
 #
 # steps
 #
+
 check_java
 delete_target_dir
 create_build_dir
