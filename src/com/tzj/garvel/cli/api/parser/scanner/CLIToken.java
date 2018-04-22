@@ -1,5 +1,7 @@
 package com.tzj.garvel.cli.api.parser.scanner;
 
+import com.tzj.garvel.cli.exception.CLIErrorHandler;
+
 import java.util.Objects;
 
 public class CLIToken {
@@ -13,7 +15,7 @@ public class CLIToken {
         if (CLITokenType.isKeyword(spelling)) {
             this.kind = CLITokenType.getKeyword(spelling);
             if (this.kind == CLITokenType.UNKNOWN) {
-                // @TODO elegant and useful error-handling
+                CLIErrorHandler.errorAndExit(String.format(String.format("Unknonw token %s", kind)));
             }
         }
         this.spelling = spelling;

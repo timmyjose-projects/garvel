@@ -136,4 +136,16 @@ public class TOMLAstCacheVisitor implements TOMLAstVisitor {
         final VersionEntry version = new VersionEntry(versionAst.getVersion().spelling());
         cache.put(CacheKey.VERSION, version);
     }
+
+    @Override
+    public void visit(final MainClassAst mainClassAst) {
+        final MainClassEntry mainClass = new MainClassEntry(mainClassAst.getMainClass().spelling());
+        cache.put(CacheKey.MAIN_CLASS, mainClass);
+    }
+
+    @Override
+    public void visit(final LibSectionAst libSectionAst) {
+        final FatJarEntry fatJar = new FatJarEntry(libSectionAst.isFatJar());
+        cache.put(CacheKey.FAT_JAR, fatJar);
+    }
 }

@@ -6,6 +6,7 @@ import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
 import com.tzj.garvel.common.spi.core.command.CommandType;
 import com.tzj.garvel.common.spi.error.GarvelCheckedException;
+import com.tzj.garvel.core.cache.exception.CacheManagerException;
 import com.tzj.garvel.core.engine.Command;
 import com.tzj.garvel.core.engine.command.*;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
@@ -22,6 +23,14 @@ import java.nio.file.Paths;
 public enum CoreServiceImpl implements CoreService {
     INSTANCE;
 
+    /**
+     * Dispatch the request to the appropriate job to be executed by the Job Engine.
+     *
+     * @param type
+     * @param cmdParams
+     * @return
+     * @throws CommandException
+     */
     @Override
     public CommandResult runCommand(final CommandType type, final CommandParams cmdParams) throws CommandException {
         Command command = null;
@@ -38,9 +47,6 @@ public enum CoreServiceImpl implements CoreService {
                 break;
             case NEW:
                 command = new NewCommand();
-                break;
-            case INIT:
-                command = new InitCommand();
                 break;
             case BUILD:
                 command = new BuildCommand();
@@ -59,9 +65,8 @@ public enum CoreServiceImpl implements CoreService {
     }
 
     /**
-     * 1. Check that the Garvel directory has been created (create it otherwise) and that access permissions
+     * Check that the Garvel directory has been created (create it otherwise) and that access permissions
      * are valid.
-     * 2. Parse the configuration file and populate the cache.
      */
     @Override
     public void setup() throws GarvelCheckedException {
@@ -69,17 +74,8 @@ public enum CoreServiceImpl implements CoreService {
         if (!checkGarvelDir()) {
             makeGarvelDir();
         }
-
-        // if the project Garvel file already exists, then
-        // parse the Garvel.gl file and populate the cache
-        final String garvelConfigFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT
-                + File.separator
-                + GarvelCoreConstants.GARVEL_CONFIG_FILE;
-
-        if (CoreModuleLoader.INSTANCE.getFileSystemFramework().checkFileExists(garvelConfigFile)) {
-            CoreModuleLoader.INSTANCE.getCacheManager().populateCache();
-        }
     }
+
 
     private void makeGarvelDir() throws FilesystemFrameworkException {
         final String fullPath = GarvelCoreConstants.GARVEL_HOME_DIR + File.separator + GarvelCoreConstants.GARVEL_DIR;
@@ -95,6 +91,29 @@ public enum CoreServiceImpl implements CoreService {
         return CoreModuleLoader.INSTANCE.getFileSystemFramework().checkDirectoryExists(fullPath);
     }
 
+    /**
+     * This will be called by the `new`, `build` and `run` commands to ensure that dependencies are up-to-date
+     * before running the command.
+     *
+     * @throws CacheManagerException
+     */
+    @Override
+    public void invokeCachePopulation() throws CacheManagerException {
+        final String garvelConfigFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT
+                + File.separator
+                + GarvelCoreConstants.GARVEL_CONFIG_FILE;
+
+        if (CoreModuleLoader.INSTANCE.getFileSystemFramework().checkFileExists(garvelConfigFile)) {
+            CoreModuleLoader.INSTANCE.getCacheManager().populateCache();
+        } else {
+            throw new CacheManagerException(String.format("Garvel configuration file %s does not exist!", garvelConfigFile));
+        }
+    }
+
+    /**
+     * Shut the ExecutorSevice (the Job Engine) down. Other daemon services could be
+     * added here in later versions.
+     */
     @Override
     public void cleanup() {
         CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().shutdown();

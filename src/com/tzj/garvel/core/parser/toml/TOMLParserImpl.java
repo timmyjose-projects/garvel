@@ -35,7 +35,7 @@ public class TOMLParserImpl implements TOMLParser {
 
     // test
     public static void main(String[] args) {
-        final String filename = System.getProperty("user.dir") + "/src/com/tzj/garvel/common/templates/garvel-bin.gl";
+        final String filename = System.getProperty("user.dir") + "/src/com/tzj/garvel/common/templates/GarvelTemplate.gl";
 
         try {
             TOMLParser parser = new TOMLParserImpl(filename);
@@ -59,11 +59,138 @@ public class TOMLParserImpl implements TOMLParser {
 
         // optional
         if (currentToken.kind() == LEFT_BRACKET) {
-            final BinSectionAst targets = parseBinSection();
-            config.setBin(targets);
+            final LibSectionAst libMetadata = parseLibSection();
+
+            if (libMetadata == null) {
+                // we have already consumed '[' and BIN
+                scanner.backtrack();
+                scanner.backtrack();
+                try {
+                    currentToken = scanner.scan();
+                } catch (TOMLScannerException e) {
+                    throw new TOMLParserException(String.format("Error while backtracking at line: %d, col: %d", currentToken.line(), currentToken.column()));
+                }
+                final BinSectionAst targets = parseBinSection();
+                config.setBin(targets);
+            } else {
+                config.setLib(libMetadata);
+
+                // optional
+                if (currentToken.kind() == LEFT_BRACKET) {
+                    final BinSectionAst targets = parseBinSection();
+                    config.setBin(targets);
+                }
+            }
         }
 
         return config;
+    }
+
+    /**
+     * LibSection ::= '[' LIB ']' Main-Class [Fat-Jar]
+     *
+     * @return
+     */
+    private LibSectionAst parseLibSection() throws TOMLParserException {
+        try {
+            accept(TOMLTokenType.LEFT_BRACKET);
+        } catch (TOMLParserException e) {
+            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected \"[\", found \"%s\"",
+                    currentToken.line(), currentToken.column(), currentToken.spelling()));
+        }
+
+        try {
+            accept(TOMLTokenType.LIB);
+        } catch (TOMLParserException e) {
+            // This means that the `lib` section is probably missing, and we should try for the `bin` section before
+            // declaring an error.
+            return null;
+        }
+
+        try {
+            accept(TOMLTokenType.RIGHT_BRACKET);
+        } catch (TOMLParserException e) {
+            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected \"]\", found \"%s\"",
+                    currentToken.line(), currentToken.column(), currentToken.spelling()));
+        }
+
+        LibSectionAst libMetadata = null;
+
+        // main-class attribute is mandatory if the `lib` section is present
+        final MainClassAst mainClass = parseMainClass();
+
+        // `fat-jar` is optional
+        if (currentToken.kind() != EOT && currentToken.kind() != LEFT_BRACKET) {
+            final boolean fatJar = parseFatJar();
+            libMetadata = new LibSectionAst(mainClass, fatJar);
+        }
+
+        return libMetadata;
+    }
+
+    /**
+     * FatJar ::= "true" | "false"
+     *
+     * @return
+     */
+    private boolean parseFatJar() throws TOMLParserException {
+        boolean isFatJar = false;
+
+        try {
+            accept(TOMLTokenType.FAT_JAR);
+        } catch (TOMLParserException e) {
+            return isFatJar;
+        }
+
+        try {
+            accept(TOMLTokenType.EQUAL);
+        } catch (TOMLParserException e) {
+            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected to find \"=\" after \"fat-jar\" key target key, found \"%s\"",
+                    currentToken.line(), currentToken.column(), currentToken.spelling()));
+        }
+
+        try {
+            final Identifier fatJarId = parseIdentifier();
+            if (fatJarId.spelling().equalsIgnoreCase("\"true\"")) {
+                isFatJar = true;
+            }
+        } catch (TOMLParserException e) {
+            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected to find \"fat-jar\" target value " +
+                    "(\"true\" or \"false\"), found \"%s\"", currentToken.line(), currentToken.column(), currentToken.spelling()));
+        }
+
+        return isFatJar;
+    }
+
+    /**
+     * Main-Class ::= MAIN-CLASS '=' Identifier
+     *
+     * @return
+     */
+    private MainClassAst parseMainClass() throws TOMLParserException {
+        try {
+            accept(TOMLTokenType.MAIN_CLASS);
+        } catch (TOMLParserException e) {
+            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected to find \"main-class\" key, found \"%s\"",
+                    currentToken.line(), currentToken.column(), currentToken.spelling()));
+        }
+
+        try {
+            accept(TOMLTokenType.EQUAL);
+        } catch (TOMLParserException e) {
+            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected to find \"=\" after \"main-class\" key target key, found \"%s\"",
+                    currentToken.line(), currentToken.column(), currentToken.spelling()));
+        }
+
+        MainClassAst mainClass = null;
+        try {
+            mainClass = new MainClassAst(parseIdentifier());
+        } catch (TOMLParserException e) {
+            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected to find \"main-class\" target value (Identifier), found \"%s\"",
+                    currentToken.line(), currentToken.column(), currentToken.spelling()));
+        }
+
+        return mainClass;
     }
 
     /**

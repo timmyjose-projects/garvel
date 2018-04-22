@@ -5,11 +5,7 @@ public enum CommandType {
     LIST,
     VERSION,
     NEW,
-    INIT,
     CLEAN,
     BUILD,
-    RUN,
-    TEST,
-    BENCH,
-    UPDATE;
+    RUN;
 }

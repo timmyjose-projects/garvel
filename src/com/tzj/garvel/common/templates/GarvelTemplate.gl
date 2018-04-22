@@ -2,7 +2,10 @@
 # The keys are fixed. Customise the values.
 # Empty keys are not allowed.
 
+#
 # project metadata
+#
+
 [project]
 
 name = "<Your project name>"
@@ -11,23 +14,38 @@ classpath = [ "./" ] # apart from the dependencies
 authors = [ "you@your-email.com" ]
 description = "<project description>"
 homepage = "<your homepage, or perhaps a github url>"
-readme = "<link to your project's readme file>""
+readme = "<link to your project's readme file>"
 keywords = [ "enter", "some", "keywords", "to", "describe", "your", "project"]
 categories = [ "what", "kind of project", "this is"] # Eg: ["web-app", "spring", "demo" ]
 licence = "<standard licence type>"
 licence-file = "<link to a custom licence file, is applicable>"
 
+#
 # the external dependencies for this project
+#
+
 [dependencies]
 
 foo = "0.0.2"
 bar = "1.2.18"
+
+# This section is optional. By default, Garvel will generate the project
+# JAR file in the `target` directory. If this section is present, the
+# given `mainclass` attribute will be used to create a runnable jar.
+# if the `fat-jar` attribute is present, a single JAR will be created
+# with all dependencies bundled together into a single "fat jar".
+
+[lib]
+
+main-class = "com/foo/bar/Main" # required if section is present
+fat-jar = "false" # default # optional
 
 # targets for `garvel run`
 # optional for project.
 # target_name : "path" format
 # at least one bin target required if this section
 # is present
+
 [bin]
 
 one = "/bin/one/Main"

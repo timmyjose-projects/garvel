@@ -23,6 +23,19 @@ public class TOMLSourceFile {
         fillStream();
     }
 
+    // test
+    public static void main(String[] args) throws LexerException {
+        final String filename = System.getProperty("user.dir") + "/src/com/tzj/garvel/common/templates/GarvelTemplate.gl";
+
+        TOMLSourceFile srcFile = new TOMLSourceFile(filename);
+        List<CharWrapper> stream = srcFile.getStream();
+
+        for (CharWrapper c : stream) {
+            System.out.printf("%c", c.c());
+        }
+
+    }
+
     private void fillStream() throws LexerException {
         int linum = 1;
         String line = null;

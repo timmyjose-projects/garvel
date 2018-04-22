@@ -3,6 +3,9 @@ package com.tzj.garvel.core.parser.toml;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The token types supported by the Garvel configuration format.
+ */
 public enum TOMLTokenType {
     IDENTIFIER("<identifier>"),
     LEFT_BRACKET("["),
@@ -22,7 +25,10 @@ public enum TOMLTokenType {
     LICENCE("licence"),
     LICENCE_FILE("licence-file"),
     DEPENDENCIES("dependencies"),
+    LIB("lib"),
     BIN("bin"),
+    MAIN_CLASS("main-class"),
+    FAT_JAR("fat-jar"),
     EOT("<eot>");
 
 
@@ -45,6 +51,9 @@ public enum TOMLTokenType {
         keywordMap.put(LICENCE_FILE.description, LICENCE_FILE);
         keywordMap.put(DEPENDENCIES.description, DEPENDENCIES);
         keywordMap.put(BIN.description, BIN);
+        keywordMap.put(LIB.description, LIB);
+        keywordMap.put(MAIN_CLASS.description, MAIN_CLASS);
+        keywordMap.put(FAT_JAR.description, FAT_JAR);
     }
 
     private String description;

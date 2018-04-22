@@ -32,4 +32,8 @@ public interface TOMLAstVisitor {
     void visit(ReadmeAst readme);
 
     void visit(VersionAst version);
+
+    void visit(MainClassAst mainClassAst);
+
+    void visit(LibSectionAst libSectionAst);
 }

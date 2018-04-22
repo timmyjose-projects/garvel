@@ -26,5 +26,5 @@ public class GarvelCoreConstants {
     public static final String GARVEL_VERSION = "0.0.1";
 
     // this should be moved to an external file that can be auto-incremented
-    public static final List<String> installedCommands = Arrays.asList("help", "list", "version", "new", "init", "build", "clean", "run", "test");
+    public static final List<String> installedCommands = Arrays.asList("help", "list", "version", "new", "build", "clean", "run");
 }

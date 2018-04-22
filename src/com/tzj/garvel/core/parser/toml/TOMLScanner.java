@@ -34,7 +34,7 @@ public class TOMLScanner {
 
     // test
     public static void main(String[] args) {
-        final String filename = System.getProperty("user.dir") + "/src/com/tzj/garvel/common/templates/garvel-bin.gl";
+        final String filename = System.getProperty("user.dir") + "/src/com/tzj/garvel/common/templates/GarvelTemplate.gl";
         try {
             TOMLScanner scanner = new TOMLScanner(filename);
 
@@ -288,9 +288,12 @@ public class TOMLScanner {
             case '+':
             case '.':
             case '@':
+            case '<':
+            case '>':
             case SPACE:
             case COMMA:
             case '!':
+            case '\'':
                 return true;
             default:
                 return false;
@@ -339,5 +342,14 @@ public class TOMLScanner {
         }
 
         return nextToken();
+    }
+
+    /**
+     * Set the counter one position back.
+     *
+     * @return
+     */
+    public void backtrack() {
+        idx--;
     }
 }

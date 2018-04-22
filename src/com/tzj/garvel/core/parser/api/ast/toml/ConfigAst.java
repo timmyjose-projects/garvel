@@ -5,6 +5,7 @@ import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
 public class ConfigAst implements TOMLAst {
     private ProjectSectionAst project;
     private DependenciesSectionAst dependencies;
+    private LibSectionAst lib;
     private BinSectionAst bin;
 
     public ConfigAst(final ProjectSectionAst project, final DependenciesSectionAst dependencies) {
@@ -20,6 +21,14 @@ public class ConfigAst implements TOMLAst {
         return dependencies;
     }
 
+    public LibSectionAst getLib() {
+        return lib;
+    }
+
+    public void setLib(final LibSectionAst lib) {
+        this.lib = lib;
+    }
+
     public BinSectionAst getBin() {
         return bin;
     }
@@ -33,6 +42,7 @@ public class ConfigAst implements TOMLAst {
         return "ConfigAst{" +
                 "project=" + project +
                 ", dependencies=" + dependencies +
+                ", lib=" + lib +
                 ", bin=" + bin +
                 '}';
     }
@@ -40,9 +50,12 @@ public class ConfigAst implements TOMLAst {
     @Override
     public void accept(final TOMLAstVisitor visitor) {
         // direct the traversal for the visitor
-
         project.accept(visitor);
         dependencies.accept(visitor);
+
+        if (lib != null) {
+            lib.accept(visitor);
+        }
 
         if (bin != null) {
             bin.accept(visitor);

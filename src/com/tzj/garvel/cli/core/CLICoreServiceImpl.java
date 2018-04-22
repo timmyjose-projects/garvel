@@ -51,7 +51,6 @@ public enum CLICoreServiceImpl implements CLICoreService {
         try {
             CoreServiceLoader.INSTANCE.getCoreService().setup();
         } catch (GarvelCheckedException e) {
-            //log error (TODO)
             CLIErrorHandler.exit("Garvel setup failed.");
         }
     }

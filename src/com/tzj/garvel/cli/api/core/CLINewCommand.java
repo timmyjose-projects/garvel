@@ -30,6 +30,7 @@ public class CLINewCommand extends CLICommand {
      * 1. Create a directory with the given name.
      * 2. Create the Garvel.gl file inside.
      * 3. Create the `src`, and `tests` directories.
+     * 4. Populate the Garvel.gl cache, and fetch data.
      */
     @Override
     public void execute() {

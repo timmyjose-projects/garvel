@@ -24,6 +24,12 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
 
     private Map<CacheKey, CacheEntry> configCache;
 
+    // test
+    public static void main(String[] args) throws CacheManagerException {
+        CacheManagerServiceImpl.INSTANCE.populateCache();
+        CacheManagerServiceImpl.INSTANCE.display();
+    }
+
     @Override
     public CacheManagerService populateCache() throws CacheManagerException {
         configCache = new HashMap<>();
@@ -50,5 +56,11 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
 
         TOMLAstVisitor cacheFillVisitor = new TOMLAstCacheVisitor(configCache);
         config.accept(cacheFillVisitor);
+    }
+
+    public void display() {
+        for (Map.Entry<CacheKey, CacheEntry> entry : configCache.entrySet()) {
+            System.out.printf("%s : %s\n", entry.getKey(), entry.getValue());
+        }
     }
 }

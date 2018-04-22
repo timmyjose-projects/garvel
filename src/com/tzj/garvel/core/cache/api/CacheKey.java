@@ -13,5 +13,7 @@ public enum CacheKey {
     LICENCE_FILE,
     DEPENDENCIES,
     KEYWORDS,
-    TARGETS;
+    TARGETS,
+    MAIN_CLASS,
+    FAT_JAR;
 }

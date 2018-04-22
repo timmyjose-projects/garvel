@@ -23,6 +23,11 @@ licence-file =  "N/A"
 junit = "4.1.2" # exact version
 log4j = "1.2.7"
 
+[lib]
+
+main-class = "com/foo/bar/Main" # required if section is present
+fat-jar = "true" # default # optional
+
 
 # targets for `garvel run --bin`
 # optional, but required for `garvel run`

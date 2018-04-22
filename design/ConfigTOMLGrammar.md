@@ -1,7 +1,7 @@
 ### Grammar for the Garvel config (restricted TOML format)
 
 ```
-Config ::= Project-Section  Dependencies-Section [ Bin-Section ]
+Config ::= Project-Section  Dependencies-Section [Lib-Section] [ Bin-Section ]
 ```
 
 ```
@@ -28,6 +28,18 @@ Dependency-Pair ::= Identifier '=' Semver
 
 ```
 Semver ::= // refer to SemverGrammar.md
+```
+
+```
+Lib-Section ::=  '[' LIB ']' Main-Class [Fat-Jar]
+```
+
+```
+Main-Class ::= MAIN_CLASS '=' Identifier
+```
+
+```
+Fat-Jar ::= "true" | "false"
 ```
 
 ```
