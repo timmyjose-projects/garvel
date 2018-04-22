@@ -7,6 +7,6 @@ public class CLICleanCommand extends CLICommand {
 
     @Override
     public void execute() {
-
+        throw new UnsupportedOperationException();
     }
 }

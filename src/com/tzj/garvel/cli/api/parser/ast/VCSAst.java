@@ -6,7 +6,6 @@ public class VCSAst extends CLIAst {
     private Identifier id;
 
     public VCSAst(final Identifier id) {
-
         this.id = id;
     }
 

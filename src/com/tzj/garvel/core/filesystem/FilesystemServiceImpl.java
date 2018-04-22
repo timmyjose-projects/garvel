@@ -1,6 +1,5 @@
 package com.tzj.garvel.core.filesystem;
 
-import com.tzj.garvel.common.parser.GarvelConstants;
 import com.tzj.garvel.core.GarvelCoreConstants;
 import com.tzj.garvel.core.filesystem.api.OsType;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
@@ -11,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermissions;
+
+import static com.tzj.garvel.common.parser.GarvelConstants.EOL;
 
 public enum FilesystemServiceImpl implements FilesystemService {
     INSTANCE;
@@ -26,11 +27,11 @@ public enum FilesystemServiceImpl implements FilesystemService {
 
         osString = osString.toLowerCase();
 
-        if (osString.contains("MAC")) {
+        if (osString.contains("mac")) {
             os = OsType.MACOS;
-        } else if (osString.contains("Linux")) {
+        } else if (osString.contains("linux")) {
             os = OsType.LINUX;
-        } else if (osString.contains("Windows")) {
+        } else if (osString.contains("windows")) {
             os = OsType.WINDOWS;
         }
 
@@ -57,7 +58,7 @@ public enum FilesystemServiceImpl implements FilesystemService {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
-                sb.append(GarvelConstants.EOL);
+                sb.append(EOL);
             }
         } catch (FileNotFoundException e) {
             throw new FilesystemFrameworkException(String.format("Unable to open non-existent file %s", filename));
@@ -69,8 +70,13 @@ public enum FilesystemServiceImpl implements FilesystemService {
     }
 
     @Override
-    public boolean checkDirectoryExists(final String directory) throws FilesystemFrameworkException {
+    public boolean checkDirectoryExists(final String directory) {
         return Paths.get(directory).toFile().exists();
+    }
+
+    @Override
+    public boolean checkFileExists(final String filename) {
+        return Paths.get(filename).toFile().exists();
     }
 
     @Override
@@ -105,12 +111,68 @@ public enum FilesystemServiceImpl implements FilesystemService {
     }
 
     @Override
-    public void makeFile(final String filename) {
+    public Path makeFile(final String filename) throws FilesystemFrameworkException {
+        Path newFile = null;
 
+        try {
+            final Path path = Paths.get(filename);
+
+            if (path.toFile().exists()) {
+                throw new FilesystemFrameworkException(String.format("file already %s exists", filename));
+            }
+
+            final OsType os = getOs();
+            switch (os) {
+
+                case MACOS:
+                case LINUX:
+                    newFile = Files.createFile(path, PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString(GarvelCoreConstants.POSIX_PERMISSIONS)));
+                    break;
+                case WINDOWS:
+                    newFile = Files.createFile(path);
+                    break;
+                default:
+                    throw new FilesystemFrameworkException("Unsupported OS. Aborting...");
+            }
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(e.getLocalizedMessage());
+        }
+
+        return newFile;
     }
 
     @Override
-    public void makeTempFile(final String filename) {
+    public String loadClassPathFileAsString(final String classpathFile) throws FilesystemFrameworkException {
+        StringBuffer sb = new StringBuffer();
 
+        String line = null;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(classpathFile)))) {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+                sb.append(EOL);
+            }
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(String.format("Unable to load classpath file \"%s\"", classpathFile));
+        }
+
+        return sb.toString();
+    }
+
+    @Override
+    public Path makeFileWithContents(final String filename, final String contents) throws FilesystemFrameworkException {
+        Path newFile = makeFile(filename);
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            String[] lines = contents.split("\n");
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+            writer.flush();
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(String.format("Unable to create file \"%s\"", filename));
+        }
+
+        return newFile;
     }
 }

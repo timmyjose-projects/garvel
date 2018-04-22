@@ -1,5 +1,6 @@
 package com.tzj.garvel.cli.core;
 
+import com.tzj.garvel.cli.ModuleLoader;
 import com.tzj.garvel.cli.api.core.*;
 import com.tzj.garvel.cli.api.parser.ast.*;
 import com.tzj.garvel.cli.exception.CLIErrorHandler;
@@ -19,14 +20,16 @@ public enum CLICoreServiceImpl implements CLICoreService {
 
         if (command instanceof HelpCommandAst) {
             final HelpCommandAst cmd = (HelpCommandAst) command;
-            cliCommand = new CLIHelpCommand(opts, cmd.getCommandName().getId().getSpelling());
+            cliCommand = new CLIHelpCommand(opts, cmd.getCommandName().getId().spelling());
         } else if (command instanceof ListCommandAst) {
             cliCommand = new CLIListCommand(opts);
         } else if (command instanceof VersionCommandAst) {
             cliCommand = new CLIVersionCommand(opts);
         } else if (command instanceof NewCommandAst) {
-            final NewCommandAst cmd = (NewCommandAst) command;
-
+            final NewCommandAst newCommand = (NewCommandAst) command;
+            cliCommand = new CLINewCommand(opts,
+                    ModuleLoader.INSTANCE.getUtils().getVCSTypeFromString(newCommand.getVcs().getId().spelling()),
+                    newCommand.getPath().getId().spelling());
         } else if (command instanceof BuildCommandAst) {
             cliCommand = new CLIBuildCommand(opts);
         } else if (command instanceof CleanCommandAst) {

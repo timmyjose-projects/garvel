@@ -12,11 +12,15 @@ public interface FilesystemService {
 
     String loadFileAsString(final String filename) throws FilesystemFrameworkException;
 
-    boolean checkDirectoryExists(final String directory) throws FilesystemFrameworkException;
+    boolean checkDirectoryExists(final String directory);
+
+    boolean checkFileExists(final String directory);
 
     Path makeDirectory(final String directory) throws FilesystemFrameworkException;
 
-    void makeFile(final String filename) throws FilesystemFrameworkException;
+    Path makeFile(final String filename) throws FilesystemFrameworkException;
 
-    void makeTempFile(final String filename) throws FilesystemFrameworkException;
+    String loadClassPathFileAsString(String garvelConfigTemplate) throws FilesystemFrameworkException;
+
+    Path makeFileWithContents(String configFilePath, String configString) throws FilesystemFrameworkException;
 }

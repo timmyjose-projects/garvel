@@ -30,7 +30,6 @@ public class Path extends CLIAst {
     }
 
     public Identifier getId() {
-
         return id;
     }
 }

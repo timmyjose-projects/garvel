@@ -16,21 +16,21 @@ public class NewCommandAst extends CommandAst {
         this.path = path;
     }
 
-    public void setPath(final Path path) {
-        this.path = path;
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(vcs, path);
     }
 
-    public VCSAst getVcs() {
-        return vcs;
+    public Path getPath() {
+        return path;
     }
 
-    public void setVcs(final VCSAst vcs) {
-        this.vcs = vcs;
+    public void setPath(final Path path) {
+        this.path = path;
+    }
+
+    public VCSAst getVcs() {
+        return vcs;
     }
 
     @Override

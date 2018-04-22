@@ -70,9 +70,15 @@ public enum CoreServiceImpl implements CoreService {
             makeGarvelDir();
         }
 
+        // if the project Garvel file already exists, then
         // parse the Garvel.gl file and populate the cache
-        CoreModuleLoader.INSTANCE.getCacheManager().populateCache();
+        final String garvelConfigFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT
+                + File.separator
+                + GarvelCoreConstants.GARVEL_CONFIG_FILE;
 
+        if (CoreModuleLoader.INSTANCE.getFileSystemFramework().checkFileExists(garvelConfigFile)) {
+            CoreModuleLoader.INSTANCE.getCacheManager().populateCache();
+        }
     }
 
     private void makeGarvelDir() throws FilesystemFrameworkException {

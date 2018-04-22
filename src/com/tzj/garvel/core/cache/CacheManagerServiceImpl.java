@@ -29,7 +29,9 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
         configCache = new HashMap<>();
 
         try {
-            final String garvelConfigFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + GarvelCoreConstants.GARVEL_CONFIG_FILE;
+            final String garvelConfigFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT
+                    + File.separator
+                    + GarvelCoreConstants.GARVEL_CONFIG_FILE;
 
             final ConfigAst config = CoreModuleLoader.INSTANCE
                     .getParserFramework()

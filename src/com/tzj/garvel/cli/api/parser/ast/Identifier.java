@@ -30,7 +30,7 @@ public class Identifier extends CLIAst {
         return Objects.hash(spelling);
     }
 
-    public String getSpelling() {
+    public String spelling() {
 
         return spelling;
     }

@@ -7,6 +7,6 @@ public class CLIRunCommand extends CLICommand {
 
     @Override
     public void execute() {
-
+        throw new UnsupportedOperationException();
     }
 }

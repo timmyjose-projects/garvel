@@ -26,6 +26,8 @@ JAVA=
 PROJECT_NAME=garvel
 BUILD_DIR=${PROJECT_ROOT}/build
 SRC_ROOT=${PROJECT_ROOT}/src
+GARVEL_TEMPLATE_DIR=${BUILD_DIR}/com/tzj/garvel/common/templates
+GARVEL_TEMPLATE_FILE=${SRC_ROOT}/com/tzj/garvel/common/templates/GarvelTemplate.gl
 MAIN_CLASS=Main
 
 ## JAR vars
@@ -81,6 +83,16 @@ function create_build_dir()
         echo "Failed to create directory ${BUILD_DIR}. Please check that you have sufficient permissions."
         exit 2
     fi
+
+    # make the templates directory explicitly
+    mkdir -p ${GARVEL_TEMPLATE_DIR}
+
+    if [[ $? -ne "0" ]]
+    then
+        echo "Failed to create directory ${BUILD_DIR} (unabled to create ${GARVEL_TEMPLATE_DIR}. Please check that you have sufficient permissions."
+        exit 2
+    fi
+
     echo "[ Created build directory ]"
 }
 
@@ -104,8 +116,9 @@ function create_project_jars()
 
     pushd ${BUILD_DIR} > /dev/null
     CLASS_FILES=`find ./ -name *.class`
+    TEMPLATE_FILES=`find ./ -name *.gl`
 
-    jar cfe ${TARGET_NAME} ${TARGET_ENTRY_POINT} ${CLASS_FILES}
+    jar cfe ${TARGET_NAME} ${TARGET_ENTRY_POINT} ${CLASS_FILES} ${TEMPLATE_FILES}
 
     if [[ "$?" -eq "0" ]]
     then
@@ -152,6 +165,7 @@ function compile_sources()
 
     echo "[ Finished compiling source files ]"
 
+    cp ${GARVEL_TEMPLATE_FILE} ${GARVEL_TEMPLATE_DIR}/GarvelTemplate.gl
     create_project_jars
 
     popd > /dev/null
@@ -205,7 +219,6 @@ function create_garvel_script()
     # setup so that the script can be invoked from anywhere
     echo "script_dir=\$(dirname -- "\$0")" >> ${script_path}
     echo "cd -- \${script_dir}" >> ${script_path}
-    echo "cd ../" >> ${script_path}
     echo >> ${script_path}
     echo "java -jar ${TARGET_DIR}/${TARGET_NAME} \$@" >> ${script_path}
 

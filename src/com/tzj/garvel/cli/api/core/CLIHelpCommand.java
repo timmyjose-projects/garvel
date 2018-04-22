@@ -10,6 +10,6 @@ public class CLIHelpCommand extends CLICommand {
 
     @Override
     public void execute() {
-
+        throw new UnsupportedOperationException();
     }
 }

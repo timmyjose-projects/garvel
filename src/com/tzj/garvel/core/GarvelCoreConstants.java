@@ -1,5 +1,6 @@
 package com.tzj.garvel.core;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +18,8 @@ public class GarvelCoreConstants {
     public static final String POSIX_PERMISSIONS = "rwxr-xr-x";
 
     public static final String GARVEL_CONFIG_FILE = "Garvel.gl";
+
+    public static final String GARVEL_CONFIG_TEMPLATE = "com/tzj/garvel/common/templates/GarvelTemplate.gl";
 
     // this should be moved to an external file that can be auto-incremented
     // with each build (post bootstrap of garvel to garvel)

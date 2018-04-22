@@ -1,17 +1,28 @@
 package com.tzj.garvel.common.util;
 
+import com.tzj.garvel.common.spi.core.VCSType;
 import com.tzj.garvel.common.spi.util.UtilService;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static com.tzj.garvel.common.spi.core.VCSType.*;
 
 public enum UtilServiceImpl implements UtilService {
     INSTANCE;
 
+    private static final Map<String, VCSType> validVCS;
     private static final Set<String> validCommands;
     private static final double LEVENSHTEIN_THRESHOLD = 0.66;
+
+    static {
+        validVCS = new HashMap<>();
+
+        validVCS.put("git", GIT);
+        validVCS.put("fossil", FOSSIL);
+        validVCS.put("mercurial", MERCURIAL);
+        validVCS.put("svn", SVN);
+        validVCS.put("cvs", CVS);
+    }
 
     static {
         validCommands = new HashSet<>();
@@ -99,6 +110,16 @@ public enum UtilServiceImpl implements UtilService {
         }
 
         return null;
+    }
+
+    @Override
+    public VCSType getVCSTypeFromString(final String spelling) {
+        VCSType vcs = validVCS.get(spelling);
+        if (vcs == null) {
+            vcs = VCSType.NONE;
+        }
+
+        return vcs;
     }
 }
 
