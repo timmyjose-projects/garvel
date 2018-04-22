@@ -63,4 +63,7 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
       in the current cache => with the re-introduction of the `Garvel.lock` file, it's 
       as trivial as checking if the current version for a dependency differs from that
       in the lock file.
+    * Handle the above tasks using parallelism for improved performance, especially downloading
+      the dependencies as well as populating the registry.
+    * Use MD5 and/or SHA1 checksum for integrity verification.    
     
