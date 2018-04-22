@@ -5,6 +5,8 @@ import com.tzj.garvel.common.spi.core.command.CommandResult;
 import com.tzj.garvel.common.spi.core.command.result.NewCommandResult;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.GarvelCoreConstants;
+import com.tzj.garvel.core.cache.CacheManagerServiceImpl;
+import com.tzj.garvel.core.cache.exception.CacheManagerException;
 import com.tzj.garvel.core.concurrent.api.Job;
 import com.tzj.garvel.core.engine.exception.JobException;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
@@ -25,6 +27,8 @@ public class NewJob implements Job<NewCommandResult> {
      * 1. Create the project directory
      * 2. Create subdirectories `src` and `tests`
      * 3. Create the `Garvel.gl` file.
+     * 4. Populate the Garvel.gl cache.
+     * 5. Fetch dependencies and cache in .garvel, creating appropriate directories.
      *
      * @return
      * @throws Exception
@@ -69,6 +73,23 @@ public class NewJob implements Job<NewCommandResult> {
                     path, e.getLocalizedMessage()));
         }
 
+        populateCacheAndFetchDependencies();
+
         return new NewCommandResult(projectPath, srcPath, testsPath, configPath);
+    }
+
+    /**
+     * Parse the Garvel.gl file and populate the cache.
+     * Fetch all the dependencies and cache them in
+     * .garvel. Create the directory structures accordingly.
+     *
+     * @throws JobException
+     */
+    private void populateCacheAndFetchDependencies() throws JobException {
+        try {
+            CacheManagerServiceImpl.INSTANCE.populateCache();
+        } catch (CacheManagerException e) {
+            throw new JobException(String.format("Unable to populate cache. Aborting. Reason = %s", e.getCause()));
+        }
     }
 }

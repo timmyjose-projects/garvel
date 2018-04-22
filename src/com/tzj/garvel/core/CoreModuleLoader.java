@@ -9,6 +9,8 @@ import com.tzj.garvel.core.concurrent.ConcurrencyServiceImpl;
 import com.tzj.garvel.core.concurrent.api.ConcurrencyService;
 import com.tzj.garvel.core.config.ConfigManagerServiceImpl;
 import com.tzj.garvel.core.config.api.ConfigManagerService;
+import com.tzj.garvel.core.dep.DependencyManagerServiceImpl;
+import com.tzj.garvel.core.dep.api.DependencyManagerService;
 import com.tzj.garvel.core.filesystem.FilesystemServiceImpl;
 import com.tzj.garvel.core.filesystem.api.FilesystemService;
 import com.tzj.garvel.core.net.NetworkServiceImpl;
@@ -81,5 +83,12 @@ public enum CoreModuleLoader {
      */
     public CacheManagerService getCacheManager() {
         return CacheManagerServiceImpl.INSTANCE;
+    }
+
+    /**
+     * The main module - handles all dependency management related functionality.
+     */
+    public DependencyManagerService getDependencyManager() {
+        return DependencyManagerServiceImpl.INSTANCE;
     }
 }

@@ -34,6 +34,8 @@ bar = "1.2.18"
 # given `mainclass` attribute will be used to create a runnable jar.
 # if the `fat-jar` attribute is present, a single JAR will be created
 # with all dependencies bundled together into a single "fat jar".
+#
+# Also, if thie section is present, it must come before the `bin` section.
 
 [lib]
 

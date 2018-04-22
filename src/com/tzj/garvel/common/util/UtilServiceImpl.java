@@ -29,14 +29,11 @@ public enum UtilServiceImpl implements UtilService {
 
         validCommands.add("help");
         validCommands.add("version");
-        validCommands.add("init");
         validCommands.add("list");
         validCommands.add("new");
         validCommands.add("clean");
         validCommands.add("build");
         validCommands.add("run");
-        validCommands.add("test");
-        validCommands.add("bench");
     }
 
     private static double probability(final String x, final String y) {
@@ -120,6 +117,15 @@ public enum UtilServiceImpl implements UtilService {
         }
 
         return vcs;
+    }
+
+    @Override
+    public void displayFormattedToConsole(boolean newline, final String format, final Object... values) {
+        if (newline) {
+            System.out.println(String.format(format, values));
+        } else {
+            System.out.print(String.format(format, values));
+        }
     }
 }
 

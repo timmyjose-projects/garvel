@@ -46,7 +46,7 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
 
             populateConfigCache(config);
         } catch (TOMLParserException e) {
-            e.printStackTrace();
+            throw new CacheManagerException(String.format("Error while populating cache. Reason = %s", e.getLocalizedMessage()));
         }
         return null;
     }
