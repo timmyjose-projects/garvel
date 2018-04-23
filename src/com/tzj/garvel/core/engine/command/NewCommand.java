@@ -8,11 +8,15 @@ import com.tzj.garvel.common.spi.core.command.result.NewCommandResult;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.concurrent.api.Job;
 import com.tzj.garvel.core.engine.Command;
+import com.tzj.garvel.core.engine.exception.JobException;
 import com.tzj.garvel.core.engine.job.NewJob;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+/**
+ * Crate a new Garvel project.
+ */
 public class NewCommand implements Command {
     @Override
     public CommandResult execute(final CommandParams params) throws CommandException {
@@ -22,10 +26,14 @@ public class NewCommand implements Command {
 
         NewCommandResult cmdRes = null;
         try {
-            // add a timeout value?
             cmdRes = task.get();
-        } catch (Exception e) {
-            throw new CommandException(e.getLocalizedMessage());
+        } catch (InterruptedException e) {
+            throw new CommandException("internal error");
+        } catch (ExecutionException e) {
+            if (e.getCause() != null) {
+                final JobException je = (JobException) e.getCause();
+                throw new CommandException(je.getErrorSting());
+            }
         }
 
         return cmdRes;

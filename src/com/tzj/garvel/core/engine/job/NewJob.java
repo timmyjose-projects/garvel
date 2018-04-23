@@ -39,7 +39,7 @@ public class NewJob implements Job<NewCommandResult> {
         try {
             projectPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(path);
         } catch (FilesystemFrameworkException e) {
-            throw new JobException(String.format("Unable to create project directory \"%s\". Reason = %s",
+            throw new JobException(String.format("Failed to create project directory \"%s\", %s",
                     path, e.getLocalizedMessage()));
         }
 
@@ -48,7 +48,7 @@ public class NewJob implements Job<NewCommandResult> {
         try {
             srcPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(srcDirPath);
         } catch (FilesystemFrameworkException e) {
-            throw new JobException(String.format("Unable to create project \"src\" directory inside project root \"%s\". Reason = %s",
+            throw new JobException(String.format("Failed to create project \"src\" directory inside project root \"%s\", %s",
                     path, e.getLocalizedMessage()));
         }
 
@@ -58,7 +58,7 @@ public class NewJob implements Job<NewCommandResult> {
         try {
             testsPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(testsDirPath);
         } catch (FilesystemFrameworkException e) {
-            throw new JobException(String.format("Unable to create project \"tests\" directory inside project root \"%s\". Reason = %s",
+            throw new JobException(String.format("Failed to create project \"tests\" directory inside project root \"%s\", %s",
                     path, e.getLocalizedMessage()));
         }
 
@@ -69,7 +69,7 @@ public class NewJob implements Job<NewCommandResult> {
             final String configString = CoreModuleLoader.INSTANCE.getFileSystemFramework().loadClassPathFileAsString(GarvelCoreConstants.GARVEL_CONFIG_TEMPLATE);
             configPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeFileWithContents(configFilePath, configString);
         } catch (FilesystemFrameworkException e) {
-            throw new JobException(String.format("Unable to create Garvel config file, \"Garvel.gl\" inside project root \"%s\". Reason = %s",
+            throw new JobException(String.format("Failed to create Garvel config file, \"Garvel.gl\" inside project root \"%s\", %s",
                     path, e.getLocalizedMessage()));
         }
 

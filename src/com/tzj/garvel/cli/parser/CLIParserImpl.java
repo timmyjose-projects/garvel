@@ -9,11 +9,13 @@ import com.tzj.garvel.cli.exception.CLIErrorHandler;
 import com.tzj.garvel.cli.exception.CLIException;
 import com.tzj.garvel.cli.parser.scanner.CLIScanner;
 import com.tzj.garvel.common.spi.core.VCSType;
+import com.tzj.garvel.common.util.UtilServiceImpl;
 
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.EOT;
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.IDENTIFIER;
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.SHOW_DEPENDENCIES;
 import static com.tzj.garvel.common.parser.GarvelConstants.SPACE;
+import static com.tzj.garvel.common.spi.core.VCSType.NONE;
 
 public enum CLIParserImpl implements CLIParser {
     INSTANCE;
@@ -102,14 +104,14 @@ public enum CLIParserImpl implements CLIParser {
             break;
 
             default: {
-                final String bestMatch = ModuleLoader.INSTANCE.getUtils().findLevenshteinMatch(currentToken.spelling());
+                final String bestMatch = ModuleLoader.INSTANCE.getUtils().findLevenshteinMatchCommand(currentToken.spelling());
 
                 if (bestMatch != null) {
-                    CLIErrorHandler.errorAndExit(String.format("\"%s\" is not a valid command.\n Did you mean \"%s\"?",
-                            currentToken.spelling(), ModuleLoader.INSTANCE.getUtils().findLevenshteinMatch(currentToken.spelling())));
+                    CLIErrorHandler.errorAndExit("\"%s\" is not a valid command.\n Did you mean \"%s\"?",
+                            currentToken.spelling(), ModuleLoader.INSTANCE.getUtils().findLevenshteinMatchCommand(currentToken.spelling()));
                 } else {
-                    CLIErrorHandler.errorAndExit(String.format("%s is not a valid command.",
-                            currentToken.spelling()));
+                    CLIErrorHandler.errorAndExit("%s is not a valid command.",
+                            currentToken.spelling());
                 }
             }
         }
@@ -166,13 +168,13 @@ public enum CLIParserImpl implements CLIParser {
 
                     case IDENTIFIER: {
                         final Path path = parsePath();
-                        command = new NewCommandAst(new VCSAst(new Identifier(VCSType.NONE.toString())), path);
+                        command = new NewCommandAst(new VCSAst(new Identifier(NONE.toString())), path);
                     }
                     break;
 
                     default: {
-                        CLIErrorHandler.errorAndExit(String.format("Error: Either %s, or the PATH must follow the `new` command",
-                                CLITokenType.VCS));
+                        CLIErrorHandler.errorAndExit("Error: Either %s, or the PATH must follow the `new` command",
+                                CLITokenType.VCS);
                     }
                 }
             }
@@ -233,11 +235,14 @@ public enum CLIParserImpl implements CLIParser {
      * @return
      */
     private DependencyNameAst parseDependencyName() {
-        if (currentToken.kind() != IDENTIFIER) {
+        DependencyNameAst depName = null;
+        try {
+            depName = new DependencyNameAst(parseIdentifier());
+        } catch (CLIException e) {
             CLIErrorHandler.errorAndExit("Missing artifact name for `dep` command");
         }
 
-        return new DependencyNameAst(parseIdentifier());
+        return depName;
     }
 
     /**
@@ -246,11 +251,14 @@ public enum CLIParserImpl implements CLIParser {
      * @return
      */
     private TargetNameAst parseTargetName() {
-        if (currentToken.kind() != CLITokenType.IDENTIFIER) {
+        TargetNameAst targetName = null;
+        try {
+            targetName = new TargetNameAst(parseIdentifier());
+        } catch (CLIException e) {
             CLIErrorHandler.errorAndExit("Missing target name for `run` command");
         }
 
-        return new TargetNameAst(parseIdentifier());
+        return targetName;
     }
 
     /**
@@ -259,7 +267,14 @@ public enum CLIParserImpl implements CLIParser {
      * @return
      */
     private Path parsePath() {
-        return new Path(parseIdentifier());
+        Path path = null;
+        try {
+            path = new Path(parseIdentifier());
+        } catch (CLIException e) {
+            CLIErrorHandler.errorAndExit("Unable to parse `path` for `new` command");
+        }
+
+        return path;
     }
 
     /**
@@ -268,7 +283,28 @@ public enum CLIParserImpl implements CLIParser {
      * @return
      */
     private VCSAst parseVCS() {
-        return new VCSAst(parseIdentifier());
+        VCSAst vcs = null;
+
+        try {
+            vcs = new VCSAst(parseIdentifier());
+        } catch (CLIException e) {
+            CLIErrorHandler.errorAndExit("Unable to parse `vcs` for `new` command");
+        }
+
+        // validate vcs type here rather than delaying it for later.
+        final String vcsTypeString = vcs.getId().spelling();
+        final VCSType vcsType = UtilServiceImpl.INSTANCE.getVCSTypeFromString(vcsTypeString);
+
+        if (vcsType == NONE) {
+            final String mostProbableVcs = UtilServiceImpl.INSTANCE.findLevenshteinMatchVCS(vcsTypeString);
+            if (mostProbableVcs != null) {
+                CLIErrorHandler.errorAndExit("Unknown vcs type: \"%s\". Did you mean \"%s\"?\n", vcsTypeString, mostProbableVcs);
+            } else {
+                CLIErrorHandler.errorAndExit("Unknown vcs type: \"%s\". Try `garvel help new` for the complete list of valid VCS types.\n", vcsTypeString);
+            }
+        }
+
+        return vcs;
     }
 
     /**
@@ -290,8 +326,17 @@ public enum CLIParserImpl implements CLIParser {
             case DEP:
             case TEST:
                 break;
-            default:
-                CLIErrorHandler.errorAndExit("Missing target name for `help` command");
+            default: {
+                final String mostProbableCommand = UtilServiceImpl.INSTANCE.findLevenshteinMatchCommand(currentToken.spelling());
+                if (mostProbableCommand == null) {
+                    CLIErrorHandler.errorAndExit("Unknown command \"%s\". Try `garvel list` to see the list of possible command names\n",
+                            currentToken.spelling());
+                } else {
+                    CLIErrorHandler.errorAndExit("Unknown command \"%s\".\nDid you mean \"%s\"?\nTry `garvel list` to see the list of possible command names\n",
+                            currentToken.spelling(), mostProbableCommand);
+                }
+            }
+
         }
 
         return new CommandNameAst(parseCommandIdentifier());
@@ -323,8 +368,8 @@ public enum CLIParserImpl implements CLIParser {
             break;
 
             default:
-                CLIErrorHandler.errorAndExit(String.format("Error: %s is not a valid argument for the `help` command\nRun `garvel list` to see " +
-                        " the valid list of command names", currentToken.spelling()));
+                CLIErrorHandler.errorAndExit("Error: %s is not a valid argument for the `help` command\nRun `garvel list` to see " +
+                        " the valid list of command names", currentToken.spelling());
         }
 
         return commandName;
@@ -336,13 +381,11 @@ public enum CLIParserImpl implements CLIParser {
      *
      * @return
      */
-    private Identifier parseIdentifier() {
+    private Identifier parseIdentifier() throws CLIException {
         if (currentToken.kind() != IDENTIFIER) {
-            // error-handling
-            throw new RuntimeException(String.format("CLI Parser Error at col %d. Expected to parse an identifier, found token of kind %s",
+            throw new CLIException(String.format("CLI Parser Error at col %d. Expected to parse an Identifier, found token of kind %s",
                     currentToken.column(), currentToken.kind()));
         }
-
         final Identifier id = new Identifier(currentToken.spelling());
         currentToken = scanner.scan();
 

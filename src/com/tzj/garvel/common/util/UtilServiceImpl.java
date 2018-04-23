@@ -12,7 +12,7 @@ public enum UtilServiceImpl implements UtilService {
 
     private static final Map<String, VCSType> validVCS;
     private static final Set<String> validCommands;
-    private static final double LEVENSHTEIN_THRESHOLD = 0.66;
+    private static final double LEVENSHTEIN_THRESHOLD = 0.50;
 
     static {
         validVCS = new HashMap<>();
@@ -30,10 +30,13 @@ public enum UtilServiceImpl implements UtilService {
         validCommands.add("help");
         validCommands.add("version");
         validCommands.add("list");
+        validCommands.add("install");
         validCommands.add("new");
         validCommands.add("clean");
         validCommands.add("build");
         validCommands.add("run");
+        validCommands.add("update");
+        validCommands.add("dep");
     }
 
     private static double probability(final String x, final String y) {
@@ -81,7 +84,7 @@ public enum UtilServiceImpl implements UtilService {
         final List<String> samples = Arrays.asList("neww", "ghel", "clena", "init", "testr", "buyidl", "qwert", "versiuin");
 
         for (String sample : samples) {
-            String cmd = UtilServiceImpl.INSTANCE.findLevenshteinMatch(sample);
+            String cmd = UtilServiceImpl.INSTANCE.findLevenshteinMatchCommand(sample);
 
             if (cmd != null) {
                 System.out.printf("%s is probably %s\n", sample, cmd);
@@ -89,8 +92,14 @@ public enum UtilServiceImpl implements UtilService {
         }
     }
 
+    /**
+     * Find the closest match (command) for the given string, or return null.
+     *
+     * @param spelling
+     * @return
+     */
     @Override
-    public String findLevenshteinMatch(final String spelling) {
+    public String findLevenshteinMatchCommand(final String spelling) {
         double maxp = 0.0;
         String currCommand = null;
 
@@ -108,6 +117,33 @@ public enum UtilServiceImpl implements UtilService {
 
         return null;
     }
+
+    /**
+     * Find the closest match (vcs) for the given string, or return null.
+     *
+     * @param spelling
+     * @return
+     */
+    @Override
+    public String findLevenshteinMatchVCS(final String spelling) {
+        double maxp = 0.0;
+        String currVcs = null;
+
+        for (String vcs : validVCS.keySet()) {
+            double cp = probability(spelling, vcs);
+            if (cp > maxp) {
+                maxp = cp;
+                currVcs = vcs;
+            }
+        }
+
+        if (maxp > LEVENSHTEIN_THRESHOLD) {
+            return currVcs;
+        }
+
+        return null;
+    }
+
 
     @Override
     public VCSType getVCSTypeFromString(final String spelling) {

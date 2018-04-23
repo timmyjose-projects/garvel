@@ -61,9 +61,9 @@ public enum FilesystemServiceImpl implements FilesystemService {
                 sb.append(EOL);
             }
         } catch (FileNotFoundException e) {
-            throw new FilesystemFrameworkException(String.format("Unable to open non-existent file %s", filename));
+            throw new FilesystemFrameworkException(String.format("Unable to open non-existent file \"%s\"", filename));
         } catch (IOException e) {
-            throw new FilesystemFrameworkException(String.format("Unable to open file %s. Reason: %s", filename, e.getLocalizedMessage()));
+            throw new FilesystemFrameworkException(String.format("Unable to open file \"%s\", %s", filename, e.getLocalizedMessage()));
         }
 
         return sb.toString();
@@ -87,7 +87,7 @@ public enum FilesystemServiceImpl implements FilesystemService {
             final Path path = Paths.get(directory);
 
             if (path.toFile().exists()) {
-                throw new FilesystemFrameworkException(String.format("directory already %s exists", directory));
+                throw new FilesystemFrameworkException(String.format("directory \"%s\" already exists", directory));
             }
 
             final OsType os = getOs();
@@ -118,7 +118,7 @@ public enum FilesystemServiceImpl implements FilesystemService {
             final Path path = Paths.get(filename);
 
             if (path.toFile().exists()) {
-                throw new FilesystemFrameworkException(String.format("file already %s exists", filename));
+                throw new FilesystemFrameworkException(String.format("file \"%s\" already exists", filename));
             }
 
             final OsType os = getOs();
