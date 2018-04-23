@@ -7,6 +7,7 @@ import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandType;
 import com.tzj.garvel.common.spi.core.command.param.NewCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.NewCommandResult;
+import com.tzj.garvel.common.util.UtilServiceImpl;
 
 /**
  * Invoked the core command and process the results.
@@ -40,7 +41,7 @@ public class CLINewCommand extends CLICommand {
 
             checkSuccess(result);
 
-            System.out.println(String.format("Project \"%s\" created successfuily", path));
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Project \"%s\" created successfuily", path);
         } catch (CommandException e) {
             CLIErrorHandler.errorAndExit(String.format("Unable to create new Garvel project \"%s\". Reason = " + e.getLocalizedMessage()));
         }

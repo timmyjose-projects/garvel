@@ -12,6 +12,7 @@ import com.tzj.garvel.common.spi.core.VCSType;
 
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.EOT;
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.IDENTIFIER;
+import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.SHOW_DEPENDENCIES;
 import static com.tzj.garvel.common.parser.GarvelConstants.SPACE;
 
 public enum CLIParserImpl implements CLIParser {
@@ -23,8 +24,9 @@ public enum CLIParserImpl implements CLIParser {
     // test
     public static void main(String[] args) {
         //final String[] input = new String[]{"--verbose", "new", "--vcs", "git", "foo"};
-        final String[] input = new String[]{"help", "new"};
+        //final String[] input = new String[]{"help", "new"};
         //final String[] input = new String[]{"--verbose", "run", "one"};
+        final String[] input = new String[]{"-q", "dep", "junit"};
 
         Program program = CLIParserImpl.INSTANCE.parse(input);
         System.out.println(program);
@@ -85,10 +87,12 @@ public enum CLIParserImpl implements CLIParser {
             case HELP:
             case LIST:
             case VERSION:
+            case INSTALL:
             case NEW:
             case BUILD:
             case CLEAN:
             case RUN:
+            case UPDATE:
             case TEST: {
                 final CommandAst command = parseCommand();
 
@@ -142,6 +146,12 @@ public enum CLIParserImpl implements CLIParser {
             }
             break;
 
+            case INSTALL: {
+                acceptIt();
+                command = new InstallCommandAst();
+            }
+            break;
+
             case NEW: {
                 acceptIt();
 
@@ -187,6 +197,26 @@ public enum CLIParserImpl implements CLIParser {
             }
             break;
 
+            case UPDATE: {
+                acceptIt();
+                command = new UpdateCommandAst();
+            }
+            break;
+
+            case DEP: {
+                acceptIt();
+
+                boolean showDependencies = false; // default
+                if (currentToken.kind() == SHOW_DEPENDENCIES) {
+                    acceptIt();
+                    showDependencies = true;
+                }
+
+                final DependencyNameAst artifact = parseDependencyName();
+                command = new DependencyCommandAst(artifact, showDependencies);
+            }
+            break;
+
             case TEST: {
                 acceptIt();
                 command = new TestCommandAst();
@@ -198,13 +228,26 @@ public enum CLIParserImpl implements CLIParser {
     }
 
     /**
+     * Dependency-Name ::= Identifier
+     *
+     * @return
+     */
+    private DependencyNameAst parseDependencyName() {
+        if (currentToken.kind() != IDENTIFIER) {
+            CLIErrorHandler.errorAndExit("Missing artifact name for `dep` command");
+        }
+
+        return new DependencyNameAst(parseIdentifier());
+    }
+
+    /**
      * TargetName ::= Identifier
      *
      * @return
      */
     private TargetNameAst parseTargetName() {
         if (currentToken.kind() != CLITokenType.IDENTIFIER) {
-            CLIErrorHandler.errorAndExit("Missing target name for `garvel run` command");
+            CLIErrorHandler.errorAndExit("Missing target name for `run` command");
         }
 
         return new TargetNameAst(parseIdentifier());
@@ -238,15 +281,17 @@ public enum CLIParserImpl implements CLIParser {
             case HELP:
             case LIST:
             case VERSION:
+            case INSTALL:
             case NEW:
             case CLEAN:
             case BUILD:
             case RUN:
+            case UPDATE:
+            case DEP:
             case TEST:
                 break;
             default:
-                CLIErrorHandler.errorAndExit("Missing target name for `garvel run` command");
-
+                CLIErrorHandler.errorAndExit("Missing target name for `help` command");
         }
 
         return new CommandNameAst(parseCommandIdentifier());
@@ -264,10 +309,13 @@ public enum CLIParserImpl implements CLIParser {
             case HELP:
             case LIST:
             case VERSION:
+            case INSTALL:
             case NEW:
             case BUILD:
             case CLEAN:
             case RUN:
+            case UPDATE:
+            case DEP:
             case TEST: {
                 commandName = new Identifier(currentToken.spelling());
                 currentToken = scanner.scan();

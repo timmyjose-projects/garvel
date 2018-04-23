@@ -15,18 +15,20 @@ public class CLI {
             "Usage:\n" +
             "\tgarvel [OPTIONS] [COMMAND]\n\n" +
             "Options:\n" +
-            "\t-v, --verbose       Use verbose output\n" +
-            "\t-q, --quiet        No output printed to stdout (default)\n\n" +
+            "\t-v, --verbose      Use verbose output (default)\n" +
+            "\t-q, --quiet        No output printed to stdout\n\n" +
             "Note that you can specify either `--verbose` or `--quiet` but not both.\n\n" +
-            "Some common garvel commands are (see all commands with --list):" +
-            "\thelp        Display this help and exit\n" +
-            "\tversion     Display version info and exit\n" +
+            "Some common garvel commands are (see all commands with --list):\n" +
+            "\thelp        Display help for a specific command\n" +
+            "\tversion     Display version information\n" +
             "\tlist        List all the available commands\n" +
-            "\tbuild       Compile the current project\n" +
+            "\tinstall     Setup Garvel\n" +
+            "\tnew         Create a new Garvel project\n" +
+            "\tbuild       Compile the current project and generate artifacts\n" +
             "\tclean       Remove the target directory\n" +
-            "\tnew         Create a new garvel project\n" +
-            "\trun         Build and execute src/Main.java\n" +
-            "\ttest        Run the tests\n\n" +
+            "\trun         Build and execute the specified target\n" +
+            "\tupdate      Fetch the latest registry from Maven Central (and other repos)\n" +
+            "\tdep         Display the available versions and dependencies of the specified artifact\n\n" +
 
             "See 'garvel help <command>' for more information on a specific command.\n\n";
 

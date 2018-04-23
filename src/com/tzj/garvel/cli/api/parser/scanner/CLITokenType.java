@@ -11,10 +11,14 @@ public enum CLITokenType {
     HELP("help"),
     VERSION("version"),
     LIST("list"),
+    INSTALL("install"),
     NEW("new"),
     BUILD("build"),
     CLEAN("clean"),
     RUN("run"),
+    UPDATE("update"),
+    DEP("dep"),
+    SHOW_DEPENDENCIES("--show-dependencies"),
     TEST("test"),
     EOT("<eot>"),
     UNKNOWN("<unknown>");
@@ -32,11 +36,16 @@ public enum CLITokenType {
         keywordMap.put(HELP.description, HELP);
         keywordMap.put(VERSION.description, VERSION);
         keywordMap.put(LIST.description, LIST);
+        keywordMap.put(INSTALL.description, INSTALL);
         keywordMap.put(NEW.description, NEW);
         keywordMap.put(BUILD.description, BUILD);
         keywordMap.put(CLEAN.description, CLEAN);
         keywordMap.put(RUN.description, RUN);
+        keywordMap.put(DEP.description, DEP);
+        keywordMap.put("-s", SHOW_DEPENDENCIES);
+        keywordMap.put(SHOW_DEPENDENCIES.description, SHOW_DEPENDENCIES);
         keywordMap.put(TEST.description, TEST);
+        keywordMap.put(UPDATE.description, UPDATE);
     }
 
     private String description;

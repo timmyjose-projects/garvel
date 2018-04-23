@@ -15,7 +15,7 @@ public class CLIToken {
         if (CLITokenType.isKeyword(spelling)) {
             this.kind = CLITokenType.getKeyword(spelling);
             if (this.kind == CLITokenType.UNKNOWN) {
-                CLIErrorHandler.errorAndExit(String.format(String.format("Unknonw token %s", kind)));
+                CLIErrorHandler.errorAndExit(String.format(String.format("unknown token %s", kind)));
             }
         }
         this.spelling = spelling;

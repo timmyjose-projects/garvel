@@ -8,14 +8,17 @@ Program ::= [(-v | --verbose) | (-q | --quiet)] Command
 ```
 
 ```
-Command ::= help CommandName
+Command ::= help Command-Name
            | list 
            | version
+           | install 
            | new [--vcs Identifier] PATH
            | build
            | clean
            | run TargetName
            | test
+           | update
+           | dep [(-s | --show-dependencies)] Dependency-Name
 ```
 
 ```
@@ -30,6 +33,9 @@ CommandIdentifier ::= "help" | "list" | "version" | "new" | "build" | "clean" | 
 TargetName ::= Identifier 
 ```
 
+```
+Dependency-Name ::= Identifier
+```
 
 ```
 PATH ::= Identifier
