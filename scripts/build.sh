@@ -215,11 +215,6 @@ function create_garvel_script()
     touch ${script_path}
     echo '#!/bin/sh' >> ${script_path}
     echo >> ${script_path}
-
-    # setup so that the script can be invoked from anywhere
-    echo "script_dir=\$(dirname -- "\$0")" >> ${script_path}
-    echo "cd -- \${script_dir}" >> ${script_path}
-    echo >> ${script_path}
     echo "java -jar ${TARGET_DIR}/${TARGET_NAME} \$@" >> ${script_path}
 
     chmod +ux ${script_path}
