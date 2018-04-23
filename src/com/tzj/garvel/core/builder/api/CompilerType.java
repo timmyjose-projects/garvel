@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.compiler.api;
+package com.tzj.garvel.core.builder.api;
 
 public enum CompilerType {
     JAVAX_JAVACOMPILER,

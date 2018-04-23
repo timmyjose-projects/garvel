@@ -1,7 +1,7 @@
-package com.tzj.garvel.core.compiler.api;
+package com.tzj.garvel.core.builder.api;
 
-import com.tzj.garvel.core.compiler.javax.JavaxJavaCompiler;
-import com.tzj.garvel.core.compiler.system.SystemJavaCompiler;
+import com.tzj.garvel.core.builder.javax.JavaxJavaCompiler;
+import com.tzj.garvel.core.builder.system.SystemJavaCompiler;
 
 public class CompilerFactory {
     private CompilerFactory() {
@@ -12,10 +12,10 @@ public class CompilerFactory {
 
         switch (type) {
             case JAVAX_JAVACOMPILER:
-                compiler = JavaxJavaCompiler.INSTANCE;
+                compiler = new JavaxJavaCompiler();
                 break;
             case SYSTEM_JAVACOMPILER:
-                compiler = SystemJavaCompiler.INSTANCE;
+                compiler = new SystemJavaCompiler();
                 break;
         }
 
