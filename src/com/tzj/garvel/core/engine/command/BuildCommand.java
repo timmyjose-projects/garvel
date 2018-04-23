@@ -3,6 +3,7 @@ package com.tzj.garvel.core.engine.command;
 import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
+import com.tzj.garvel.common.spi.core.command.param.InstallCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.BuildCommandResult;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.concurrent.api.Job;
@@ -13,9 +14,27 @@ import com.tzj.garvel.core.engine.job.BuildJob;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class BuildCommand implements Command {
+public class BuildCommand extends Command {
+    public BuildCommand() {
+        super(new InstallCommand());
+    }
+
+    /**
+     * `build` has a dependency on `install`.
+     *
+     * @throws CommandException
+     */
     @Override
-    public CommandResult execute(final CommandParams params) throws CommandException {
+    protected void executePrerequisite() throws CommandException {
+        try {
+            prerequisiteCommand.run(new InstallCommandParams());
+        } catch (CommandException e) {
+            throw new CommandException(String.format("Prerequisite (install) for build command failed, %s\n", e.getErrorString()));
+        }
+    }
+
+    @Override
+    protected CommandResult execute(final CommandParams params) throws CommandException {
         final Job<BuildCommandResult> job = new BuildJob();
         final Future<BuildCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().submit(job);
 

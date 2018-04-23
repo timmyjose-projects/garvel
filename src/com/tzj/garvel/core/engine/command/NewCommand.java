@@ -3,6 +3,7 @@ package com.tzj.garvel.core.engine.command;
 import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
+import com.tzj.garvel.common.spi.core.command.param.InstallCommandParams;
 import com.tzj.garvel.common.spi.core.command.param.NewCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.NewCommandResult;
 import com.tzj.garvel.core.CoreModuleLoader;
@@ -17,7 +18,25 @@ import java.util.concurrent.Future;
 /**
  * Crate a new Garvel project.
  */
-public class NewCommand implements Command {
+public class NewCommand extends Command {
+    public NewCommand() {
+        super(new InstallCommand());
+    }
+
+    /**
+     * `new` command depends on `install` command.
+     *
+     * @throws CommandException
+     */
+    @Override
+    protected void executePrerequisite() throws CommandException {
+        try {
+            prerequisiteCommand.run(new InstallCommandParams());
+        } catch (CommandException e) {
+            throw new CommandException(String.format("Prerequisite (install) for new command failed, %s\n", e.getErrorString()));
+        }
+    }
+
     @Override
     public CommandResult execute(final CommandParams params) throws CommandException {
         final NewCommandParams cmdParams = (NewCommandParams) params;

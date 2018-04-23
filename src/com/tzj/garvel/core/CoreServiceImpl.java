@@ -61,7 +61,7 @@ public enum CoreServiceImpl implements CoreService {
                 throw new CommandException(String.format("Command %s is not a valid command", type));
         }
 
-        return command.execute(cmdParams);
+        return command.run(cmdParams);
     }
 
     /**

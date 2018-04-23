@@ -14,7 +14,21 @@ import com.tzj.garvel.core.engine.job.VersionJob;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class VersionCommand implements Command {
+public class VersionCommand extends Command {
+    public VersionCommand() {
+        super(null);
+    }
+
+    /**
+     * `version` has no prerequisites.
+     *
+     * @throws CommandException
+     */
+    @Override
+    protected void executePrerequisite() throws CommandException {
+        return;
+    }
+
     @Override
     public CommandResult execute(final CommandParams params) throws CommandException {
         final Job<VersionCommandResult> job = new VersionJob();

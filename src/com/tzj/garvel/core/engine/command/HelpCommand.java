@@ -17,7 +17,21 @@ import java.util.concurrent.Future;
 /**
  * Retrieve the help pages for the given command.
  */
-public class HelpCommand implements Command {
+public class HelpCommand extends Command {
+    public HelpCommand() {
+        super(null);
+    }
+
+    /**
+     * This command has no prerequisites.
+     *
+     * @throws CommandException
+     */
+    @Override
+    protected void executePrerequisite() throws CommandException {
+        return;
+    }
+
     @Override
     public CommandResult execute(final CommandParams params) throws CommandException {
         final HelpCommandParams cmdParams = (HelpCommandParams) params;

@@ -13,7 +13,21 @@ import com.tzj.garvel.core.engine.job.ListJob;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class ListCommand implements Command {
+public class ListCommand extends Command {
+    public ListCommand() {
+        super(null);
+    }
+
+    /**
+     * `list` command has no prerequisites.
+     *
+     * @throws CommandException
+     */
+    @Override
+    protected void executePrerequisite() throws CommandException {
+        return;
+    }
+
     @Override
     public CommandResult execute(final CommandParams params) throws CommandException {
         final Job<ListCommandResult> job = new ListJob();

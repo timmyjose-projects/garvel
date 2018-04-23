@@ -46,8 +46,8 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
  * Progress Monitor using total file size and currently downloaded bytes.
  * `Garvel.lock` file is now required to maintain the current state of the project's dependencies.
  
- * Logging becomes increasingly important. Configure the base Java logger.
- * Improve error-handling by using custom methods to chain causes for proper display.
+ * Logging becomes increasingly important. Configure the base Java logger. (lower priority).
+ * ~~Improve error-handling by using custom methods to chain causes for proper display.~~
  
   
   Overall strategy:
