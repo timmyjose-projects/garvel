@@ -37,13 +37,6 @@ public class CleanJob implements Job<CleanCommandResult> {
             throw new JobException(String.format("clean job failed to delete some files: %s", e.getLocalizedMessage()));
         }
 
-        // delete the target directory itself now (which is presumably empty);
-        try {
-            Files.deleteIfExists(targetDirPath);
-        } catch (IOException e) {
-            throw new JobException(String.format("clean job failed to delete the `target` directory: %s", e.getLocalizedMessage()));
-        }
-
         return new CleanCommandResult(true);
     }
 }
