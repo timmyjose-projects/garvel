@@ -1,5 +1,6 @@
 package com.tzj.garvel.core.engine.command;
 
+import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
 import com.tzj.garvel.common.spi.core.command.param.NewCommandParams;
@@ -14,8 +15,8 @@ import java.util.concurrent.Future;
 
 public class NewCommand implements Command {
     @Override
-    public CommandResult execute(final CommandParams params) {
-        final NewCommandParams cmdParams = (NewCommandParams)params;
+    public CommandResult execute(final CommandParams params) throws CommandException {
+        final NewCommandParams cmdParams = (NewCommandParams) params;
         final Job<NewCommandResult> job = new NewJob(cmdParams.getVcs(), cmdParams.getPath());
         final Future<NewCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().submit(job);
 
@@ -23,10 +24,8 @@ public class NewCommand implements Command {
         try {
             // add a timeout value?
             cmdRes = task.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new CommandException(e.getLocalizedMessage());
         }
 
         return cmdRes;

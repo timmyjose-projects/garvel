@@ -35,7 +35,7 @@ public class TOMLParserImpl implements TOMLParser {
 
     // test
     public static void main(String[] args) {
-        final String filename = System.getProperty("user.dir") + "/src/com/tzj/garvel/common/templates/GarvelTemplate.gl";
+        final String filename = "/Users/z0ltan/Code/Projects/Playground/temp/foo/Garvel.gl";
 
         try {
             TOMLParser parser = new TOMLParserImpl(filename);

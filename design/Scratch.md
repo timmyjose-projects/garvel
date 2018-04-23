@@ -45,6 +45,10 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
  * Migrate tool for Maven projects using the POM Parser to generate the corresponding Garvel.gl file.
  * Progress Monitor using total file size and currently downloaded bytes.
  * `Garvel.lock` file is now required to maintain the current state of the project's dependencies.
+ 
+ * Logging becomes increasingly important. Configure the base Java logger.
+ * Improve error-handling by using custom methods to chain causes for proper display.
+ 
   
   Overall strategy:
   ****************

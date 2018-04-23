@@ -43,7 +43,7 @@ public class CLINewCommand extends CLICommand {
 
             UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Project \"%s\" created successfuily", path);
         } catch (CommandException e) {
-            CLIErrorHandler.errorAndExit(String.format("Unable to create new Garvel project \"%s\". Reason = " + e.getLocalizedMessage()));
+            CLIErrorHandler.errorAndExit(String.format("Unable to create new Garvel project \"%s\". Reason = %s", path, e.getMessage()));
         }
     }
 

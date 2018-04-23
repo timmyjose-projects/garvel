@@ -6,6 +6,8 @@ import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandType;
 import com.tzj.garvel.common.spi.core.command.param.VersionCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.VersionCommandResult;
+import com.tzj.garvel.common.spi.util.UtilService;
+import com.tzj.garvel.common.util.UtilServiceImpl;
 
 /**
  * Get the current Garvel version from core.
@@ -21,7 +23,7 @@ public class CLIVersionCommand extends CLICommand {
         VersionCommandResult result = null;
         try {
             result = (VersionCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.VERSION, params);
-            System.out.println(result.getVersionSemverString());
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, result.getVersionSemverString());
         } catch (CommandException e) {
             CLIErrorHandler.errorAndExit("Unable to fetch version. Reason = " + e.getLocalizedMessage());
         }

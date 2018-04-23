@@ -26,19 +26,18 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
 
     // test
     public static void main(String[] args) throws CacheManagerException {
-        CacheManagerServiceImpl.INSTANCE.populateCache();
+        final String garvelConfigFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + GarvelCoreConstants.GARVEL_CONFIG_FILE;
+
+        CacheManagerServiceImpl.INSTANCE.populateCache(garvelConfigFile);
         CacheManagerServiceImpl.INSTANCE.display();
     }
 
     @Override
-    public CacheManagerService populateCache() throws CacheManagerException {
+    public CacheManagerService populateCache(final String garvelConfigFile) throws CacheManagerException {
         configCache = new HashMap<>();
 
         try {
-            final String garvelConfigFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT
-                    + File.separator
-                    + GarvelCoreConstants.GARVEL_CONFIG_FILE;
-
+            System.out.println("file = " + garvelConfigFile);
             final ConfigAst config = CoreModuleLoader.INSTANCE
                     .getParserFramework()
                     .getTOMLParser(garvelConfigFile)

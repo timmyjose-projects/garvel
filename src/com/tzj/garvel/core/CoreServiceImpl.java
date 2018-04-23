@@ -9,6 +9,7 @@ import com.tzj.garvel.common.spi.error.GarvelCheckedException;
 import com.tzj.garvel.core.cache.exception.CacheManagerException;
 import com.tzj.garvel.core.engine.Command;
 import com.tzj.garvel.core.engine.command.*;
+import com.tzj.garvel.core.engine.exception.JobException;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 
 import java.io.File;
@@ -34,7 +35,6 @@ public enum CoreServiceImpl implements CoreService {
     @Override
     public CommandResult runCommand(final CommandType type, final CommandParams cmdParams) throws CommandException {
         Command command = null;
-
         switch (type) {
             case HELP:
                 command = new HelpCommand();
@@ -92,7 +92,7 @@ public enum CoreServiceImpl implements CoreService {
     }
 
     /**
-     * This will be called by the `new`, `build` and `run` commands to ensure that dependencies are up-to-date
+     * This will be called by the  `build` and `run` commands to ensure that dependencies are up-to-date
      * before running the command.
      *
      * @throws CacheManagerException
@@ -104,7 +104,7 @@ public enum CoreServiceImpl implements CoreService {
                 + GarvelCoreConstants.GARVEL_CONFIG_FILE;
 
         if (CoreModuleLoader.INSTANCE.getFileSystemFramework().checkFileExists(garvelConfigFile)) {
-            CoreModuleLoader.INSTANCE.getCacheManager().populateCache();
+            CoreModuleLoader.INSTANCE.getCacheManager().populateCache(garvelConfigFile);
         } else {
             throw new CacheManagerException(String.format("Garvel configuration file %s does not exist!", garvelConfigFile));
         }

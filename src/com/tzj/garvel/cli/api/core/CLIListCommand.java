@@ -6,6 +6,7 @@ import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandType;
 import com.tzj.garvel.common.spi.core.command.param.ListCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.ListCommandResult;
+import com.tzj.garvel.common.util.UtilServiceImpl;
 
 import java.util.List;
 
@@ -21,10 +22,10 @@ public class CLIListCommand extends CLICommand {
             final ListCommandResult commands = (ListCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.LIST, params);
 
             final List<String> validCommands = commands.getValidCommands();
-            System.out.printf("Installed commands:\n");
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Installed commands:");
 
             for (String command : validCommands) {
-                System.out.printf("\t%s\n", command);
+                UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "\t%s", command);
             }
         } catch (CommandException e) {
             CLIErrorHandler.errorAndExit("Unable to fetch list of available commands. Reason = " + e.getLocalizedMessage());

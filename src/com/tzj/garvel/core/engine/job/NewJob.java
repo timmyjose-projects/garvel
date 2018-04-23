@@ -73,23 +73,6 @@ public class NewJob implements Job<NewCommandResult> {
                     path, e.getLocalizedMessage()));
         }
 
-        populateCacheAndFetchDependencies();
-
         return new NewCommandResult(projectPath, srcPath, testsPath, configPath);
-    }
-
-    /**
-     * Parse the Garvel.gl file and populate the cache.
-     * Fetch all the dependencies and cache them in
-     * .garvel. Create the directory structures accordingly.
-     *
-     * @throws JobException
-     */
-    private void populateCacheAndFetchDependencies() throws JobException {
-        try {
-            CacheManagerServiceImpl.INSTANCE.populateCache();
-        } catch (CacheManagerException e) {
-            throw new JobException(String.format("Unable to populate cache. Aborting. Reason = %s", e.getCause()));
-        }
     }
 }
