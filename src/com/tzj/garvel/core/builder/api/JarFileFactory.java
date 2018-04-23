@@ -1,6 +1,6 @@
 package com.tzj.garvel.core.builder.api;
 
-import com.tzj.garvel.core.builder.artifact.FatJarCreatorService;
+import com.tzj.garvel.core.builder.artifact.FatJarCreator;
 import com.tzj.garvel.core.builder.artifact.NormalJarFileCreator;
 
 public class JarFileFactory {
@@ -15,7 +15,7 @@ public class JarFileFactory {
                 jarService = new NormalJarFileCreator();
                 break;
             case FAT_JAR:
-                jarService = new FatJarCreatorService();
+                jarService = new FatJarCreator();
                 break;
         }
 
