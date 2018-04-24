@@ -1,8 +1,10 @@
 package com.tzj.garvel.cli.api.parser.ast;
 
+import com.tzj.garvel.cli.api.parser.visitor.CLIAstVisitor;
+
 import java.util.Objects;
 
-public class Program extends CLIAst {
+public class Program implements CLIAst {
     private boolean verbose;
     private boolean quiet;
     private CommandAst command;
@@ -54,5 +56,11 @@ public class Program extends CLIAst {
 
     public void setCommand(final CommandAst command) {
         this.command = command;
+    }
+
+    @Override
+    public void accept(final CLIAstVisitor visitor) {
+        visitor.visit(this);
+        command.accept(visitor);
     }
 }

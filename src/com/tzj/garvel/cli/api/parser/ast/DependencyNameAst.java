@@ -1,6 +1,6 @@
 package com.tzj.garvel.cli.api.parser.ast;
 
-public class DependencyNameAst extends CLIAst {
+public class DependencyNameAst {
     private Identifier commandName;
 
     public DependencyNameAst(final Identifier commandName) {

@@ -33,5 +33,5 @@ public abstract class Command {
 
     protected abstract void executePrerequisite() throws CommandException;
 
-    protected abstract CommandResult execute(CommandParams params) throws CommandException;
+    public abstract CommandResult execute(CommandParams params) throws CommandException;
 }

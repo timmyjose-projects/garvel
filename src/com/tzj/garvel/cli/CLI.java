@@ -23,6 +23,7 @@ public class CLI {
             "\tversion     Display version information\n" +
             "\tlist        List all the available commands\n" +
             "\tinstall     Setup Garvel\n" +
+            "\tuninstall   Remove Garvel setup\n" +
             "\tnew         Create a new Garvel project\n" +
             "\tbuild       Compile the current project and generate artifacts\n" +
             "\tclean       Remove the target directory\n" +
@@ -46,10 +47,7 @@ public class CLI {
         final CLIAst program = parser.parse(args);
 
         final CLICoreService service = ModuleLoader.INSTANCE.getCLICoreService();
-        service.checkGarveEssentials();
-        final CLICommand command = service.getCommand(program);
-
-        command.execute();
+        service.dispatchCommand(program);
         service.cleanup();
     }
 

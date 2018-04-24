@@ -2,7 +2,7 @@ package com.tzj.garvel.cli.api.parser.ast;
 
 import java.util.Objects;
 
-public class CommandNameAst extends CLIAst {
+public class CommandNameAst {
     private Identifier id;
 
     public CommandNameAst(final Identifier id) {

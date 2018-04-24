@@ -34,7 +34,7 @@ public class CLIScanner {
 
     // test
     public static void main(String[] args) {
-        final String text = "dep -q --show-dependencies junit";
+        final String text = "uninstall";
 
         CLIScanner scanner = new CLIScanner(text);
         while (scanner.hasMoreTokens()) {

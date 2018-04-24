@@ -12,9 +12,10 @@ Command ::= help Command-Name
            | list 
            | version
            | install 
+           | uninstall
            | new [--vcs Identifier] PATH
            | build
-           | clean
+           | clean [--include-logs]
            | run TargetName
            | test
            | update

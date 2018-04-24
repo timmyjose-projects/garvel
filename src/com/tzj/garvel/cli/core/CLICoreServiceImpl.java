@@ -7,54 +7,27 @@ import com.tzj.garvel.cli.exception.CLIErrorHandler;
 import com.tzj.garvel.common.spi.core.CoreServiceLoader;
 import com.tzj.garvel.common.spi.error.GarvelCheckedException;
 
+/**
+ * This class performs the conceptual mapping from the CLI commands to the core commands.
+ */
 public enum CLICoreServiceImpl implements CLICoreService {
     INSTANCE;
 
+    /**
+     * Dispatch the appropriate command to Core.
+     *
+     * @param ast
+     */
     @Override
-    public CLICommand getCommand(final CLIAst ast) {
-        Program program = (Program) ast;
-
-        final CLICommandOption opts = new CLICommandOption(program.isVerbose(), program.isQuiet());
-        final CommandAst command = program.getCommand();
-        CLICommand cliCommand = null;
-
-        if (command instanceof HelpCommandAst) {
-            final HelpCommandAst cmd = (HelpCommandAst) command;
-            cliCommand = new CLIHelpCommand(opts, cmd.getCommandName().getId().spelling());
-        } else if (command instanceof ListCommandAst) {
-            cliCommand = new CLIListCommand(opts);
-        } else if (command instanceof VersionCommandAst) {
-            cliCommand = new CLIVersionCommand(opts);
-        } else if (command instanceof NewCommandAst) {
-            final NewCommandAst newCommand = (NewCommandAst) command;
-            cliCommand = new CLINewCommand(opts,
-                    ModuleLoader.INSTANCE.getUtils().getVCSTypeFromString(newCommand.getVcs().getId().spelling()),
-                    newCommand.getPath().getId().spelling());
-        } else if (command instanceof BuildCommandAst) {
-            cliCommand = new CLIBuildCommand(opts);
-        } else if (command instanceof CleanCommandAst) {
-            cliCommand = new CLICleanCommand(opts);
-        } else if (command instanceof RunCommandAst) {
-            cliCommand = new CLIRunCommand(opts);
-        } else if (command instanceof TestCommandAst) {
-            cliCommand = new CLITestCommand(opts);
-        }
-
-        return cliCommand;
+    public void dispatchCommand(final CLIAst ast) {
+        final Program program = (Program) ast;
+        program.accept(new CLIAstCommandDispatchVisitor());
     }
 
     /**
-     * Contact the core service and ensure that all setup is done and ready.
+     * Perform clean-up before exiting. Currently, all this does is
+     * to call the core to shutdown the Job Engine.
      */
-    @Override
-    public void checkGarveEssentials() {
-        try {
-            CoreServiceLoader.INSTANCE.getCoreService().setup();
-        } catch (GarvelCheckedException e) {
-            CLIErrorHandler.exit("Garvel setup failed.");
-        }
-    }
-
     @Override
     public void cleanup() {
         CoreServiceLoader.INSTANCE.getCoreService().cleanup();

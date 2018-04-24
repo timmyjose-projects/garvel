@@ -1,5 +1,6 @@
 package com.tzj.garvel.cli.api.parser.ast;
 
+import com.tzj.garvel.cli.api.parser.visitor.CLIAstVisitor;
 import com.tzj.garvel.core.engine.command.NewCommand;
 
 import java.util.Objects;
@@ -48,5 +49,10 @@ public class NewCommandAst extends CommandAst {
         final NewCommandAst that = (NewCommandAst) o;
         return Objects.equals(vcs, that.vcs) &&
                 Objects.equals(path, that.path);
+    }
+
+    @Override
+    public void accept(final CLIAstVisitor visitor) {
+        visitor.visit(this);
     }
 }

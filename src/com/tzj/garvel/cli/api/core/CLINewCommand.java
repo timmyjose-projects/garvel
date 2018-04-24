@@ -43,15 +43,18 @@ public class CLINewCommand extends CLICommand {
 
             UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Project \"%s\" created successfuily", path);
         } catch (CommandException e) {
-            CLIErrorHandler.errorAndExit(String.format("Unable to create new Garvel project \"%s\". Reason = %s", path, e.getErrorString()));
+            CLIErrorHandler.errorAndExit("Unable to create new Garvel project \"%s\". Reason = %s", path, e.getErrorString());
         }
     }
 
     private void checkSuccess(final NewCommandResult result) {
-        if (result.getProjectPath().toFile().exists() && result.getSrcPath().toFile().exists() && result.getTestsPath().toFile().exists() && result.getConfigPath().toFile().exists()) {
+        if (result.getProjectPath().toFile().exists()
+                && result.getSrcPath().toFile().exists()
+                && result.getTestsPath().toFile().exists()
+                && result.getConfigPath().toFile().exists()) {
             return;
         }
 
-        CLIErrorHandler.errorAndExit(String.format("Unable to create new Garvel project \"%s\"", path));
+        CLIErrorHandler.errorAndExit("Unable to create new Garvel project \"%s\"", path);
     }
 }

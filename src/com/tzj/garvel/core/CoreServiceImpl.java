@@ -1,5 +1,6 @@
 package com.tzj.garvel.core;
 
+import com.tzj.garvel.cli.api.parser.ast.UninstallCommandAst;
 import com.tzj.garvel.common.spi.core.CoreService;
 import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandParams;
@@ -45,6 +46,12 @@ public enum CoreServiceImpl implements CoreService {
             case LIST:
                 command = new ListCommand();
                 break;
+            case INSTALL:
+                command = new InstallCommand();
+                break;
+            case UNINSTALL:
+                command = new UninstallCommand();
+                break;
             case NEW:
                 command = new NewCommand();
                 break;
@@ -57,38 +64,20 @@ public enum CoreServiceImpl implements CoreService {
             case RUN:
                 command = new RunCommand();
                 break;
+            case UPDATE:
+                command = new UpdateCommand();
+                break;
+            case DEP:
+                command = new DepCommand();
+                break;
+            case TEST:
+                command = new TestCommand();
+                break;
             default:
                 throw new CommandException(String.format("Command %s is not a valid command", type));
         }
 
         return command.run(cmdParams);
-    }
-
-    /**
-     * Check that the Garvel directory has been created (create it otherwise) and that access permissions
-     * are valid.
-     */
-    @Override
-    public void setup() throws GarvelCheckedException {
-        // ensure that the garvel directory already exists
-        if (!checkGarvelDir()) {
-            makeGarvelDir();
-        }
-    }
-
-
-    private void makeGarvelDir() throws FilesystemFrameworkException {
-        final String fullPath = GarvelCoreConstants.GARVEL_HOME_DIR + File.separator + GarvelCoreConstants.GARVEL_DIR;
-        CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(fullPath);
-    }
-
-    private boolean checkGarvelDir() throws GarvelCheckedException {
-        if (GarvelCoreConstants.GARVEL_HOME_DIR == null) {
-            throw new GarvelCheckedException("Unable to resolve user's home directory. Aborting...");
-        }
-
-        final String fullPath = GarvelCoreConstants.GARVEL_HOME_DIR + File.separator + GarvelCoreConstants.GARVEL_DIR;
-        return CoreModuleLoader.INSTANCE.getFileSystemFramework().checkDirectoryExists(fullPath);
     }
 
     /**

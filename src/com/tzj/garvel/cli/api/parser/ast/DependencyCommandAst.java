@@ -1,5 +1,7 @@
 package com.tzj.garvel.cli.api.parser.ast;
 
+import com.tzj.garvel.cli.api.parser.visitor.CLIAstVisitor;
+
 public class DependencyCommandAst extends CommandAst {
     private DependencyNameAst dependency;
     private boolean showDependencies;
@@ -23,5 +25,10 @@ public class DependencyCommandAst extends CommandAst {
 
     public boolean isShowDependencies() {
         return showDependencies;
+    }
+
+    @Override
+    public void accept(final CLIAstVisitor visitor) {
+        visitor.visit(this);
     }
 }

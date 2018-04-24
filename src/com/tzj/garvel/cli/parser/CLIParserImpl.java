@@ -28,7 +28,8 @@ public enum CLIParserImpl implements CLIParser {
         //final String[] input = new String[]{"--verbose", "new", "--vcs", "git", "foo"};
         //final String[] input = new String[]{"help", "new"};
         //final String[] input = new String[]{"--verbose", "run", "one"};
-        final String[] input = new String[]{"-q", "dep", "junit"};
+        //final String[] input = new String[]{"-q", "dep", "junit"};
+        final String[] input = new String[]{"-q", "clean", "--include-logs"};
 
         Program program = CLIParserImpl.INSTANCE.parse(input);
         System.out.println(program);
@@ -90,6 +91,7 @@ public enum CLIParserImpl implements CLIParser {
             case LIST:
             case VERSION:
             case INSTALL:
+            case UNINSTALL:
             case NEW:
             case BUILD:
             case CLEAN:
@@ -154,6 +156,12 @@ public enum CLIParserImpl implements CLIParser {
             }
             break;
 
+            case UNINSTALL: {
+                acceptIt();
+                command = new UninstallCommandAst();
+            }
+            break;
+
             case NEW: {
                 acceptIt();
 
@@ -188,7 +196,13 @@ public enum CLIParserImpl implements CLIParser {
 
             case CLEAN: {
                 acceptIt();
-                command = new CleanCommandAst();
+                final CleanCommandAst cleanCommand = new CleanCommandAst();
+                if (currentToken.kind() == CLITokenType.INCLUDE_LOGS) {
+                    acceptIt();
+                    cleanCommand.setIncludeLogs(true);
+                }
+
+                command = cleanCommand;
             }
             break;
 
@@ -318,6 +332,7 @@ public enum CLIParserImpl implements CLIParser {
             case LIST:
             case VERSION:
             case INSTALL:
+            case UNINSTALL:
             case NEW:
             case CLEAN:
             case BUILD:
@@ -336,7 +351,6 @@ public enum CLIParserImpl implements CLIParser {
                             currentToken.spelling(), mostProbableCommand);
                 }
             }
-
         }
 
         return new CommandNameAst(parseCommandIdentifier());
@@ -355,6 +369,7 @@ public enum CLIParserImpl implements CLIParser {
             case LIST:
             case VERSION:
             case INSTALL:
+            case UNINSTALL:
             case NEW:
             case BUILD:
             case CLEAN:

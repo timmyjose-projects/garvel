@@ -9,13 +9,16 @@ import com.tzj.garvel.common.util.UtilServiceImpl;
 import com.tzj.garvel.core.CoreServiceImpl;
 
 public class CLICleanCommand extends CLICommand {
-    public CLICleanCommand(final CLICommandOption opts) {
+    private boolean includeLogs;
+
+    public CLICleanCommand(final CLICommandOption opts, final boolean includeLogs) {
         super(opts);
+        this.includeLogs = includeLogs;
     }
 
     @Override
     public void execute() {
-        CleanCommandParams params = new CleanCommandParams();
+        CleanCommandParams params = new CleanCommandParams(includeLogs);
         try {
             CleanCommandResult result = (CleanCommandResult) CoreServiceImpl.INSTANCE.runCommand(CommandType.CLEAN, params);
 

@@ -13,8 +13,6 @@ import com.tzj.garvel.core.cache.exception.CacheManagerException;
 public interface CoreService {
     CommandResult runCommand(final CommandType cmd, final CommandParams cmdParams) throws CommandException;
 
-    void setup() throws GarvelCheckedException;
-
     void invokeCachePopulation() throws CacheManagerException;
 
     void cleanup();

@@ -27,7 +27,7 @@ public class DepCommand extends Command {
     }
 
     @Override
-    protected CommandResult execute(final CommandParams params) throws CommandException {
+    public CommandResult execute(final CommandParams params) throws CommandException {
         return null;
     }
 }

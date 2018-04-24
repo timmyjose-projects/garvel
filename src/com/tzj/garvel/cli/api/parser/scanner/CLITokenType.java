@@ -12,9 +12,11 @@ public enum CLITokenType {
     VERSION("version"),
     LIST("list"),
     INSTALL("install"),
+    UNINSTALL("uninstall"),
     NEW("new"),
     BUILD("build"),
     CLEAN("clean"),
+    INCLUDE_LOGS("--include-logs"),
     RUN("run"),
     UPDATE("update"),
     DEP("dep"),
@@ -37,9 +39,11 @@ public enum CLITokenType {
         keywordMap.put(VERSION.description, VERSION);
         keywordMap.put(LIST.description, LIST);
         keywordMap.put(INSTALL.description, INSTALL);
+        keywordMap.put(UNINSTALL.description, UNINSTALL);
         keywordMap.put(NEW.description, NEW);
         keywordMap.put(BUILD.description, BUILD);
         keywordMap.put(CLEAN.description, CLEAN);
+        keywordMap.put(INCLUDE_LOGS.description, INCLUDE_LOGS);
         keywordMap.put(RUN.description, RUN);
         keywordMap.put(DEP.description, DEP);
         keywordMap.put("-s", SHOW_DEPENDENCIES);

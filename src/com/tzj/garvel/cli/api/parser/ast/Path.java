@@ -2,7 +2,7 @@ package com.tzj.garvel.cli.api.parser.ast;
 
 import java.util.Objects;
 
-public class Path extends CLIAst {
+public class Path {
     private Identifier id;
 
     public Path(final Identifier id) {

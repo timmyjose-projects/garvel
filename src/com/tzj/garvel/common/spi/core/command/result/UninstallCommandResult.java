@@ -2,12 +2,12 @@ package com.tzj.garvel.common.spi.core.command.result;
 
 import com.tzj.garvel.common.spi.core.command.CommandResult;
 
-public class InstallCommandResult extends CommandResult {
+public class UninstallCommandResult extends CommandResult {
     private boolean garvelRoot;
     private boolean garvelRegistry;
     private boolean garvelCache;
 
-    public boolean getGarvelRoot() {
+    public boolean isGarvelRoot() {
         return garvelRoot;
     }
 
@@ -15,7 +15,7 @@ public class InstallCommandResult extends CommandResult {
         this.garvelRoot = garvelRoot;
     }
 
-    public boolean getGarvelRegistry() {
+    public boolean isGarvelRegistry() {
         return garvelRegistry;
     }
 
@@ -23,7 +23,7 @@ public class InstallCommandResult extends CommandResult {
         this.garvelRegistry = garvelRegistry;
     }
 
-    public boolean getGarvelCache() {
+    public boolean isGarvelCache() {
         return garvelCache;
     }
 

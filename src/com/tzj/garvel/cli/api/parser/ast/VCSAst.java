@@ -2,7 +2,7 @@ package com.tzj.garvel.cli.api.parser.ast;
 
 import java.util.Objects;
 
-public class VCSAst extends CLIAst {
+public class VCSAst {
     private Identifier id;
 
     public VCSAst(final Identifier id) {

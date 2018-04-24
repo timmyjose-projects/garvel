@@ -71,3 +71,24 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
       the dependencies as well as populating the registry.
     * Use MD5 and/or SHA1 checksum for integrity verification.    
     
+    
+   #### Install layout (one-time operation)
+    
+    ```
+    $HOME/.garvel
+    $HOME/.garvel/registry
+    $HOME/.garvel/cache
+    ```
+    
+   #### New layout
+    
+    ```
+    $PROJECT_ROOT/Garvel.gl
+    $PROJECT_ROOT/src
+    $PROJECT_ROOT/tests
+    $PROJECT_ROOT/logs
+    $PROJECT_ROOT/target (generated)
+    $PROJECT_ROOT/target/build (generated)
+    ```
+    
+    

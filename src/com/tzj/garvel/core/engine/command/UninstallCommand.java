@@ -3,42 +3,39 @@ package com.tzj.garvel.core.engine.command;
 import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
-import com.tzj.garvel.common.spi.core.command.param.InstallCommandParams;
-import com.tzj.garvel.common.spi.core.command.result.BuildCommandResult;
+import com.tzj.garvel.common.spi.core.command.param.UninstallCommandParams;
+import com.tzj.garvel.common.spi.core.command.result.UninstallCommandResult;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.concurrent.api.Job;
 import com.tzj.garvel.core.engine.Command;
 import com.tzj.garvel.core.engine.exception.JobException;
-import com.tzj.garvel.core.engine.job.BuildJob;
+import com.tzj.garvel.core.engine.job.UninstallJob;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class BuildCommand extends Command {
-    public BuildCommand() {
-        super(new InstallCommand());
-    }
-
+public class UninstallCommand extends Command {
     /**
-     * `build` has a dependency on `install`.
+     * `uninstall` has no prerequisites.
      *
      * @throws CommandException
      */
+    public UninstallCommand() {
+        super(null);
+    }
+
     @Override
     protected void executePrerequisite() throws CommandException {
-        try {
-            prerequisiteCommand.run(new InstallCommandParams());
-        } catch (CommandException e) {
-            throw new CommandException(String.format("Prerequisite (install) for build command failed, %s\n", e.getErrorString()));
-        }
+        return;
     }
 
     @Override
     public CommandResult execute(final CommandParams params) throws CommandException {
-        final Job<BuildCommandResult> job = new BuildJob();
-        final Future<BuildCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().submit(job);
+        final UninstallCommandParams cmdParams = (UninstallCommandParams) params;
+        final Job<UninstallCommandResult> job = new UninstallJob(cmdParams);
+        final Future<UninstallCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().submit(job);
 
-        BuildCommandResult cmdRes = null;
+        UninstallCommandResult cmdRes = null;
         try {
             cmdRes = task.get();
         } catch (InterruptedException e) {

@@ -3,9 +3,7 @@ package com.tzj.garvel.cli.api.core;
 import com.tzj.garvel.cli.api.parser.ast.CLIAst;
 
 public interface CLICoreService {
-    CLICommand getCommand(final CLIAst ast);
-
-    void checkGarveEssentials();
+    void dispatchCommand(final CLIAst ast);
 
     void cleanup();
 }

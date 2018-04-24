@@ -15,6 +15,10 @@ public class GarvelCoreConstants {
 
     public static final String GARVEL_DIR = ".garvel";
 
+    public static final String GARVEL_REGISTRY_DIR = "registry";
+
+    public static final String GARVEL_CACHE_DIR = "cache";
+
     public static final String POSIX_PERMISSIONS = "rwxr-xr-x";
 
     public static final String GARVEL_CONFIG_FILE = "Garvel.gl";

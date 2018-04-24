@@ -2,7 +2,7 @@ package com.tzj.garvel.cli.api.parser.ast;
 
 import java.util.Objects;
 
-public class Identifier extends CLIAst {
+public class Identifier {
     private String spelling;
 
     public Identifier(final String spelling) {

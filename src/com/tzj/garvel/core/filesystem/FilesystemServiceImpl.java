@@ -38,6 +38,13 @@ public enum FilesystemServiceImpl implements FilesystemService {
         return os;
     }
 
+    /**
+     * Return a new BufferedReader for the given filename (if valid).
+     *
+     * @param filename
+     * @return
+     * @throws FilesystemFrameworkException
+     */
     @Override
     public BufferedReader newBufferedReader(final String filename) throws FilesystemFrameworkException {
         BufferedReader reader = null;
@@ -50,6 +57,13 @@ public enum FilesystemServiceImpl implements FilesystemService {
         return reader;
     }
 
+    /**
+     * Load the file contents into a String object.
+     *
+     * @param filename
+     * @return
+     * @throws FilesystemFrameworkException
+     */
     @Override
     public String loadFileAsString(final String filename) throws FilesystemFrameworkException {
         StringBuffer sb = new StringBuffer();
@@ -69,16 +83,35 @@ public enum FilesystemServiceImpl implements FilesystemService {
         return sb.toString();
     }
 
+    /**
+     * Check if directory represented by the name exists.
+     *
+     * @param directory
+     * @return
+     */
     @Override
     public boolean checkDirectoryExists(final String directory) {
         return Paths.get(directory).toFile().exists();
     }
 
+    /**
+     * Check if the file represented by the name exists.
+     *
+     * @param filename
+     * @return
+     */
     @Override
     public boolean checkFileExists(final String filename) {
         return Paths.get(filename).toFile().exists();
     }
 
+    /**
+     * Create the directory at the path specified by the name.
+     *
+     * @param directory
+     * @return
+     * @throws FilesystemFrameworkException
+     */
     @Override
     public Path makeDirectory(final String directory) throws FilesystemFrameworkException {
         Path newDirectory = null;
@@ -110,6 +143,13 @@ public enum FilesystemServiceImpl implements FilesystemService {
         return newDirectory;
     }
 
+    /**
+     * Create the file at the path specified by the name.
+     *
+     * @param filename
+     * @return
+     * @throws FilesystemFrameworkException
+     */
     @Override
     public Path makeFile(final String filename) throws FilesystemFrameworkException {
         Path newFile = null;
@@ -141,6 +181,41 @@ public enum FilesystemServiceImpl implements FilesystemService {
         return newFile;
     }
 
+    /**
+     * Delete the given directory, if possible.
+     *
+     * @param directory
+     */
+    @Override
+    public void deleteDirectory(final String directory) throws FilesystemFrameworkException {
+        try {
+            Files.deleteIfExists(Paths.get(directory));
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(String.format("Unable to delete directory \"%s\": %s\n", directory, e.getLocalizedMessage()));
+        }
+    }
+
+    /**
+     * Delete the given file, if possible.
+     *
+     * @param filename
+     */
+    @Override
+    public void deleteFile(final String filename) throws FilesystemFrameworkException {
+        try {
+            Files.deleteIfExists(Paths.get(filename));
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(String.format("Unable to delete file \"%s\": %s\n", filename, e.getLocalizedMessage()));
+        }
+    }
+
+    /**
+     * Load a Garvel project system resource as a String object.
+     *
+     * @param classpathFile
+     * @return
+     * @throws FilesystemFrameworkException
+     */
     @Override
     public String loadClassPathFileAsString(final String classpathFile) throws FilesystemFrameworkException {
         StringBuffer sb = new StringBuffer();
@@ -158,6 +233,14 @@ public enum FilesystemServiceImpl implements FilesystemService {
         return sb.toString();
     }
 
+    /**
+     * Create the file with the given name and given contents.
+     *
+     * @param filename
+     * @param contents
+     * @return
+     * @throws FilesystemFrameworkException
+     */
     @Override
     public Path makeFileWithContents(final String filename, final String contents) throws FilesystemFrameworkException {
         Path newFile = makeFile(filename);

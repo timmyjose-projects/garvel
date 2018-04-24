@@ -14,11 +14,15 @@ public interface FilesystemService {
 
     boolean checkDirectoryExists(final String directory);
 
-    boolean checkFileExists(final String directory);
+    boolean checkFileExists(final String filename);
 
     Path makeDirectory(final String directory) throws FilesystemFrameworkException;
 
     Path makeFile(final String filename) throws FilesystemFrameworkException;
+
+    void deleteDirectory(final String directory) throws FilesystemFrameworkException;;
+
+    void deleteFile(final String filename) throws FilesystemFrameworkException;;
 
     String loadClassPathFileAsString(String garvelConfigTemplate) throws FilesystemFrameworkException;
 

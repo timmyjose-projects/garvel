@@ -38,6 +38,16 @@ public class HelpPages {
             "ARGS:\n" +
             "    None\n\n";
 
+    public static final String uninstallCommand = "garvel-uninstall\n" +
+            "Uninstalls the Garvel manager for this system. It removes the .garvel metadata directory inside $HOME or %%USERPROFILE%%.\n" +
+            "\n" +
+            "USAGE:\n" +
+            "    garvel uninstall\n" +
+            "\n" +
+            "ARGS:\n" +
+            "    None\n\n";
+
+
     public static final String newCommand = "garvel-new\n" +
             "Creates a new project in the current directory. If the `garvel install` command was not executed prior this this command,\n" +
             "it also invokes the `garvel install` command to perform the initial Garvel setup before creating the project.\n" +
@@ -65,12 +75,14 @@ public class HelpPages {
 
     public static final String cleanCommand = "garvel-clean\n" +
             "Cleans the current project. Specifically, it deletes the `target` directory.\n" +
+            "If the `--with-logs` option is included, then the `logs` directory inside the project\n" +
+            "is also deleted\n" +
             "\n" +
             "USAGE:\n" +
-            "    garvel clean\n" +
+            "    garvel clean [--with-logs]\n" +
             "\n" +
             "ARGS:\n" +
-            "    None\n\n";
+            "    --with-logs remove the project's `logs` directory\n\n";
 
     public static final String runCommand = "garvel-run\n" +
             "Run the specified target (as specified in the `bin` section of the `Garvel.gl` file).\n" +

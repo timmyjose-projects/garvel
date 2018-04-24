@@ -1,5 +1,7 @@
 package com.tzj.garvel.cli.api.parser.ast;
 
+import com.tzj.garvel.cli.api.parser.visitor.CLIAstVisitor;
+
 import java.util.Objects;
 
 public class RunCommandAst extends CommandAst {
@@ -31,5 +33,10 @@ public class RunCommandAst extends CommandAst {
 
     public TargetNameAst getTarget() {
         return target;
+    }
+
+    @Override
+    public void accept(final CLIAstVisitor visitor) {
+        visitor.visit(this);
     }
 }

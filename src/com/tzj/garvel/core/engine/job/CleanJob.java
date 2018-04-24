@@ -17,6 +17,8 @@ public class CleanJob implements Job<CleanCommandResult> {
      * 1. Check if the target directory exists and if not, return true immediately.
      * 2. Walk the target directory and delete all the entries inside.
      * 3. Delete the target directory itself.
+     * 4. Check if the `logs` directory exists and if not, return true immediately.
+     * 5. Delete the logs directory.
      *
      * @return
      * @throws JobException
@@ -24,17 +26,25 @@ public class CleanJob implements Job<CleanCommandResult> {
     @Override
     public CleanCommandResult call() throws JobException {
         final String targetDirFullName = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + "target";
-
         final Path targetDirPath = Paths.get(targetDirFullName);
 
-        if (!targetDirPath.toFile().exists()) {
-            return new CleanCommandResult(true);
+        if (targetDirPath.toFile().exists()) {
+            try {
+                Files.walkFileTree(targetDirPath, new CleanJobVisitor());
+            } catch (IOException e) {
+                throw new JobException(String.format("clean job failed to delete some files: %s", e.getLocalizedMessage()));
+            }
         }
 
-        try {
-            final Path deletionStartPath = Files.walkFileTree(targetDirPath, new CleanJobVisitor());
-        } catch (IOException e) {
-            throw new JobException(String.format("clean job failed to delete some files: %s", e.getLocalizedMessage()));
+        final String logsDirFullName = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + "logs";
+        final Path logsDirPath = Paths.get(logsDirFullName);
+
+        if (logsDirPath.toFile().exists()) {
+            try {
+                Files.walkFileTree(logsDirPath, new CleanJobVisitor());
+            } catch (IOException e) {
+                throw new JobException(String.format("clean job failed to delete some files: %s", e.getLocalizedMessage()));
+            }
         }
 
         return new CleanCommandResult(true);

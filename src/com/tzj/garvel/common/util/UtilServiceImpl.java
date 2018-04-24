@@ -3,6 +3,7 @@ package com.tzj.garvel.common.util;
 import com.tzj.garvel.common.spi.core.VCSType;
 import com.tzj.garvel.common.spi.util.UtilService;
 
+import java.nio.file.Path;
 import java.util.*;
 
 import static com.tzj.garvel.common.spi.core.VCSType.*;
@@ -31,6 +32,7 @@ public enum UtilServiceImpl implements UtilService {
         validCommands.add("version");
         validCommands.add("list");
         validCommands.add("install");
+        validCommands.add("uninstall");
         validCommands.add("new");
         validCommands.add("clean");
         validCommands.add("build");
