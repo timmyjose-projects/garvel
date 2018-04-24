@@ -31,7 +31,7 @@ public class CLIAstCommandDispatchVisitor implements CLIAstVisitor {
      */
     @Override
     public void visit(final CleanCommandAst cleanCommand) {
-        final CLICommand clean = new CLICleanCommand(opts, cleanCommand.isIncludeLogs());
+        final CLICommand clean = new CLICleanCommand(opts);
         clean.execute();
     }
 

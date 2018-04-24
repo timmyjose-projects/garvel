@@ -24,8 +24,6 @@ public class CleanJobVisitor implements FileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        // log to the main Garvel log here
-        System.out.printf("Deleting file: %s\n", file.toAbsolutePath().toString());
         Files.delete(file);
 
         return FileVisitResult.CONTINUE;
@@ -33,15 +31,12 @@ public class CleanJobVisitor implements FileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFileFailed(final Path file, final IOException exc) throws IOException {
-        // log to the main Garvel log here
         throw new IOException(String.format("Failed to delete file %s", file.toAbsolutePath().toString()));
     }
 
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-        // log to the main Garvel log here
         if (exc == null) {
-            System.out.printf("Deleting file: %s\n", dir.toAbsolutePath().toString());
             Files.delete(dir);
             return FileVisitResult.CONTINUE;
         } else {

@@ -15,7 +15,7 @@ Command ::= help Command-Name
            | uninstall
            | new [--vcs Identifier] PATH
            | build
-           | clean [--include-logs]
+           | clean
            | run TargetName
            | test
            | update

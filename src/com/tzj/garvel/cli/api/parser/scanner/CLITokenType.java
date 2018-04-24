@@ -16,7 +16,6 @@ public enum CLITokenType {
     NEW("new"),
     BUILD("build"),
     CLEAN("clean"),
-    INCLUDE_LOGS("--include-logs"),
     RUN("run"),
     UPDATE("update"),
     DEP("dep"),
@@ -43,7 +42,6 @@ public enum CLITokenType {
         keywordMap.put(NEW.description, NEW);
         keywordMap.put(BUILD.description, BUILD);
         keywordMap.put(CLEAN.description, CLEAN);
-        keywordMap.put(INCLUDE_LOGS.description, INCLUDE_LOGS);
         keywordMap.put(RUN.description, RUN);
         keywordMap.put(DEP.description, DEP);
         keywordMap.put("-s", SHOW_DEPENDENCIES);

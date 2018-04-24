@@ -11,9 +11,9 @@ import com.tzj.garvel.core.CoreServiceImpl;
 public class CLICleanCommand extends CLICommand {
     private boolean includeLogs;
 
-    public CLICleanCommand(final CLICommandOption opts, final boolean includeLogs) {
+
+    public CLICleanCommand(final CLICommandOption opts) {
         super(opts);
-        this.includeLogs = includeLogs;
     }
 
     @Override

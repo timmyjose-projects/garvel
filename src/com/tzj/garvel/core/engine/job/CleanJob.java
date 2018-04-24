@@ -24,9 +24,6 @@ public class CleanJob implements Job<CleanCommandResult> {
      * 1. Check if the target directory exists and if not, return true immediately.
      * 2. Walk the target directory and delete all the entries inside.
      * 3. Delete the target directory itself.
-     * 4. If the --include-logs command is specified, check if the `logs` directory exists and if not,
-     * return true immediately.
-     * 5. Delete the logs directory.
      *
      * @return
      * @throws JobException
@@ -41,19 +38,6 @@ public class CleanJob implements Job<CleanCommandResult> {
                 Files.walkFileTree(targetDirPath, new CleanJobVisitor());
             } catch (IOException e) {
                 throw new JobException(String.format("clean job failed to delete some files in the target directory: %s", e.getLocalizedMessage()));
-            }
-        }
-
-        if (cmdParams.isIncludeLogs()) {
-            final String logsDirFullName = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + "logs";
-            final Path logsDirPath = Paths.get(logsDirFullName);
-
-            if (logsDirPath.toFile().exists()) {
-                try {
-                    Files.walkFileTree(logsDirPath, new CleanJobVisitor());
-                } catch (IOException e) {
-                    throw new JobException(String.format("clean job failed to delete some files in the logs directory: %s", e.getLocalizedMessage()));
-                }
             }
         }
 

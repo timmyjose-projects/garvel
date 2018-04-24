@@ -61,7 +61,7 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
       system to handle dependency management.
     * For each POM file, retrieve the dependencies and add them to the list.
     * Do minimal analysis on the dependency graph.
-    * Downloiad the dependencies and cache them in the .garvel/registry directory.
+    * Download the dependencies and cache them in the .garvel/registry directory.
     * This cache will be updated either when the `garvel update` command is invoked, 
       or a dependency in the current parsed state of the `Garvel.gl` file is not found 
       in the current cache => with the re-introduction of the `Garvel.lock` file, it's 
@@ -69,7 +69,8 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
       in the lock file.
     * Handle the above tasks using parallelism for improved performance, especially downloading
       the dependencies as well as populating the registry.
-    * Use MD5 and/or SHA1 checksum for integrity verification.    
+    * Use MD5 and/or SHA1 checksum for integrity verification.
+    * Cargo-style dependencies range semantics.    
     
     
    #### Install layout (one-time operation)

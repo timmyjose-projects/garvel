@@ -75,14 +75,12 @@ public class HelpPages {
 
     public static final String cleanCommand = "garvel-clean\n" +
             "Cleans the current project. Specifically, it deletes the `target` directory.\n" +
-            "If the `--with-logs` option is included, then the `logs` directory inside the project\n" +
-            "is also deleted\n" +
             "\n" +
             "USAGE:\n" +
-            "    garvel clean [--with-logs]\n" +
+            "    garvel clean\n" +
             "\n" +
             "ARGS:\n" +
-            "    --with-logs remove the project's `logs` directory\n\n";
+            "    None\n\n";
 
     public static final String runCommand = "garvel-run\n" +
             "Run the specified target (as specified in the `bin` section of the `Garvel.gl` file).\n" +

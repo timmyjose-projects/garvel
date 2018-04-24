@@ -196,13 +196,7 @@ public enum CLIParserImpl implements CLIParser {
 
             case CLEAN: {
                 acceptIt();
-                final CleanCommandAst cleanCommand = new CleanCommandAst();
-                if (currentToken.kind() == CLITokenType.INCLUDE_LOGS) {
-                    acceptIt();
-                    cleanCommand.setIncludeLogs(true);
-                }
-
-                command = cleanCommand;
+                command = new CleanCommandAst();
             }
             break;
 
