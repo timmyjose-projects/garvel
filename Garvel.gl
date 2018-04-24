@@ -20,13 +20,11 @@ licence-file =  "N/A"
 # the external dependencies for this project
 [dependencies]
 
-junit = "4.1.2" # exact version
-log4j = "1.2.7"
 
 [lib]
 
-main-class = "com/foo/bar/Main" # required if section is present
-fat-jar = "true" # default # optional
+main-class = "com/tzj/garvel/cli/CLI" # required if section is present
+fat-jar = "false" # default # optional
 
 
 # targets for `garvel run --bin`
@@ -35,6 +33,3 @@ fat-jar = "true" # default # optional
 # at least one bin target required
 [bin]
 
-one = "/bin/one/Main"
-two = "/bin/two/Main"
-three = "/bin/three/Client"

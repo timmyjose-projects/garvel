@@ -20,6 +20,7 @@ categories = [ "what", "kind of project", "this is"] # Eg: ["web-app", "spring",
 licence = "<standard licence type>"
 licence-file = "<link to a custom licence file, is applicable>"
 
+
 #
 # the external dependencies for this project
 #

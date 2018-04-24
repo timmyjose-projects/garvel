@@ -8,11 +8,11 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
-class CollectSourceFilesVisitor implements FileVisitor<Path> {
-    private List<File> files;
+class AllFilesFileVisitor implements FileVisitor<Path> {
+    private final List<File> tree;
 
-    public CollectSourceFilesVisitor(final List<File> files) {
-        this.files = files;
+    public AllFilesFileVisitor(final List<File> tree) {
+        this.tree = tree;
     }
 
     @Override
@@ -22,10 +22,7 @@ class CollectSourceFilesVisitor implements FileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        if (file.toFile().exists() && file.toFile().getName().endsWith(".java")) {
-            files.add(file.toFile());
-        }
-
+        tree.add(file.toFile());
         return FileVisitResult.CONTINUE;
     }
 
@@ -36,6 +33,7 @@ class CollectSourceFilesVisitor implements FileVisitor<Path> {
 
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+        tree.add(dir.toFile());
         return FileVisitResult.CONTINUE;
     }
 }
