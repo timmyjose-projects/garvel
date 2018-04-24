@@ -25,54 +25,59 @@ public class NewJob implements Job<NewCommandResult> {
 
     /**
      * 1. Create the project directory
-     * 2. Create subdirectories `src` and `tests`
+     * 2. Create subdirectories `src`, `logs`, and`tests`
      * 3. Create the `Garvel.gl` file.
-     * 4. Populate the Garvel.gl cache.
-     * 5. Fetch dependencies and cache in .garvel, creating appropriate directories.
+     * 4. Fetch dependencies and cache in .garvel, creating appropriate directories. @TODO
      *
      * @return
      * @throws Exception
      */
     @Override
     public NewCommandResult call() throws JobException {
-        Path projectPath = null;
+        final Path projectPath = createPath(path);
+        final Path srcPath = createPath(projectPath + File.separator + "src");
+        final Path testsPath = createPath(projectPath + File.separator + "tests");
+        final Path logsPath = createPath(projectPath + File.separator + "logs");
+        final Path configPath = createConfigPath(projectPath + File.separator + "Garvel.gl");
+
+        return new NewCommandResult(projectPath, srcPath, testsPath, logsPath, configPath);
+    }
+
+    /**
+     * Helper method to create the Garvel.gl config file.
+     *
+     * @param path
+     * @return
+     * @throws JobException
+     */
+    private Path createConfigPath(final String path) throws JobException {
+        Path configFilePath = null;
         try {
-            projectPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(path);
+            final String configFileTemplate = CoreModuleLoader.INSTANCE.getFileSystemFramework().loadClassPathFileAsString(GarvelCoreConstants.GARVEL_CONFIG_TEMPLATE);
+            configFilePath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeFileWithContents(path, configFileTemplate);
+        } catch (FilesystemFrameworkException e) {
+            throw new JobException(String.format("Failed to create Garvel config file, \"Garvel.gl\", %s", e.getErrorString()));
+        }
+
+        return configFilePath;
+    }
+
+    /**
+     * Helper method to create the project skeleton.
+     *
+     * @param path
+     * @return
+     * @throws JobException
+     */
+    private Path createPath(final String path) throws JobException {
+        Path createdPath = null;
+        try {
+            createdPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(path);
         } catch (FilesystemFrameworkException e) {
             throw new JobException(String.format("Failed to create project directory \"%s\", %s",
                     path, e.getLocalizedMessage()));
         }
 
-        final String srcDirPath = projectPath + File.separator + "src";
-        Path srcPath = null;
-        try {
-            srcPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(srcDirPath);
-        } catch (FilesystemFrameworkException e) {
-            throw new JobException(String.format("Failed to create project \"src\" directory inside project root \"%s\", %s",
-                    path, e.getLocalizedMessage()));
-        }
-
-        final String testsDirPath = projectPath + File.separator + "tests";
-        Path testsPath = null;
-
-        try {
-            testsPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(testsDirPath);
-        } catch (FilesystemFrameworkException e) {
-            throw new JobException(String.format("Failed to create project \"tests\" directory inside project root \"%s\", %s",
-                    path, e.getLocalizedMessage()));
-        }
-
-        final String configFilePath = projectPath + File.separator + "Garvel.gl";
-        Path configPath = null;
-
-        try {
-            final String configString = CoreModuleLoader.INSTANCE.getFileSystemFramework().loadClassPathFileAsString(GarvelCoreConstants.GARVEL_CONFIG_TEMPLATE);
-            configPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeFileWithContents(configFilePath, configString);
-        } catch (FilesystemFrameworkException e) {
-            throw new JobException(String.format("Failed to create Garvel config file, \"Garvel.gl\" inside project root \"%s\", %s",
-                    path, e.getLocalizedMessage()));
-        }
-
-        return new NewCommandResult(projectPath, srcPath, testsPath, configPath);
+        return createdPath;
     }
 }

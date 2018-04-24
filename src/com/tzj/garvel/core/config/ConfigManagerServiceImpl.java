@@ -8,7 +8,6 @@ import java.util.List;
 public enum ConfigManagerServiceImpl implements ConfigManagerService {
     INSTANCE;
 
-
     @Override
     public String getVersion() {
         return GarvelCoreConstants.GARVEL_VERSION;

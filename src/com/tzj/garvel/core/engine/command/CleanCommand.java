@@ -3,6 +3,7 @@ package com.tzj.garvel.core.engine.command;
 import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
+import com.tzj.garvel.common.spi.core.command.param.CleanCommandParams;
 import com.tzj.garvel.common.spi.core.command.param.InstallCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.CleanCommandResult;
 import com.tzj.garvel.common.spi.core.command.result.InstallCommandResult;
@@ -37,7 +38,8 @@ public class CleanCommand extends Command {
 
     @Override
     public CommandResult execute(final CommandParams params) throws CommandException {
-        final Job<CleanCommandResult> job = new CleanJob();
+        final CleanCommandParams cmdParams = (CleanCommandParams)params;
+        final Job<CleanCommandResult> job = new CleanJob(cmdParams);
         final Future<CleanCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().submit(job);
 
         CleanCommandResult cmdRes = null;
