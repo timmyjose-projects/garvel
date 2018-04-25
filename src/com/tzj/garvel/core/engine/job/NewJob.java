@@ -37,10 +37,9 @@ public class NewJob implements Job<NewCommandResult> {
         final Path projectPath = createPath(path);
         final Path srcPath = createPath(projectPath + File.separator + "src");
         final Path testsPath = createPath(projectPath + File.separator + "tests");
-        final Path logsPath = createPath(projectPath + File.separator + "logs");
         final Path configPath = createConfigPath(projectPath + File.separator + "Garvel.gl");
 
-        return new NewCommandResult(projectPath, srcPath, testsPath, logsPath, configPath);
+        return new NewCommandResult(projectPath, srcPath, testsPath, configPath);
     }
 
     /**

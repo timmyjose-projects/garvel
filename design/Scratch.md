@@ -70,7 +70,8 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
     * Handle the above tasks using parallelism for improved performance, especially downloading
       the dependencies as well as populating the registry.
     * Use MD5 and/or SHA1 checksum for integrity verification.
-    * Cargo-style dependencies range semantics.    
+    * Cargo-style dependencies range semantics.
+    * Have a new command, `purge` to delete the local repository cache without uninstalling Garvel.    
     
     
    #### Install layout (one-time operation)
