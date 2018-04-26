@@ -22,13 +22,18 @@ licence-file = "<link to a custom licence file, is applicable>"
 
 
 #
-# the external dependencies for this project
+# The external dependencies for this project
+# Since we rely on the Maven repositories for downloading
+# artifacts, the expected format of a dependency is:
+#
+# groupId/artifactId = "version"
 #
 
 [dependencies]
 
-foo = "0.0.2"
-bar = "1.2.18"
+junit/junit = "4.12"
+org.apache.logging.log4j/log4j-core = "2.11.0"
+
 
 # This section is optional. By default, Garvel will generate the project
 # JAR file in the `target` directory. If this section is present, the

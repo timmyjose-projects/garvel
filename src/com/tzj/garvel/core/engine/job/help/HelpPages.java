@@ -30,7 +30,6 @@ public class HelpPages {
 
     public static final String installCommand = "garvel-install\n" +
             "Installs the Garvel manager for this system. It creates the .garvel metadata directory inside $HOME or %%USERPROFILE%%.\n" +
-            "It also fetches the list of available artifacts from the Maven Central (and other) repositories and populates the local registry.\n" +
             "\n" +
             "USAGE:\n" +
             "    garvel install\n" +
@@ -64,7 +63,7 @@ public class HelpPages {
             "Builds the current project. The project artifact will be deployed in the `target` directory under project root, either as a \n" +
             "single JAR file (default) containing the project's contents, or if the `--fat-jar` key has been specified in the `Garvel.gl` file, as a\n" +
             "single fat JAR file with all the dependencies bundled in.\n\n" +
-            "In addition, if the `lib` section is present, then the mandatory `main-class` key will ensure that the built JAR file is a runnabel HAR file\n" +
+            "In addition, if the `lib` section is present, then the mandatory `main-class` key will ensure that the built JAR file is a runnable JAR file\n" +
             " with the `Main-Class` JAR attribute set to the supplied value for `main-class`\n" +
             "\n" +
             "USAGE:\n" +
@@ -85,31 +84,18 @@ public class HelpPages {
     public static final String runCommand = "garvel-run\n" +
             "Run the specified target (as specified in the `bin` section of the `Garvel.gl` file).\n" +
             "If no target-name is specified, and if the project is runnable i.e., the `main-class` key has been\n" +
-            "specified in the `lib` section of the `Garvel.gl` file, then the project itself will be run, otherwis\n" +
+            "specified in the `lib` section of the `Garvel.gl` file, then the project itself will be run, otherwise\n" +
             "an error message will be issued.\n" +
             "\n" +
             "USAGE:\n" +
             "    garvel run [target-name]\n" +
             "\n" +
             "ARGS:\n" +
-            "    target-name the target name (as specified in the `bin` section of the `Garvel.gl` file.\n\n";
-
-    public static final String updateCommand = "garvel-update\n" +
-            "Updates the local registry of available artifacts by contacting Maven Central (and other repositories)\n" +
-            "and retrieving the latest contents. Note that this command does not update the `Garvel.lock` file by checking the\n" +
-            "`Garvel.gl` file. That is done through `garvel build` or `garvel run`\n" +
-            "\n" +
-            "USAGE:\n" +
-            "    garvel update\n" +
-            "\n" +
-            "ARGS:\n" +
-            "    None\n\n";
+            "    target-name the target name (as specified in the `bin` section of the `Garvel.gl` file). Optional.\n\n";
 
     public static final String depCommand = "garvel-dep\n" +
             "For the given ARTIFACT, lists all the currently available versions, and if the `--show-dependencies` option is\n" +
-            "supplied, then lists all the artifacts this artifact depends upon. Note that this command uses the local registry, and\n" +
-            "does not fetch the latest information from Maven Central (or other repositories). To get the latest data, invoke the\n" +
-            "`garvel update` command followed by this command.\n" +
+            "supplied, then lists all the artifacts this artifact depends upon.\n" +
             "\n" +
             "USAGE:\n" +
             "    garvel dep [-s | --show-dependencies ] ARTIFACT\n" +

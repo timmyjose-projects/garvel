@@ -17,7 +17,6 @@ public enum CLITokenType {
     BUILD("build"),
     CLEAN("clean"),
     RUN("run"),
-    UPDATE("update"),
     DEP("dep"),
     SHOW_DEPENDENCIES("--show-dependencies"),
     TEST("test"),
@@ -47,7 +46,6 @@ public enum CLITokenType {
         keywordMap.put("-s", SHOW_DEPENDENCIES);
         keywordMap.put(SHOW_DEPENDENCIES.description, SHOW_DEPENDENCIES);
         keywordMap.put(TEST.description, TEST);
-        keywordMap.put(UPDATE.description, UPDATE);
     }
 
     private String description;

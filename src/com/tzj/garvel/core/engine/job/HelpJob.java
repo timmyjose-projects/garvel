@@ -44,9 +44,6 @@ public class HelpJob implements Job<HelpCommandResult> {
             case "run":
                 helpPages = HelpPages.runCommand;
                 break;
-            case "update":
-                helpPages = HelpPages.updateCommand;
-                break;
             case "dep":
                 helpPages = HelpPages.depCommand;
                 break;

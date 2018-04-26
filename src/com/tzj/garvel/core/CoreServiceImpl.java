@@ -64,9 +64,6 @@ public enum CoreServiceImpl implements CoreService {
             case RUN:
                 command = new RunCommand();
                 break;
-            case UPDATE:
-                command = new UpdateCommand();
-                break;
             case DEP:
                 command = new DepCommand();
                 break;

@@ -23,8 +23,6 @@ public interface CLIAstVisitor {
 
     void visit(TestCommandAst testCommand);
 
-    void visit(UpdateCommandAst updateCommand);
-
     void visit(VersionCommandAst versionCommand);
 
     void visit(UninstallCommandAst uninstallCommandAst);

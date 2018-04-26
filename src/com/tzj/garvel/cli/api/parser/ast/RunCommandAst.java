@@ -11,6 +11,10 @@ public class RunCommandAst extends CommandAst {
         this.target = target;
     }
 
+    public RunCommandAst() {
+
+    }
+
     @Override
     public String toString() {
         return "RunCommandAst{" +
@@ -33,6 +37,10 @@ public class RunCommandAst extends CommandAst {
 
     public TargetNameAst getTarget() {
         return target;
+    }
+
+    public void setTarget(final TargetNameAst target) {
+        this.target = target;
     }
 
     @Override

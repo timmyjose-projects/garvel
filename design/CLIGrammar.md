@@ -16,9 +16,8 @@ Command ::= help Command-Name
            | new [--vcs Identifier] PATH
            | build
            | clean
-           | run TargetName
+           | run [TargetName]
            | test
-           | update
            | dep [(-s | --show-dependencies)] Dependency-Name
 ```
 

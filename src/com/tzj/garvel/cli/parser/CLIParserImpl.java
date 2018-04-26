@@ -10,6 +10,7 @@ import com.tzj.garvel.cli.exception.CLIException;
 import com.tzj.garvel.cli.parser.scanner.CLIScanner;
 import com.tzj.garvel.common.spi.core.VCSType;
 import com.tzj.garvel.common.util.UtilServiceImpl;
+import com.tzj.garvel.core.engine.command.RunCommand;
 
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.EOT;
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.IDENTIFIER;
@@ -29,7 +30,8 @@ public enum CLIParserImpl implements CLIParser {
         //final String[] input = new String[]{"help", "new"};
         //final String[] input = new String[]{"--verbose", "run", "one"};
         //final String[] input = new String[]{"-q", "dep", "junit"};
-        final String[] input = new String[]{"-q", "clean", "--include-logs"};
+        //final String[] input = new String[]{"-q", "clean", "--include-logs"};
+        final String[] input = new String[] { "run" };
 
         Program program = CLIParserImpl.INSTANCE.parse(input);
         System.out.println(program);
@@ -96,7 +98,6 @@ public enum CLIParserImpl implements CLIParser {
             case BUILD:
             case CLEAN:
             case RUN:
-            case UPDATE:
             case TEST: {
                 final CommandAst command = parseCommand();
 
@@ -202,14 +203,14 @@ public enum CLIParserImpl implements CLIParser {
 
             case RUN: {
                 acceptIt();
-                final TargetNameAst target = parseTargetName();
-                command = new RunCommandAst(target);
-            }
-            break;
 
-            case UPDATE: {
-                acceptIt();
-                command = new UpdateCommandAst();
+                final RunCommandAst runCommand = new RunCommandAst();
+                if (currentToken.kind() == IDENTIFIER) {
+                    final TargetNameAst target = parseTargetName();
+                    runCommand.setTarget(target);
+                }
+
+                command = runCommand;
             }
             break;
 
@@ -331,7 +332,6 @@ public enum CLIParserImpl implements CLIParser {
             case CLEAN:
             case BUILD:
             case RUN:
-            case UPDATE:
             case DEP:
             case TEST:
                 break;
@@ -368,7 +368,6 @@ public enum CLIParserImpl implements CLIParser {
             case BUILD:
             case CLEAN:
             case RUN:
-            case UPDATE:
             case DEP:
             case TEST: {
                 commandName = new Identifier(currentToken.spelling());

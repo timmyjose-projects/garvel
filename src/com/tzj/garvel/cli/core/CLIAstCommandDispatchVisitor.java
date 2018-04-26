@@ -114,16 +114,6 @@ public class CLIAstCommandDispatchVisitor implements CLIAstVisitor {
     }
 
     /**
-     * Dispatch the update command to Core.
-     *
-     * @param updateCommand
-     */
-    @Override
-    public void visit(final UpdateCommandAst updateCommand) {
-
-    }
-
-    /**
      * Dispatch the version command to Core.
      *
      * @param versionCommand
