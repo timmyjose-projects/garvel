@@ -105,7 +105,7 @@ public class CLIAstCommandDispatchVisitor implements CLIAstVisitor {
         } else {
             run = new CLIRunCommand(opts, runCommand.getTarget().getId().spelling());
         }
-        
+
         run.execute();
     }
 
