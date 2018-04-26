@@ -2,10 +2,9 @@ package com.tzj.garvel.core.dep.api.graph;
 
 import java.util.List;
 
-public class AdajcencyMatrix implements Graph {
+public class AdjacencyMatrix implements Graph {
     @Override
     public void addEdge(final int v1, final int v2) {
-
     }
 
     @Override

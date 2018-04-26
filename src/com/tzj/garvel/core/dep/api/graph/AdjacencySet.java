@@ -2,7 +2,7 @@ package com.tzj.garvel.core.dep.api.graph;
 
 import java.util.List;
 
-public class AdajcencySet implements Graph {
+public class AdjacencySet implements Graph {
     @Override
     public void addEdge(final int v1, final int v2) {
 
