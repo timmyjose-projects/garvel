@@ -99,7 +99,13 @@ public class CLIAstCommandDispatchVisitor implements CLIAstVisitor {
      */
     @Override
     public void visit(final RunCommandAst runCommand) {
-        final CLICommand run = new CLIRunCommand(opts, runCommand.getTarget().getId().spelling());
+        CLICommand run = null;
+        if (runCommand.getTarget() == null) {
+            run = new CLIRunCommand(opts, "none");
+        } else {
+            run = new CLIRunCommand(opts, runCommand.getTarget().getId().spelling());
+        }
+        
         run.execute();
     }
 

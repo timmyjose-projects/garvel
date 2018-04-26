@@ -12,7 +12,6 @@ public class RunCommandAst extends CommandAst {
     }
 
     public RunCommandAst() {
-
     }
 
     @Override
