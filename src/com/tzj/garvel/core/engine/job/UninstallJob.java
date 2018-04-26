@@ -22,22 +22,10 @@ public class UninstallJob implements Job<UninstallCommandResult> {
     @Override
     public UninstallCommandResult call() throws Exception {
         final String garvelRoot = GarvelCoreConstants.GARVEL_HOME_DIR + File.separator + GarvelCoreConstants.GARVEL_DIR;
-        final String garvelRegistry = garvelRoot + File.separator + GarvelCoreConstants.GARVEL_REGISTRY_DIR;
         final String garvelCache = garvelRoot + File.separator + GarvelCoreConstants.GARVEL_CACHE_DIR;
 
         final UninstallCommandResult uninstallResult = new UninstallCommandResult();
         final FilesystemService fs = CoreModuleLoader.INSTANCE.getFileSystemFramework();
-
-        if (!fs.checkDirectoryExists(garvelRegistry)) {
-            uninstallResult.setGarvelRegistry(true);
-        } else {
-            try {
-                fs.deleteDirectory(garvelRegistry);
-                uninstallResult.setGarvelRegistry(true);
-            } catch (FilesystemFrameworkException e) {
-                throw new JobException(String.format("Failed to delete the Garvel registry directory, %s: %s\n", garvelRegistry, e.getErrorString()));
-            }
-        }
 
         if (!fs.checkDirectoryExists(garvelCache)) {
             uninstallResult.setGarvelCache(true);
@@ -46,7 +34,7 @@ public class UninstallJob implements Job<UninstallCommandResult> {
                 fs.deleteDirectory(garvelCache);
                 uninstallResult.setGarvelCache(true);
             } catch (FilesystemFrameworkException e) {
-                throw new JobException(String.format("Failed to delete the Garvel registry directory, %s: %s\n", garvelRegistry, e.getErrorString()));
+                throw new JobException(String.format("Failed to delete the Garvel cache directory, %s: %s\n", garvelCache, e.getErrorString()));
             }
         }
 
@@ -61,6 +49,7 @@ public class UninstallJob implements Job<UninstallCommandResult> {
                 throw new JobException(String.format("Failed to delete the Garvel root directory, %s: %s\n", garvelRoot, e.getErrorString()));
             }
         }
+
         return uninstallResult;
     }
 }

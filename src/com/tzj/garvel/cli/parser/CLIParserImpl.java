@@ -31,7 +31,7 @@ public enum CLIParserImpl implements CLIParser {
         //final String[] input = new String[]{"--verbose", "run", "one"};
         //final String[] input = new String[]{"-q", "dep", "junit"};
         //final String[] input = new String[]{"-q", "clean", "--include-logs"};
-        final String[] input = new String[] { "run" };
+        final String[] input = new String[]{"run"};
 
         Program program = CLIParserImpl.INSTANCE.parse(input);
         System.out.println(program);
@@ -336,6 +336,11 @@ public enum CLIParserImpl implements CLIParser {
             case TEST:
                 break;
             default: {
+                // special check
+                if (currentToken.spelling() == null || currentToken.spelling().isEmpty()) {
+                    CLIErrorHandler.displayUsageAndExit(0);
+                }
+
                 final String mostProbableCommand = UtilServiceImpl.INSTANCE.findLevenshteinMatchCommand(currentToken.spelling());
                 if (mostProbableCommand == null) {
                     CLIErrorHandler.errorAndExit("Unknown command \"%s\". Try `garvel list` to see the list of possible command names\n",

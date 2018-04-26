@@ -22,13 +22,11 @@ public class InstallJob implements Job<InstallCommandResult> {
     /**
      * 0.Fetch the list of available artifacts from the Maven Central (and other) repositories and populate the local registry. @TODO
      * 1. Create the $HOME/.garvel directory and set R/W permissions.
-     * 2. Create the $HOME/.garvel/registry directory and set R/W permissions.
-     * 3. Create the $HOME/.garvel/cache directory and set R/W permissions.
+     * 2. Create the $HOME/.garvel/cache directory and set R/W permissions.
      */
     @Override
     public InstallCommandResult call() throws JobException {
         final String garvelRoot = GarvelCoreConstants.GARVEL_HOME_DIR + File.separator + GarvelCoreConstants.GARVEL_DIR;
-        final String garvelRegistry = garvelRoot + File.separator + GarvelCoreConstants.GARVEL_REGISTRY_DIR;
         final String garvelCache = garvelRoot + File.separator + GarvelCoreConstants.GARVEL_CACHE_DIR;
 
         final InstallCommandResult installResult = new InstallCommandResult();
@@ -41,20 +39,8 @@ public class InstallJob implements Job<InstallCommandResult> {
                 fs.makeDirectory(garvelRoot);
                 installResult.setGarvelRoot(true);
             } catch (FilesystemFrameworkException e) {
-                cleanUp(fs, garvelRoot, garvelRegistry, garvelCache);
+                cleanUp(fs, garvelRoot, garvelCache);
                 throw new JobException(String.format("Failed to create the Garvel root directory, %s: %s\n", garvelRoot, e.getErrorString()));
-            }
-        }
-
-        if (fs.checkDirectoryExists(garvelRegistry)) {
-            installResult.setGarvelRegistry(true);
-        } else {
-            try {
-                fs.makeDirectory(garvelRegistry);
-                installResult.setGarvelRegistry(true);
-            } catch (FilesystemFrameworkException e) {
-                cleanUp(fs, garvelRoot, garvelRegistry, garvelCache);
-                throw new JobException(String.format("Failed to create the Garvel registry directory, %s: %s\n", garvelRegistry, e.getErrorString()));
             }
         }
 
@@ -65,8 +51,8 @@ public class InstallJob implements Job<InstallCommandResult> {
                 fs.makeDirectory(garvelCache);
                 installResult.setGarvelCache(true);
             } catch (FilesystemFrameworkException e) {
-                cleanUp(fs, garvelRoot, garvelRegistry, garvelCache);
-                throw new JobException(String.format("Failed to create the Garvel registry directory, %s: %s\n", garvelRegistry, e.getErrorString()));
+                cleanUp(fs, garvelRoot, garvelCache);
+                throw new JobException(String.format("Failed to create the Garvel cache directory, %s: %s\n", garvelCache, e.getErrorString()));
             }
         }
 
@@ -78,13 +64,11 @@ public class InstallJob implements Job<InstallCommandResult> {
      *
      * @param fs
      * @param garvelRoot
-     * @param garvelRegistry
      * @param garvelCache
      */
-    private void cleanUp(final FilesystemService fs, final String garvelRoot, final String garvelRegistry, final String garvelCache) {
+    private void cleanUp(final FilesystemService fs, final String garvelRoot, final String garvelCache) {
         try {
             fs.deleteDirectory(garvelRoot);
-            fs.deleteDirectory(garvelRegistry);
             fs.deleteDirectory(garvelCache);
         } catch (Throwable err) {
             // do nothing. we shouldn't fail

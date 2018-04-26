@@ -37,7 +37,6 @@ public enum UtilServiceImpl implements UtilService {
         validCommands.add("clean");
         validCommands.add("build");
         validCommands.add("run");
-        validCommands.add("update");
         validCommands.add("dep");
     }
 

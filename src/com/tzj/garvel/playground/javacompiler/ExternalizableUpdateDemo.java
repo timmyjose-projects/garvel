@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public class ExternalizableUpdateDemo {
     public static void main(String[] args) {
         Map<String, String> cache = new HashMap<>();

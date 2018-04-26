@@ -27,7 +27,7 @@ public class CLIInstallCommand extends CLICommand {
     }
 
     private void checkSuccess(final InstallCommandResult result) {
-        if (result.getGarvelRoot() && result.getGarvelRegistry() && result.getGarvelCache()) {
+        if (result.getGarvelRoot() && result.getGarvelCache()) {
             return;
         }
 

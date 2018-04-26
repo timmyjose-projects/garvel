@@ -109,11 +109,11 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
     `Maven coordinates` refers to the (groupId, artifactId, version) tuple.
     
     * Install - Create the $HOME/.garvel and $HOME/.garvel/cache directories. The cache will contain the repositories
-    that have been used by all Garvel projects. 
+    that have been used by all Garvel projects. [DONE]
     
-    * Uninstall - Delete $HOME/.garvel recursively.
+    * Uninstall - Delete $HOME/.garvel recursively. [DONE]
     
-    * New - Create the project skeleton containg the following directories and files - Garvel.gl, src, tests.
+    * New - Create the project skeleton containg the following directories and files - Garvel.gl, src, tests. [DONE]
     
     * Build - 1). Create the `target` directory with `build` and `deps` directories. `build` will hold the build
               artifacts (class files basically), and the `deps` directory will hold the dependency graph of the current 
@@ -129,15 +129,19 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
               
               3). Compile the project and create the deliverable JAR file, ${PROJECT_NAME}.jar in the `target` directory.
               If there are any errors, report them to the user and exit immediately.
+              
+              Note: Since the idea is to bootstrap Garvel to use Garvel itself, special handling must be done for the
+              `Garvel` project name to generate the the wrapper scripts for `garvel`.jar as well. Whether to restrict
+              new project names with the same name will depend on testing and verification.
                 
-    * Clean - Will simply delete the entire `target` folder.
+    * Clean - Will simply delete the entire `target` folder. [DONE]
     
     * Run - Will invoke `build` to get the latest state of the project, and check for the target name in the Core Cache,
     reporting any errors if the target is not found. If the target name is not specified, and if the `Main-Class` attribute
     has been supplied in the `Lib` section of `Garvel.gl`, then an attempt will be made to run the JAR file itself.
     
     * Update - Deprecated. Since `install` does not download the registry information, there is no need for this 
-    command.
+    command. [DONE]
     
     * Dep - 1. Given the Maven Coordinates, display the available versions. To this end, the local cache will be queried
     first, and if not found, then Maven Central will be contacted for ths information. 
@@ -145,11 +149,11 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
             2. If the `--show-dependencies` flag is supplied, then the transitive dependencies of the artifact will
             also be displayed in a suitably formatted manner. 
     
-    * List - List all the installed commands. 
+    * List - List all the installed commands. [DONE]
     
-    * Version - List the current version of Garvel (core);
+    * Version - List the current version of Garvel (core); [DONE]
     
-    * Help - Given a subcommand, list the help pages for the command.
+    * Help - Given a subcommand, list the help pages for the command. [DONE}
     
     * Test - @TODO.
     
