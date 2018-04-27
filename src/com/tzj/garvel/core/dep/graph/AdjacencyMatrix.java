@@ -1,7 +1,8 @@
-package com.tzj.garvel.core.dep.api.graph;
+package com.tzj.garvel.core.dep.graph;
 
 import com.tzj.garvel.common.spi.error.GarvelUncheckedException;
 import com.tzj.garvel.core.dep.api.exception.GraphUncheckedException;
+import com.tzj.garvel.core.dep.api.graph.Graph;
 
 import java.util.ArrayList;
 import java.util.Collections;

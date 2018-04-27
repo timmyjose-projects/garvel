@@ -38,7 +38,7 @@ public class DepCommand extends Command {
     @Override
     public CommandResult execute(final CommandParams params) throws CommandException {
         final DepCommandParams cmdParams = (DepCommandParams) params;
-        final Job<DepCommandResult> job = new DepJob(cmdParams.getGroupId(), cmdParams.getArtifactId(), cmdParams.isShowDependencies());
+        final Job<DepCommandResult> job = new DepJob(cmdParams.getGroupId(), cmdParams.getArtifactId(), cmdParams.getVersion(), cmdParams.isShowDependencies());
         final Future<DepCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().submit(job);
 
         DepCommandResult cmdRes = null;

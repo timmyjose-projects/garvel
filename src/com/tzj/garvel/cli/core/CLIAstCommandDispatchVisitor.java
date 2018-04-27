@@ -44,6 +44,7 @@ public class CLIAstCommandDispatchVisitor implements CLIAstVisitor {
     public void visit(final DependencyCommandAst dependencyCommand) {
         final CLICommand dep = new CLIDepCommand(opts, dependencyCommand.getDependency().getGroupId(),
                 dependencyCommand.getDependency().getArtifactId(),
+                dependencyCommand.getVersion(),
                 dependencyCommand.isShowDependencies());
         dep.execute();
     }

@@ -94,13 +94,13 @@ public class HelpPages {
             "    target-name the target name (as specified in the `bin` section of the `Garvel.gl` file). Optional.\n\n";
 
     public static final String depCommand = "garvel-dep\n" +
-            "For the given ARTIFACT, lists all the currently available versions, and if the `--show-dependencies` option is\n" +
-            "supplied, then lists all the artifacts this artifact depends upon.\n" +
+            "For the given artifact, lists all the currently available versions, and if the `--show-dependencies` option is\n" +
+            "supplied, then lists all the artifacts the specific version of the artifact depends upon.\n" +
             "\n" +
             "USAGE:\n" +
             "    garvel dep [-s | --show-dependencies ] ARTIFACT\n" +
             "\n" +
             "ARGS:\n" +
-            "    [-s | --show-dependencies] display the dependencies for this artifact.\n" +
-            "    ARTIFACT                   the  artifact (in `groupId/artifactId` format) whose metadata we are interested in.\n\n";
+            "    [-s | --show-dependencies <version> ] display the dependencies for this artifact version.\n" +
+            "    ARTIFACT                             the  artifact (in `groupId/artifactId` format) whose metadata we are interested in.\n\n";
 }

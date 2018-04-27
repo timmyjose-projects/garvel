@@ -10,10 +10,6 @@ import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 public class ApacheReleasesRepositoryLoader extends RepositoryLoader {
     public ApacheReleasesRepositoryLoader() {
         kind = RepositoryKind.APACHE_RELEASES;
-    }
-
-    @Override
-    protected void setNextLoader() {
         nextLoader = new ClojarsRepositoryLoader();
     }
 

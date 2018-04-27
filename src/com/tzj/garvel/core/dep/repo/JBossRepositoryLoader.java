@@ -10,10 +10,6 @@ import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 public class JBossRepositoryLoader extends RepositoryLoader {
     public JBossRepositoryLoader() {
         kind = RepositoryKind.JBOSS_RELEASES;
-    }
-
-    @Override
-    protected void setNextLoader() {
         nextLoader = new NuxeoRepositoryLoader();
     }
 

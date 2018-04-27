@@ -18,7 +18,7 @@ Command ::= help Command-Name
            | clean
            | run [TargetName]
            | test
-           | dep [(-s | --show-dependencies)] Dependency-Name
+           | dep [(-s | --show-dependencies) VERSION] Dependency-Name
 ```
 
 ```
@@ -40,6 +40,10 @@ Dependency-Name ::= Identifier
 ```
 PATH ::= Identifier
 ```
+
+``
+VERSION ::= Identifier
+``
 
 ```
 Identifier ::= Letter (Letter | Digit)*

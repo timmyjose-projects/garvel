@@ -15,5 +15,7 @@ public interface UtilService {
     VCSType getVCSTypeFromString(String spelling);
 
     void displayFormattedToConsole(boolean newline, String format, Object... values);
+
+    boolean validateArtifactVersion(String version);
 }
 

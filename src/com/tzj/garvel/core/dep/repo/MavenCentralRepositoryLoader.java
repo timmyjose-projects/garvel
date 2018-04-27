@@ -14,10 +14,6 @@ import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 public class MavenCentralRepositoryLoader extends RepositoryLoader {
     public MavenCentralRepositoryLoader() {
         kind = RepositoryKind.CENTRAL;
-    }
-
-    @Override
-    protected void setNextLoader() {
         nextLoader = new SonaTypeRepositoryLoader();
     }
 

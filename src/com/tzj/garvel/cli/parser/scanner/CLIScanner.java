@@ -175,7 +175,17 @@ public class CLIScanner {
             case 'X':
             case 'Y':
             case 'Z':
-            case '_': {
+            case '_':
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9': {
                 takeIt();
 
                 while (isLetter(currentChar.c()) || isDigit(currentChar.c())) {
@@ -258,6 +268,7 @@ public class CLIScanner {
             case '_':
             case '-':
             case '/':
+            case '.':
                 return true;
 
             default:

@@ -10,7 +10,6 @@ import com.tzj.garvel.cli.exception.CLIException;
 import com.tzj.garvel.cli.parser.scanner.CLIScanner;
 import com.tzj.garvel.common.spi.core.VCSType;
 import com.tzj.garvel.common.util.UtilServiceImpl;
-import com.tzj.garvel.core.engine.command.RunCommand;
 
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.EOT;
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.IDENTIFIER;
@@ -98,6 +97,7 @@ public enum CLIParserImpl implements CLIParser {
             case BUILD:
             case CLEAN:
             case RUN:
+            case DEP:
             case TEST: {
                 final CommandAst command = parseCommand();
 
@@ -218,13 +218,15 @@ public enum CLIParserImpl implements CLIParser {
                 acceptIt();
 
                 boolean showDependencies = false; // default
+                String version = null;
                 if (currentToken.kind() == SHOW_DEPENDENCIES) {
                     acceptIt();
                     showDependencies = true;
+                    version = parseDependencyVersion();
                 }
 
                 final DependencyNameAst artifact = parseDependencyName();
-                command = new DependencyCommandAst(artifact, showDependencies);
+                command = new DependencyCommandAst(artifact, version, showDependencies);
             }
             break;
 
@@ -236,6 +238,22 @@ public enum CLIParserImpl implements CLIParser {
         }
 
         return command;
+    }
+
+    private String parseDependencyVersion() {
+        String version = null;
+        try {
+            version = parseIdentifier().spelling();
+        } catch (CLIException e) {
+            CLIErrorHandler.errorAndExit("Missing version for the --show-dependencies option.");
+        }
+
+        // double-check to ensure that version is not conflated with PATh
+        if (!UtilServiceImpl.INSTANCE.validateArtifactVersion(version)) {
+            CLIErrorHandler.errorAndExit("\"%s\" does not appear to be a valid artifact version.", version);
+        }
+
+        return version;
     }
 
     /**
@@ -254,8 +272,8 @@ public enum CLIParserImpl implements CLIParser {
 
         // validate that it is the proper format - groupId/artifactId.
         String[] parts = depNameId.spelling().split("/");
-        if (parts == null || parts.length == 0 || parts[0] == null || parts[0].isEmpty() || parts[1] == null || parts[1].isEmpty()) {
-            CLIErrorHandler.errorAndExit("Supplied dependency name %s is not in the proper `groupId/artifgactId` format", depNameId.spelling());
+        if (parts == null || parts.length != 2 || parts[0] == null || parts[0].isEmpty() || parts[1] == null || parts[1].isEmpty()) {
+            CLIErrorHandler.errorAndExit("Supplied dependency name %s is not in the proper `groupId/artifactId` format", depNameId.spelling());
         }
 
         depName = new DependencyNameAst(parts[0], parts[1]);

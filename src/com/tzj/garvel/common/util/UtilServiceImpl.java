@@ -168,6 +168,32 @@ public enum UtilServiceImpl implements UtilService {
     }
 
     /**
+     * A valid artifact version is in the "[0-9]+.[0-9]+.[0-9]*" format.
+     * Since this can vary considerablt, only basic checks are provided here,
+     * offloading proper validation onto Core.
+     *
+     * @param version
+     * @return
+     */
+    @Override
+    public boolean validateArtifactVersion(final String version) {
+        if (version.isEmpty()) {
+            return false;
+        }
+
+        if (!version.contains(".")) {
+            return false;
+        }
+
+        // check if it starts with a numerical value
+        if (!Character.isDigit(version.charAt(0))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Simply check that the given path exists and is valid.
      *
      * @param path

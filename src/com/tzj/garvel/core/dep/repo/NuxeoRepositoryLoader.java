@@ -10,10 +10,6 @@ import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 public class NuxeoRepositoryLoader extends RepositoryLoader {
     public NuxeoRepositoryLoader() {
         kind = RepositoryKind.NUXEO_RELEASES;
-    }
-
-    @Override
-    protected void setNextLoader() {
         nextLoader = new XWikiReleasesRepositoryLoader();
     }
 

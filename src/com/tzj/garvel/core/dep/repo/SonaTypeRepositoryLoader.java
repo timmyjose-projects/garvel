@@ -10,10 +10,6 @@ import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 public class SonaTypeRepositoryLoader extends RepositoryLoader {
     public SonaTypeRepositoryLoader() {
         kind = RepositoryKind.SONATYPE;
-    }
-
-    @Override
-    protected void setNextLoader() {
         nextLoader = new SpringPluginsRepositoryLoader();
     }
 

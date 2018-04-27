@@ -4,10 +4,12 @@ import com.tzj.garvel.cli.api.parser.visitor.CLIAstVisitor;
 
 public class DependencyCommandAst extends CommandAst {
     private DependencyNameAst dependency;
+    private String version;
     private boolean showDependencies;
 
-    public DependencyCommandAst(final DependencyNameAst dependency, final boolean showDependencies) {
+    public DependencyCommandAst(final DependencyNameAst dependency, final String version, final boolean showDependencies) {
         this.dependency = dependency;
+        this.version = version;
         this.showDependencies = showDependencies;
     }
 
@@ -15,12 +17,17 @@ public class DependencyCommandAst extends CommandAst {
     public String toString() {
         return "DependencyCommandAst{" +
                 "dependency=" + dependency +
+                ", version='" + version + '\'' +
                 ", showDependencies=" + showDependencies +
                 '}';
     }
 
     public DependencyNameAst getDependency() {
         return dependency;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     public boolean isShowDependencies() {

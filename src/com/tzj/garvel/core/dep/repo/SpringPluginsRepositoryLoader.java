@@ -10,10 +10,6 @@ import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 public class SpringPluginsRepositoryLoader extends RepositoryLoader {
     public SpringPluginsRepositoryLoader() {
         kind = RepositoryKind.SPRING_PLUGINS;
-    }
-
-    @Override
-    protected void setNextLoader() {
         nextLoader = new SpringLibsRepositoryLoader();
     }
 

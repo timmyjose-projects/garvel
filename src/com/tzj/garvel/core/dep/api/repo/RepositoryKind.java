@@ -14,28 +14,28 @@ public enum RepositoryKind {
     CENTRAL {
         @Override
         public String getUrl() {
-            return "http://central.maven.org/maven2/";
+            return "http://central.maven.org/maven2";
         }
     },
 
     SONATYPE {
         @Override
         public String getUrl() {
-            return "https://oss.sonatype.org/content/repositories/releases/";
+            return "https://oss.sonatype.org/content/repositories/releases";
         }
     },
 
     SPRING_PLUGINS {
         @Override
         public String getUrl() {
-            return "http://repo.spring.io/plugins-release/";
+            return "http://repo.spring.io/plugins-release";
         }
     },
 
     SPRING_LIBS {
         @Override
         public String getUrl() {
-            return "http://repo.spring.io/libs-milestone/";
+            return "http://repo.spring.io/libs-milestone";
         }
     },
 
@@ -43,14 +43,14 @@ public enum RepositoryKind {
         @Override
         public String getUrl() {
             return "\n" +
-                    "https://maven.atlassian.com/content/repositories/atlassian-public/";
+                    "https://maven.atlassian.com/content/repositories/atlassian-public";
         }
     },
 
     JBOSS_RELEASES {
         @Override
         public String getUrl() {
-            return "https://repository.jboss.org/nexus/content/repositories/releases/";
+            return "https://repository.jboss.org/nexus/content/repositories/releases";
         }
     },
 
@@ -58,28 +58,28 @@ public enum RepositoryKind {
         @Override
         public String getUrl() {
             return
-                    "https://maven-eu.nuxeo.org/nexus/content/repositories/public-releases/";
+                    "https://maven-eu.nuxeo.org/nexus/content/repositories/public-releases";
         }
     },
 
     XWIKI_RELEASES {
         @Override
         public String getUrl() {
-            return "http://maven.xwiki.org/releases/";
+            return "http://maven.xwiki.org/releases";
         }
     },
 
     APACHE_RELEASES {
         @Override
         public String getUrl() {
-            return "https://repository.apache.org/content/repositories/releases/";
+            return "https://repository.apache.org/content/repositories/releases";
         }
     },
 
     CLOJARS {
         @Override
         public String getUrl() {
-            return "http://clojars.org/repo/";
+            return "http://clojars.org/repo";
         }
     };
 

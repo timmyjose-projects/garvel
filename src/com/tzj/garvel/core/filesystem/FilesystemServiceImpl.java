@@ -16,6 +16,13 @@ import static com.tzj.garvel.common.parser.GarvelConstants.EOL;
 public enum FilesystemServiceImpl implements FilesystemService {
     INSTANCE;
 
+    /**
+     * Simplistic way to get the OS vendor. We do not care
+     * as much for the specific version.
+     *
+     * @return
+     * @throws FilesystemFrameworkException
+     */
     @Override
     public OsType getOs() throws FilesystemFrameworkException {
         OsType os = OsType.UNKNOWN;

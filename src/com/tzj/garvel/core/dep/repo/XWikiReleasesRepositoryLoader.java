@@ -10,10 +10,6 @@ import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 public class XWikiReleasesRepositoryLoader extends RepositoryLoader {
     public XWikiReleasesRepositoryLoader() {
         kind = RepositoryKind.XWIKI_RELEASES;
-    }
-
-    @Override
-    protected void setNextLoader() {
         nextLoader = new ApacheReleasesRepositoryLoader();
     }
 

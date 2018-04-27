@@ -13,10 +13,6 @@ import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 public class ClojarsRepositoryLoader extends RepositoryLoader {
     public ClojarsRepositoryLoader() {
         kind = RepositoryKind.CLOJARS;
-    }
-
-    @Override
-    protected void setNextLoader() {
         nextLoader = null;
     }
 

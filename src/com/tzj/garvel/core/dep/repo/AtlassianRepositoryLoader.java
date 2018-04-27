@@ -10,10 +10,6 @@ import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 public class AtlassianRepositoryLoader extends RepositoryLoader {
     public AtlassianRepositoryLoader() {
         kind = RepositoryKind.ATLASSIAN;
-    }
-
-    @Override
-    protected void setNextLoader() {
         nextLoader = new JBossRepositoryLoader();
     }
 

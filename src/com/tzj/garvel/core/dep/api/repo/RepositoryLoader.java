@@ -13,7 +13,15 @@ public abstract class RepositoryLoader {
     public RepositoryLoader() {
     }
 
-    protected abstract void setNextLoader();
+    public RepositoryKind getKind() {
+        return kind;
+    }
+
+    protected RepositoryLoader getNextLoader() {
+        return nextLoader;
+    }
+
     protected abstract boolean checkRepoStatus();
+
     public abstract String constructArtifactUrl(final String groupId, final String artifactId) throws RepositoryLoaderException;
 }

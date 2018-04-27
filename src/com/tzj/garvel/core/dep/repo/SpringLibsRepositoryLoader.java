@@ -10,10 +10,6 @@ import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 public class SpringLibsRepositoryLoader extends RepositoryLoader {
     public SpringLibsRepositoryLoader() {
         kind = RepositoryKind.SPRING_LIBS;
-    }
-
-    @Override
-    protected void setNextLoader() {
         nextLoader = new AtlassianRepositoryLoader();
     }
 

@@ -1,0 +1,7 @@
+package com.tzj.garvel.core.net.api;
+
+public class NetworkConstants {
+    public static final int CONNECT_TIMEOUT = 5000; // 5 seconds
+    public static final int READ_TIMEOUT = 5000;
+    public static final String HEAD = "HEAD";
+}
