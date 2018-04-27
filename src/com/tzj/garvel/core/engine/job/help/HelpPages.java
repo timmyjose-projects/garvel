@@ -102,5 +102,5 @@ public class HelpPages {
             "\n" +
             "ARGS:\n" +
             "    [-s | --show-dependencies] display the dependencies for this artifact.\n" +
-            "    ARTIFACT                   the  artifact (project dependency) whose metadata we are interested in.\n\n";
+            "    ARTIFACT                   the  artifact (in `groupId/artifactId` format) whose metadata we are interested in.\n\n";
 }

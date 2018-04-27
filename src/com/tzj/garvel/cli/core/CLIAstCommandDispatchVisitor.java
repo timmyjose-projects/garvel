@@ -42,7 +42,9 @@ public class CLIAstCommandDispatchVisitor implements CLIAstVisitor {
      */
     @Override
     public void visit(final DependencyCommandAst dependencyCommand) {
-        final CLICommand dep = new CLIDepCommand(opts, dependencyCommand.getDependency().getCommandName().spelling(), dependencyCommand.isShowDependencies());
+        final CLICommand dep = new CLIDepCommand(opts, dependencyCommand.getDependency().getGroupId(),
+                dependencyCommand.getDependency().getArtifactId(),
+                dependencyCommand.isShowDependencies());
         dep.execute();
     }
 

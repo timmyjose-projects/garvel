@@ -5,11 +5,13 @@ import com.tzj.garvel.core.concurrent.api.Job;
 import com.tzj.garvel.core.engine.exception.JobException;
 
 public class DepJob implements Job<DepCommandResult> {
-    private final String dependencyName;
+    private final String groupId;
+    private final String artifactId;
     private final boolean showDependencies;
 
-    public DepJob(final String dependencyName, final boolean showDependencies) {
-        this.dependencyName = dependencyName;
+    public DepJob(final String groupId, final String artifactId, final boolean showDependencies) {
+        this.groupId = groupId;
+        this.artifactId = artifactId;
         this.showDependencies = showDependencies;
     }
 
@@ -27,7 +29,6 @@ public class DepJob implements Job<DepCommandResult> {
     public DepCommandResult call() throws Exception {
         DepCommandResult result = null;
 
-        validateMavenCoordinates();
         queryDependencyGraph();
         queryLocalCache();
         queryRepos();
@@ -44,10 +45,6 @@ public class DepJob implements Job<DepCommandResult> {
     }
 
     private void queryDependencyGraph() throws JobException {
-
-    }
-
-    private void validateMavenCoordinates() throws JobException {
 
     }
 }

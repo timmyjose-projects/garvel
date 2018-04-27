@@ -1,20 +1,19 @@
 package com.tzj.garvel.cli.api.parser.ast;
 
 public class DependencyNameAst {
-    private Identifier commandName;
+    private String groupId;
+    private String artifactId;
 
-    public DependencyNameAst(final Identifier commandName) {
-        this.commandName = commandName;
+    public DependencyNameAst(final String groupId, final String artifactId) {
+        this.groupId = groupId;
+        this.artifactId = artifactId;
     }
 
-    @Override
-    public String toString() {
-        return "DependencyNameAst{" +
-                "commandName=" + commandName +
-                '}';
+    public String getGroupId() {
+        return groupId;
     }
 
-    public Identifier getCommandName() {
-        return commandName;
+    public String getArtifactId() {
+        return artifactId;
     }
 }

@@ -245,11 +245,20 @@ public enum CLIParserImpl implements CLIParser {
      */
     private DependencyNameAst parseDependencyName() {
         DependencyNameAst depName = null;
+        Identifier depNameId = null;
         try {
-            depName = new DependencyNameAst(parseIdentifier());
+            depNameId = parseIdentifier();
         } catch (CLIException e) {
             CLIErrorHandler.errorAndExit("Missing artifact name for `dep` command");
         }
+
+        // validate that it is the proper format - groupId/artifactId.
+        String[] parts = depNameId.spelling().split("/");
+        if (parts == null || parts.length == 0 || parts[0] == null || parts[0].isEmpty() || parts[1] == null || parts[1].isEmpty()) {
+            CLIErrorHandler.errorAndExit("Supplied dependency name %s is not in the proper `groupId/artifgactId` format", depNameId.spelling());
+        }
+
+        depName = new DependencyNameAst(parts[0], parts[1]);
 
         return depName;
     }
