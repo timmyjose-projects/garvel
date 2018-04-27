@@ -1,5 +1,7 @@
 package com.tzj.garvel.core.dep.api.resolver;
 
+import java.util.List;
+
 public interface DependencyResolverStrategy {
-    void resolve();
+    List<String> resolve();
 }

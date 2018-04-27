@@ -9,9 +9,9 @@ public interface Graph {
 
     int getIndegree(int v);
 
-    void display();
+    int size();
 
-    List<Integer> topologicalSort();
+    void display();
 
     enum Kind {
         DIRECTED,
