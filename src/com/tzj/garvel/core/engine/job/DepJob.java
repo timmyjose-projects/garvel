@@ -36,14 +36,29 @@ public class DepJob implements Job<DepCommandResult> {
         return result;
     }
 
+    /**
+     * Query the central repos directly.
+     *
+     * @throws JobException
+     */
     private void queryRepos() throws JobException {
 
     }
 
+    /**
+     * Query the Garvel cache ($HOME/.garvel/cache), if available.
+     *
+     * @throws JobException
+     */
     private void queryLocalCache() throws JobException {
 
     }
 
+    /**
+     * Query the project's Dependency Graph, if available.
+     *
+     * @throws JobException
+     */
     private void queryDependencyGraph() throws JobException {
 
     }

@@ -42,4 +42,7 @@ public class GarvelCoreConstants {
             "dep",
             "test"
     );
+
+    // useful to have a constant here for forming URLs
+    public static final String FORWARD_SLASH = "/";
 }

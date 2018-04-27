@@ -1,7 +1,11 @@
 package com.tzj.garvel.core.net.api;
 
-public interface NetworkService {
-    void downloadTextFile(final String url);
+import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 
-    void downloadBinaryFile(final String url);
+public interface NetworkService {
+    boolean checkUrlAvailable(final String url) throws NetworkServiceException;
+
+    void downloadTextFile(final String url) throws NetworkServiceException;
+
+    void downloadBinaryFile(final String url) throws NetworkServiceException;
 }
