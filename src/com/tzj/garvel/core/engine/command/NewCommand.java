@@ -49,7 +49,7 @@ public class NewCommand extends Command {
         } catch (InterruptedException e) {
             throw new CommandException("internal error");
         } catch (ExecutionException e) {
-            if (e.getCause() != null) {
+            if (e.getCause() != null && e.getCause() instanceof JobException) {
                 final JobException je = (JobException) e.getCause();
                 throw new CommandException(je.getErrorSting());
             }
