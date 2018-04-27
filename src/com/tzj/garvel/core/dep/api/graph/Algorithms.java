@@ -1,6 +1,7 @@
 package com.tzj.garvel.core.dep.api.graph;
 
 import com.tzj.garvel.core.dep.api.exception.GraphCheckedException;
+import com.tzj.garvel.core.dep.api.exception.GraphUncheckedException;
 
 import java.util.*;
 
@@ -8,7 +9,20 @@ public class Algorithms {
     private Algorithms() {
     }
 
+    /**
+     * Topological Sort.
+     * <p>
+     * O(V+E)
+     *
+     * @param g
+     * @return
+     * @throws GraphCheckedException
+     */
     public static List<Integer> topologicalSort(Graph g) throws GraphCheckedException {
+        if (g.kind() != Graph.Kind.DIRECTED) {
+            throw new GraphUncheckedException("Topological Sort is only supported for Directed Graphs\n");
+        }
+
         Queue<Integer> q = new ArrayDeque<>();
 
         Map<Integer, Integer> indegs = new HashMap<>();

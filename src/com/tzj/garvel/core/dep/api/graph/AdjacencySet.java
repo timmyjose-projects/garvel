@@ -81,6 +81,11 @@ public class AdjacencySet implements Graph {
         }
     }
 
+    @Override
+    public Kind kind() {
+        return kind;
+    }
+
     private class Vertex {
         int v;
         Set<Integer> vs;

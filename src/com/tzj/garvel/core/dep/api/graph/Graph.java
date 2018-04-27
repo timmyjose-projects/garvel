@@ -13,6 +13,8 @@ public interface Graph {
 
     void display();
 
+    Graph.Kind kind();
+
     enum Kind {
         DIRECTED,
         UNDIRECTED;

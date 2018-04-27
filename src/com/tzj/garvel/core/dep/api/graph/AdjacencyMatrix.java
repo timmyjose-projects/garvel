@@ -82,4 +82,9 @@ public class AdjacencyMatrix implements Graph {
             System.out.println();
         }
     }
+
+    @Override
+    public Kind kind() {
+        return kind;
+    }
 }
