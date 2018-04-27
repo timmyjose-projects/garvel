@@ -32,6 +32,13 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
         CacheManagerServiceImpl.INSTANCE.display();
     }
 
+    /**
+     * Populate the Core Cache with the data from the Garvel.gl configuration file.
+     *
+     * @param garvelConfigFile
+     * @return
+     * @throws CacheManagerException
+     */
     @Override
     public CacheManagerService populateCache(final String garvelConfigFile) throws CacheManagerException {
         configCache = new HashMap<>();

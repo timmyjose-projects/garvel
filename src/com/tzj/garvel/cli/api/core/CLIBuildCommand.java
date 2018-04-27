@@ -6,6 +6,9 @@ import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandType;
 import com.tzj.garvel.common.spi.core.command.param.BuildCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.BuildCommandResult;
+import com.tzj.garvel.common.util.UtilServiceImpl;
+
+import java.nio.file.Path;
 
 public class CLIBuildCommand extends CLICommand {
     public CLIBuildCommand(final CLICommandOption opts) {
@@ -26,6 +29,17 @@ public class CLIBuildCommand extends CLICommand {
     }
 
     private void checkSuccess(final BuildCommandResult result) {
+        if (exists(result.getTargetDir()) &&
+                exists(result.getBuildDir()) &&
+                exists(result.getDepsDir()) &&
+                exists(result.getJarFile())) {
+            return;
+        }
 
+        CLIErrorHandler.errorAndExit("Build failed: failed to create one of the artifacts. Please run `garvel clean` and try again.\n");
+    }
+
+    private boolean exists(final Path path) {
+        return UtilServiceImpl.INSTANCE.pathExists(path);
     }
 }

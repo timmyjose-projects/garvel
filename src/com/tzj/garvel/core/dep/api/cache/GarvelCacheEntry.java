@@ -7,6 +7,7 @@ import java.io.ObjectOutput;
 import java.util.Objects;
 
 public class GarvelCacheEntry implements Externalizable {
+    private static final long serialVersionUID = 1923996787546922505L;
     private String groupId;
     private String artifactId;
     private String version;

@@ -20,9 +20,11 @@ public interface FilesystemService {
 
     Path makeFile(final String filename) throws FilesystemFrameworkException;
 
-    void deleteDirectory(final String directory) throws FilesystemFrameworkException;;
+    void deleteDirectory(final String directory) throws FilesystemFrameworkException;
 
-    void deleteFile(final String filename) throws FilesystemFrameworkException;;
+    void deleteDirectory(Path path) throws FilesystemFrameworkException;
+
+    void deleteFile(final String filename) throws FilesystemFrameworkException;
 
     String loadClassPathFileAsString(String garvelConfigTemplate) throws FilesystemFrameworkException;
 

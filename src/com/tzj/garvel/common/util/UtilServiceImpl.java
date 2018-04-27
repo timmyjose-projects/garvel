@@ -1,7 +1,9 @@
 package com.tzj.garvel.common.util;
 
+import com.tzj.garvel.common.spi.core.CoreService;
 import com.tzj.garvel.common.spi.core.VCSType;
 import com.tzj.garvel.common.spi.util.UtilService;
+import com.tzj.garvel.core.CoreServiceImpl;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -163,6 +165,16 @@ public enum UtilServiceImpl implements UtilService {
         } else {
             System.out.print(String.format(format, values));
         }
+    }
+
+    /**
+     * Simply check that the given path exists and is valid.
+     *
+     * @param path
+     * @return
+     */
+    public boolean pathExists(final Path path) {
+        return path.toFile().exists();
     }
 }
 

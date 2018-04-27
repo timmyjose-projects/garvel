@@ -1,9 +1,19 @@
 package com.tzj.garvel.core.engine.job;
 
-import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.result.BuildCommandResult;
+import com.tzj.garvel.core.CoreModuleLoader;
+import com.tzj.garvel.core.GarvelCoreConstants;
+import com.tzj.garvel.core.cache.exception.CacheManagerException;
 import com.tzj.garvel.core.concurrent.api.Job;
+import com.tzj.garvel.core.dep.api.exception.DependencyManagerException;
+import com.tzj.garvel.core.dep.api.resolver.DependencyResolverContext;
+import com.tzj.garvel.core.dep.api.resolver.SimpleDependencyResolverStrategy;
 import com.tzj.garvel.core.engine.exception.JobException;
+import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
 
 public class BuildJob implements Job<BuildCommandResult> {
     public BuildJob() {
@@ -13,7 +23,7 @@ public class BuildJob implements Job<BuildCommandResult> {
      * 1). Create the `target` directory with `build` and `deps` directories. `build` will hold the build
      * artifacts (class files basically), and the `deps` directory will hold the dependency graph of the current
      * project in binary form.The Dependency Graph will not only help generate the JAR file more quickly, but
-     * also help in incremental builds where only the changed source files will be executed (based on checking
+     * also help in incremental builds where only the changed source files will be compiled (based on checking
      * the timestamp of the class files against the source file).
      * <p>
      * 2). Parse the Garvel.gl file and populate the Core Cache. If there are any changes (new artifact,
@@ -34,6 +44,138 @@ public class BuildJob implements Job<BuildCommandResult> {
      */
     @Override
     public BuildCommandResult call() throws JobException {
-        return null;
+        BuildCommandResult result = null;
+
+        // 1. create target directory hierarchy
+        createTargetHierarchy(result);
+
+        // 2. Parse the project config file and populate the Core Cache.
+        populateCoreCache(result);
+
+        // 3. Analyse the dependencies.
+        List<String> depsClassPath = analyseDependencies();
+
+        // 4. Compile the project.
+        compileProject(depsClassPath);
+
+        // 5. Generate the project artifacts.
+        generateProjectArtifacts(result);
+
+        return result;
+    }
+
+    /**
+     * Step 5 - Generate the project artifacts in the `target` directory.
+     *
+     * @param result
+     */
+    private void generateProjectArtifacts(final BuildCommandResult result) {
+
+    }
+
+    /**
+     * Step 4 - Compile the project sources into the `target/build` directory.
+     *
+     * @param depsClassPath
+     */
+    private void compileProject(final List<String> depsClassPath) {
+
+    }
+
+    /**
+     * Step 3 - Imvoke the Dependency Manager to analyse the dependencies, if any.
+     */
+    private List<String> analyseDependencies() throws JobException {
+        List<String> dependenciesClassPath = null;
+        try {
+            final DependencyResolverContext ctx = new DependencyResolverContext(new SimpleDependencyResolverStrategy());
+            dependenciesClassPath = CoreModuleLoader.INSTANCE.getDependencyManager().analyse(ctx);
+        } catch (DependencyManagerException e) {
+            throw new JobException(String.format("Dependency Analysis failed: %s\n", e.getErrorString()));
+        }
+
+        return dependenciesClassPath;
+    }
+
+    /**
+     * Step 2 - Populate the Core cache by parsing the Garvel/gl file.
+     *
+     * @param result
+     * @throws JobException
+     */
+    private void populateCoreCache(final BuildCommandResult result) throws JobException {
+        final String configFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + GarvelCoreConstants.GARVEL_CONFIG_FILE;
+        try {
+            CoreModuleLoader.INSTANCE.getCacheManager().populateCache(configFile);
+        } catch (CacheManagerException e) {
+            throw new JobException(String.format("failed to populate Core Cache: %s\n", e.getErrorString()));
+        }
+    }
+
+    /**
+     * Step 1 - create the `target`, `target/build`, and `target/deps` directories atomically.
+     *
+     * @param result
+     * @throws JobException
+     */
+    private void createTargetHierarchy(final BuildCommandResult result) throws JobException {
+        Path targetDirPath = null;
+        try {
+            targetDirPath = createTargetDir();
+        } catch (FilesystemFrameworkException e) {
+            throw new JobException(String.format("failed to create `target`: %s\n", e.getErrorString()));
+        }
+
+        Path buildDirPath = null;
+        try {
+            buildDirPath = createBuildDir(targetDirPath);
+        } catch (FilesystemFrameworkException e) {
+            cleanup(targetDirPath);
+            throw new JobException(String.format("failed to create `target/build`: %s\n", e.getErrorString()));
+        }
+
+        Path depsDirPath = null;
+
+        try {
+            depsDirPath = createDepsDir(targetDirPath);
+        } catch (FilesystemFrameworkException e) {
+            cleanup(targetDirPath, buildDirPath);
+            throw new JobException(String.format("failed to create `target/build`: %s\n", e.getErrorString()));
+        }
+
+        result.setTargetDir(targetDirPath);
+        result.setBuildDir(buildDirPath);
+        result.setDepsDir(depsDirPath);
+    }
+
+    /**
+     * TYhe target directory hierarchy creation is an atomic operation. Failure must entail
+     * cleanup of all the already created directories.
+     *
+     * @param paths
+     */
+    private void cleanup(final Path... paths) {
+        for (Path p : paths) {
+            try {
+                CoreModuleLoader.INSTANCE.getFileSystemFramework().deleteDirectory(p);
+            } catch (FilesystemFrameworkException e) {
+                // don't fail because of this.
+            }
+        }
+    }
+
+    private Path createDepsDir(final Path targetDirPath) throws FilesystemFrameworkException {
+        final String depsDir = targetDirPath.toFile().getAbsolutePath() + File.separator + "deps";
+        return CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(depsDir);
+    }
+
+    private Path createBuildDir(final Path targetDirPath) throws FilesystemFrameworkException {
+        final String buildDir = targetDirPath.toFile().getAbsolutePath() + File.separator + "build";
+        return CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(buildDir);
+    }
+
+    private Path createTargetDir() throws FilesystemFrameworkException {
+        final String targetDir = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + "target";
+        return CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(targetDir);
     }
 }

@@ -196,6 +196,20 @@ public enum FilesystemServiceImpl implements FilesystemService {
     }
 
     /**
+     * Delete the given directory (supplied as a Path), if possible.
+     *
+     * @param path
+     */
+    @Override
+    public void deleteDirectory(final Path path) throws FilesystemFrameworkException {
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(String.format("Unable to delete directory \"%s\": %s\n", path.toString(), e.getLocalizedMessage()));
+        }
+    }
+
+    /**
      * Delete the given file, if possible.
      *
      * @param filename

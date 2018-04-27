@@ -118,7 +118,7 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
     * Build - 1). Create the `target` directory with `build` and `deps` directories. `build` will hold the build
               artifacts (class files basically), and the `deps` directory will hold the dependency graph of the current 
               project in binary form.The Dependency Graph will not only help generate the JAR file more quickly, but 
-              also help in incremental builds where only the changed source files will be executed (based on checking
+              also help in incremental builds where only the changed source files will be compiled (based on checking
               the timestamp of the class files against the source file).
               
               2). Parse the Garvel.gl file and populate the Core Cache. If there are any changes (new artifact, 
