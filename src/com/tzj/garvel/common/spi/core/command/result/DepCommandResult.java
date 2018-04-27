@@ -23,6 +23,10 @@ public class DepCommandResult extends CommandResult {
         return versions;
     }
 
+    public void setVersions(final String versions) {
+        this.versions = versions;
+    }
+
     public String getDependencyGraphString() {
         return dependencyGraphString;
     }

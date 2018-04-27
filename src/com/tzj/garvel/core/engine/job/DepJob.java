@@ -7,8 +7,6 @@ import com.tzj.garvel.core.dep.api.repo.RepositoryLoader;
 import com.tzj.garvel.core.dep.api.repo.RepositoryLoaderFactory;
 import com.tzj.garvel.core.engine.exception.JobException;
 
-import java.util.List;
-
 public class DepJob implements Job<DepCommandResult> {
     private final String groupId;
     private final String artifactId;
@@ -33,12 +31,18 @@ public class DepJob implements Job<DepCommandResult> {
      * @throws Exception
      */
     @Override
-    public DepCommandResult call() throws Exception {
+    public DepCommandResult call() throws JobException {
         DepCommandResult result = null;
 
-        queryDependencyGraph();
-        queryLocalCache();
-        queryRepos();
+        if (queryDependencyGraph()) {
+            return result;
+        }
+
+        if (queryLocalCache()) {
+            return result;
+        }
+
+        queryRepos(result);
 
         return result;
     }
@@ -46,9 +50,10 @@ public class DepJob implements Job<DepCommandResult> {
     /**
      * Query the central repos directly.
      *
+     * @param result
      * @throws JobException
      */
-    private void queryRepos() throws JobException {
+    private void queryRepos(final DepCommandResult result) throws JobException {
         final RepositoryLoader repoLoader = RepositoryLoaderFactory.getLoader();
         String repoUrl = null;
 
@@ -59,12 +64,25 @@ public class DepJob implements Job<DepCommandResult> {
         }
 
         // get the maven metadata file and populate version info
-
+        String versions = getVersionsForDependency();
+        result.setVersions(versions);
 
         // if the --show-dependencies flag was supplier, then
         // get the artifact POM (using version) and populate
         // the transitive dependency information.
+        String dependencies = getTransitiveDependencies();
+        result.setDependenciesInformationAvailable(true);
+        result.setDependencyGraphString(dependencies);
+    }
 
+    private String getTransitiveDependencies() {
+        return null;
+    }
+
+    private String getVersionsForDependency() {
+        StringBuffer sb = new StringBuffer();
+
+        return sb.toString();
     }
 
     /**
@@ -72,8 +90,8 @@ public class DepJob implements Job<DepCommandResult> {
      *
      * @throws JobException
      */
-    private void queryLocalCache() throws JobException {
-
+    private boolean queryLocalCache() throws JobException {
+        return false;
     }
 
     /**
@@ -81,7 +99,7 @@ public class DepJob implements Job<DepCommandResult> {
      *
      * @throws JobException
      */
-    private void queryDependencyGraph() throws JobException {
-
+    private boolean queryDependencyGraph() throws JobException {
+        return false;
     }
 }

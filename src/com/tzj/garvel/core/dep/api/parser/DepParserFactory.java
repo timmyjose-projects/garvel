@@ -7,15 +7,15 @@ public class DepParserFactory {
     private DepParserFactory() {
     }
 
-    public static DepParser getParser(final DepParserKind kind) {
+    public static DepParser getParser(final DepParserKind kind, final String url) {
         DepParser parser = null;
 
         switch (kind) {
             case METADATA:
-                parser = new DepMetadataParser();
+                parser = new DepMetadataParser(url);
                 break;
             case POM:
-                parser = new DepPOMParser();
+                parser = new DepPOMParser(url);
                 break;
         }
 

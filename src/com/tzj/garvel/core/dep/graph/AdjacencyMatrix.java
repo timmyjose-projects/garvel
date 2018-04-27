@@ -4,11 +4,15 @@ import com.tzj.garvel.common.spi.error.GarvelUncheckedException;
 import com.tzj.garvel.core.dep.api.exception.GraphUncheckedException;
 import com.tzj.garvel.core.dep.api.graph.Graph;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class AdjacencyMatrix implements Graph {
+    private static final long serialVersionUID = 1410137352373349136L;
     private int[][] a;
     private int n;
     private Graph.Kind kind;
@@ -87,5 +91,15 @@ public class AdjacencyMatrix implements Graph {
     @Override
     public Kind kind() {
         return kind;
+    }
+
+    @Override
+    public void writeExternal(final ObjectOutput out) throws IOException {
+
+    }
+
+    @Override
+    public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
+
     }
 }

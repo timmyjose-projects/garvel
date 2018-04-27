@@ -3,9 +3,13 @@ package com.tzj.garvel.core.dep.graph;
 import com.tzj.garvel.core.dep.api.exception.GraphUncheckedException;
 import com.tzj.garvel.core.dep.api.graph.Graph;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.*;
 
 public class AdjacencySet implements Graph {
+    private static final long serialVersionUID = -847254791596283923L;
     private Vertex[] vertices;
     private int n;
     private Graph.Kind kind;
@@ -85,6 +89,16 @@ public class AdjacencySet implements Graph {
     @Override
     public Kind kind() {
         return kind;
+    }
+
+    @Override
+    public void writeExternal(final ObjectOutput out) throws IOException {
+
+    }
+
+    @Override
+    public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
+
     }
 
     private class Vertex {
