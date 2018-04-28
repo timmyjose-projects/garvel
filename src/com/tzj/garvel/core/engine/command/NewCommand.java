@@ -47,7 +47,7 @@ public class NewCommand extends Command {
         try {
             cmdRes = task.get();
         } catch (InterruptedException e) {
-            throw new CommandException("internal error");
+            throw new CommandException("internal exception");
         } catch (ExecutionException e) {
             if (e.getCause() != null && e.getCause() instanceof JobException) {
                 final JobException je = (JobException) e.getCause();

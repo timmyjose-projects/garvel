@@ -5,6 +5,7 @@ import com.tzj.garvel.core.GarvelCoreConstants;
 import com.tzj.garvel.core.cache.api.CacheEntry;
 import com.tzj.garvel.core.cache.api.CacheKey;
 import com.tzj.garvel.core.cache.api.CacheManagerService;
+import com.tzj.garvel.core.cache.api.DependenciesEntry;
 import com.tzj.garvel.core.cache.exception.CacheManagerException;
 import com.tzj.garvel.core.parser.api.ast.toml.ConfigAst;
 import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
@@ -22,46 +23,95 @@ import java.util.Map;
 public enum CacheManagerServiceImpl implements CacheManagerService {
     INSTANCE;
 
-    private Map<CacheKey, CacheEntry> configCache;
+    private Map<CacheKey, CacheEntry> configCache; // Garvel.gl
+    private Map<CacheKey, CacheEntry> lockCache; // Garvel.lock, if present
 
-    // test
+    //test
     public static void main(String[] args) throws CacheManagerException {
-        final String garvelConfigFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + GarvelCoreConstants.GARVEL_CONFIG_FILE;
-
-        CacheManagerServiceImpl.INSTANCE.populateCache(garvelConfigFile);
+        CacheManagerServiceImpl.INSTANCE.populateCoreCaches();
         CacheManagerServiceImpl.INSTANCE.display();
     }
 
     /**
      * Populate the Core Cache with the data from the Garvel.gl configuration file.
      *
-     * @param garvelConfigFile
-     * @return
      * @throws CacheManagerException
      */
     @Override
-    public CacheManagerService populateCache(final String garvelConfigFile) throws CacheManagerException {
+    public void populateCoreCaches() throws CacheManagerException {
+        // required
+        if (!CoreModuleLoader.INSTANCE.getFileSystemFramework().checkFileExists(GarvelCoreConstants.GARVEl_PROJECT_CONFIG_FILE)) {
+            throw new CacheManagerException(String.format("Garvel configuration file %s does not exist!", GarvelCoreConstants.GARVEl_PROJECT_CONFIG_FILE));
+        }
+
         configCache = new HashMap<>();
 
         try {
-            System.out.println("file = " + garvelConfigFile);
             final ConfigAst config = CoreModuleLoader.INSTANCE
                     .getParserFramework()
-                    .getTOMLParser(garvelConfigFile)
+                    .getTOMLParser(GarvelCoreConstants.GARVEl_PROJECT_CONFIG_FILE)
                     .parse();
 
             populateConfigCache(config);
         } catch (TOMLParserException e) {
-            throw new CacheManagerException(String.format("Error while populating cache. Reason = %s", e.getLocalizedMessage()));
+            throw new CacheManagerException(String.format("Error while populating Garvel config cache. Reason = %s", e.getErrorString()));
         }
+
+        // optional
+        if (CoreModuleLoader.INSTANCE.getFileSystemFramework().checkFileExists(GarvelCoreConstants.GARVEL_PROJECT_LOCK_FILE)) {
+            try {
+                final ConfigAst lock = CoreModuleLoader.INSTANCE
+                        .getParserFramework()
+                        .getTOMLParser(GarvelCoreConstants.GARVEL_PROJECT_LOCK_FILE)
+                        .parse();
+
+                populateLockCache(lock);
+            } catch (TOMLParserException e) {
+                throw new CacheManagerException(String.format("Error while populating Garvel lock cache. Reason = %s", e.getErrorString()));
+            }
+        }
+    }
+
+    @Override
+    public boolean isConfigCachePopulated() {
+        return configCache != null;
+    }
+
+    @Override
+    public boolean isLockCachePopulated() {
+        return lockCache != null;
+    }
+
+    @Override
+    public DependenciesEntry getConfigDependencies() {
+        if (configCache != null) {
+            return (DependenciesEntry) configCache.get(CacheKey.DEPENDENCIES);
+        }
+
+        return null;
+    }
+
+    @Override
+    public DependenciesEntry getLockDependencies() {
+        if (lockCache != null) {
+            return (DependenciesEntry) lockCache.get(CacheKey.DEPENDENCIES);
+        }
+
         return null;
     }
 
     private void populateConfigCache(final ConfigAst config) {
         configCache = new HashMap<>();
 
-        TOMLAstVisitor cacheFillVisitor = new TOMLAstCacheVisitor(configCache);
-        config.accept(cacheFillVisitor);
+        TOMLAstVisitor configCacheFillVisitor = new TOMLAstCacheVisitor(configCache);
+        config.accept(configCacheFillVisitor);
+    }
+
+    private void populateLockCache(final ConfigAst lock) {
+        lockCache = new HashMap<>();
+
+        TOMLAstVisitor lockCacheFillVisitor = new TOMLAstCacheVisitor(lockCache);
+        lock.accept(lockCacheFillVisitor);
     }
 
     public void display() {

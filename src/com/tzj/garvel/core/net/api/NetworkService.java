@@ -1,6 +1,6 @@
 package com.tzj.garvel.core.net.api;
 
-import com.tzj.garvel.core.net.api.buffers.DynamicBuffer;
+import com.tzj.garvel.common.buffers.DynamicBuffer;
 import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 
 public interface NetworkService {

@@ -7,7 +7,7 @@ import com.tzj.garvel.core.cache.exception.CacheManagerException;
 import com.tzj.garvel.core.concurrent.api.Job;
 import com.tzj.garvel.core.dep.api.exception.DependencyManagerException;
 import com.tzj.garvel.core.dep.api.resolver.DependencyResolverContext;
-import com.tzj.garvel.core.dep.api.resolver.SimpleDependencyResolverStrategy;
+import com.tzj.garvel.core.dep.resolver.SimpleDependencyResolverStrategy;
 import com.tzj.garvel.core.engine.exception.JobException;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 
@@ -104,11 +104,10 @@ public class BuildJob implements Job<BuildCommandResult> {
      * @throws JobException
      */
     private void populateCoreCache(final BuildCommandResult result) throws JobException {
-        final String configFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + GarvelCoreConstants.GARVEL_CONFIG_FILE;
         try {
-            CoreModuleLoader.INSTANCE.getCacheManager().populateCache(configFile);
+            CoreModuleLoader.INSTANCE.getCacheManager().populateCoreCaches();
         } catch (CacheManagerException e) {
-            throw new JobException(String.format("failed to populate Core Cache: %s\n", e.getErrorString()));
+            throw new JobException(String.format("failed to populate Core Caches: %s\n", e.getErrorString()));
         }
     }
 

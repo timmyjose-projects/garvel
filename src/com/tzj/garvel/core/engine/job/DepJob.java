@@ -41,11 +41,11 @@ public class DepJob implements Job<DepCommandResult> {
     public DepCommandResult call() throws JobException {
         DepCommandResult result = new DepCommandResult();
 
-        if (queryDependencyGraph()) {
+        if (queryDependencyGraph(result)) {
             return result;
         }
 
-        if (queryLocalCache()) {
+        if (queryLocalCache(result)) {
             return result;
         }
 
@@ -135,8 +135,9 @@ public class DepJob implements Job<DepCommandResult> {
      * Query the Garvel cache ($HOME/.garvel/cache), if available.
      *
      * @throws JobException
+     * @param result
      */
-    private boolean queryLocalCache() throws JobException {
+    private boolean queryLocalCache(final DepCommandResult result) throws JobException {
         return false;
     }
 
@@ -144,8 +145,9 @@ public class DepJob implements Job<DepCommandResult> {
      * Query the project's Dependency Graph, if available.
      *
      * @throws JobException
+     * @param result
      */
-    private boolean queryDependencyGraph() throws JobException {
+    private boolean queryDependencyGraph(final DepCommandResult result) throws JobException {
         return false;
     }
 }

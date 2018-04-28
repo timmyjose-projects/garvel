@@ -1,6 +1,7 @@
 package com.tzj.garvel.playground.javacompiler;
 
 import com.tzj.garvel.core.dep.api.exception.GraphCheckedException;
+import com.tzj.garvel.core.dep.api.graph.GraphKind;
 import com.tzj.garvel.core.dep.graph.AdjacencySet;
 import com.tzj.garvel.core.dep.graph.Algorithms;
 import com.tzj.garvel.core.dep.api.graph.Graph;
@@ -20,7 +21,7 @@ public class DependencyGraphDisplayer {
         mapping.put(4, new DepArtifact("com.quux", "quux", "5.0"));
         mapping.put(5, new DepArtifact("net.arghh", "arghh", "6.0"));
 
-        Graph g = new AdjacencySet(6, Graph.Kind.DIRECTED);
+        Graph g = new AdjacencySet(6, GraphKind.DIRECTED);
         g.addEdge(0, 1);
         g.addEdge(0, 4);
         g.addEdge(1, 3);

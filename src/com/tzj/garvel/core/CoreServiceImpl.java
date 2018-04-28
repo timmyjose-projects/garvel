@@ -1,20 +1,15 @@
 package com.tzj.garvel.core;
 
-import com.tzj.garvel.cli.api.parser.ast.UninstallCommandAst;
 import com.tzj.garvel.common.spi.core.CoreService;
 import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
 import com.tzj.garvel.common.spi.core.command.CommandType;
-import com.tzj.garvel.common.spi.error.GarvelCheckedException;
 import com.tzj.garvel.core.cache.exception.CacheManagerException;
 import com.tzj.garvel.core.engine.Command;
 import com.tzj.garvel.core.engine.command.*;
-import com.tzj.garvel.core.engine.exception.JobException;
-import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 
 import java.io.File;
-import java.nio.file.Paths;
 
 /**
  * This class represents the core of the garvel package manager.
@@ -75,25 +70,6 @@ public enum CoreServiceImpl implements CoreService {
         }
 
         return command.run(cmdParams);
-    }
-
-    /**
-     * This will be called by the  `build` and `run` commands to ensure that dependencies are up-to-date
-     * before running the command.
-     *
-     * @throws CacheManagerException
-     */
-    @Override
-    public void invokeCachePopulation() throws CacheManagerException {
-        final String garvelConfigFile = GarvelCoreConstants.GARVEL_PROJECT_ROOT
-                + File.separator
-                + GarvelCoreConstants.GARVEL_CONFIG_FILE;
-
-        if (CoreModuleLoader.INSTANCE.getFileSystemFramework().checkFileExists(garvelConfigFile)) {
-            CoreModuleLoader.INSTANCE.getCacheManager().populateCache(garvelConfigFile);
-        } else {
-            throw new CacheManagerException(String.format("Garvel configuration file %s does not exist!", garvelConfigFile));
-        }
     }
 
     /**

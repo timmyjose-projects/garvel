@@ -70,7 +70,7 @@ public class CLIScanner {
 
     private void take(final char expectedChar) {
         if (currentChar.c() != expectedChar) {
-            // error
+            // exception
             throw new RuntimeException(String.format("CLI Scanner Error at col %d. Expected to take %c, found %c",
                     currentChar.column(), expectedChar, currentChar.c()));
         }
@@ -202,7 +202,7 @@ public class CLIScanner {
             break;
 
             default: {
-                // error
+                // exception
                 throw new RuntimeException(String.format("CLI SCanner Error: at col %d, %c cannot start a valid token",
                         currentChar.column(), currentChar.c()));
             }

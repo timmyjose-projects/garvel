@@ -1,6 +1,6 @@
 package com.tzj.garvel.core.dep.api.exception;
 
-import com.tzj.garvel.common.spi.error.GarvelUncheckedException;
+import com.tzj.garvel.common.spi.exception.GarvelUncheckedException;
 
 public class GraphUncheckedException extends GarvelUncheckedException {
     private static final long serialVersionUID = 6483349032725046609L;

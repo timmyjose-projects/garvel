@@ -9,19 +9,42 @@ import java.util.List;
  * configuration file that may or may not be affected by builds.
  */
 public class GarvelCoreConstants {
+    // Garvel config
     public static final String GARVEL_HOME_DIR = System.getProperty("user.home");
-
-    public static final String GARVEL_PROJECT_ROOT = System.getProperty("user.dir");
 
     public static final String GARVEL_DIR = ".garvel";
 
     public static final String GARVEL_CACHE_DIR = "cache";
 
+    public static final String GARVEL_CACHE_FILE = GARVEL_CACHE_DIR +
+            File.separator + "cache.mapping";
+
     public static final String POSIX_PERMISSIONS = "rwxr-xr-x";
 
-    public static final String GARVEL_CONFIG_FILE = "Garvel.gl";
-
+    // Garvel codebase specific
     public static final String GARVEL_CONFIG_TEMPLATE = "com/tzj/garvel/common/templates/GarvelTemplate.gl";
+
+    // Garvel project config
+    public static final String GARVEL_PROJECT_ROOT = System.getProperty("user.dir");
+
+    public static final String GARVEl_PROJECT_CONFIG_FILE = GARVEL_PROJECT_ROOT +
+            File.separator + "Garvel.gl";
+
+    public static final String GARVEL_PROJECT_LOCK_FILE = GARVEL_PROJECT_ROOT +
+            File.separator + "Garvel.lock";
+
+    public static final String GARVEL_PROJECT_TARGET_DIR = GARVEL_PROJECT_ROOT
+            + File.separator + "target";
+
+    public static final String GARVEL_PROJECT_BUILD_DIR = GARVEL_PROJECT_TARGET_DIR +
+            File.separator + "build";
+
+    public static final String GARVEL_PROJECT_DEPS_DIR = GARVEL_PROJECT_TARGET_DIR +
+            File.separator + "deps";
+
+    public static final String GARVEL_PROJECT_DEPS_FILE = GARVEL_PROJECT_DEPS_DIR +
+            File.separator + "dependency.graph";
+
 
     // this should be moved to an external file that can be auto-incremented
     // with each build (post bootstrap of garvel to garvel)
@@ -42,7 +65,4 @@ public class GarvelCoreConstants {
             "dep",
             "test"
     );
-
-    // useful to have a constant here for forming URLs
-    public static final String FORWARD_SLASH = "/";
 }

@@ -9,6 +9,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermissions;
 
 import static com.tzj.garvel.common.parser.GarvelConstants.EOL;
@@ -278,5 +279,49 @@ public enum FilesystemServiceImpl implements FilesystemService {
         }
 
         return newFile;
+    }
+
+    /**
+     * Copy the source file to the destination file.
+     *
+     * @param destinationFile
+     * @param sourceFile
+     * @return
+     * @throws FilesystemFrameworkException
+     */
+    @Override
+    public void copyFile(final String destinationFile, final String sourceFile) throws FilesystemFrameworkException {
+        final Path sourceFilePath = Paths.get(sourceFile);
+
+        if (!sourceFilePath.toFile().exists()) {
+            throw new FilesystemFrameworkException(String.format("file \"%s\" does not exist", sourceFile));
+        }
+
+        final Path destinationFilePath = Paths.get(destinationFile);
+
+        try {
+            Files.copy(sourceFilePath, destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(String.format("file \"%s\" could not be copied to \"%s\": %s",
+                    sourceFile, destinationFile, e.getLocalizedMessage()));
+        }
+
+        // sanity check
+        if (!destinationFilePath.toFile().exists()) {
+            throw new FilesystemFrameworkException(String.format("file \"%s\" could not be copied to \"%s\": internal error",
+                    sourceFile, destinationFile));
+        }
+    }
+
+    /**
+     * Deserialize the stored object and return the instance.
+     *
+     * @param filename
+     * @param clazz
+     * @return
+     */
+    @Override
+    public Object loadSerializedObject(final String filename, final Class<?> clazz) throws FilesystemFrameworkException {
+        return null;
     }
 }

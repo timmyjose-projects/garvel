@@ -24,7 +24,7 @@ public class CLIBuildCommand extends CLICommand {
 
             checkSuccess(result);
         } catch (CommandException e) {
-            CLIErrorHandler.errorAndExit(String.format("Build failed with error message: %s", e.getErrorString()));
+            CLIErrorHandler.errorAndExit(String.format("Build failed with exception message: %s", e.getErrorString()));
         }
     }
 

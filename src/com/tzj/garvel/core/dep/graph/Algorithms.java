@@ -4,6 +4,7 @@ import com.tzj.garvel.core.dep.api.exception.GraphCheckedException;
 import com.tzj.garvel.core.dep.api.exception.GraphUncheckedException;
 import com.tzj.garvel.core.dep.api.graph.Graph;
 import com.tzj.garvel.core.dep.api.graph.GraphCallback;
+import com.tzj.garvel.core.dep.api.graph.GraphKind;
 
 import java.util.*;
 
@@ -21,7 +22,7 @@ public class Algorithms {
      * @throws GraphCheckedException
      */
     public static void topologicalSort(Graph g, GraphCallback<List<Integer>> cb) throws GraphCheckedException {
-        if (g.kind() != Graph.Kind.DIRECTED) {
+        if (g.kind() != GraphKind.DIRECTED) {
             throw new GraphUncheckedException("Topological Sort is only supported for Directed Graphs\n");
         }
 

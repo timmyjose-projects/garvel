@@ -144,7 +144,7 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
     command. [DONE]
     
     * Dep - 1. Given the Maven Coordinates, display the available versions. To this end, the local cache will be queried
-    first, and if not found, then Maven Central will be contacted for ths information. 
+    first, and if not found, then Maven Central will be contacted for ths information. [DONE]
     
             2. If the `--show-dependencies` flag is supplied, then the transitive dependencies of the artifact will
             also be displayed in a suitably formatted manner. 
@@ -204,6 +204,40 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
      And a map containing mapping from groupId+artifactId+version to path (as String since `Path` is not serializable)
      in the cache. This is in binary form for performance. Whenever the cache is updated, this map will also be updated.
     
+    Algorithm for Dependency Graph:
+    
+    1. The Dependency Graph will store the metadata of the dependencies
+    of the project. The actual data for the artifacts themselves will be stored in the Garvel Cache (GC).
+    
+    Note: For the dependency graph, the only `id` used is a monotonously increasing integer value. There will be a mapping
+    from the Maven coordinates to the integer value that is persisted so that steps 2 and 3 can be undertaken. 
+    
+    2. When a build is triggered, the Garvel.lock file will be queried for. If it does not exist, this is the first build
+    for the project - parse the Garvel.gl file and get the list of all the current dependencies. Create a new Dependency Graph (DG) 
+    and make these dependencies as the initial vertices. Then find all the transitive dependencies of all the dependencies, and populate the graph.
+     
+    Perform Topological Sort (TS) to find out the ordering of all the dependencies. Report any cyclic dependencies as errors (for 1.0).
+    Then download all the dependencies in the Topological Order, and persist the Dependency Graph in the `target/deps` directory.
+    Finally, clone the Garvel.gl file as the Garvel.lock file (removing the old one).
+    
+    3. i). Now, if a Garvel.lock file already existed, then parse both Garvel.lock and Garvel.gl, and compare the dependencies.
+    If new dependencies were added, current dependencies removed, or current dependencies' versions changed, then delete the
+    Garvel.lock file, update the DG, and perform TS, and continue as in 2. Finally, persist the DG, and clone the Garvel.gl
+    file into the new Garvel.lock file. 
+    
+       ii). If no changes were found between the Garvel.gl and Garvel.lock file, then simply use the DG, if it exists,
+       perform a TS and get the classpath string to build the project with. If the DG is not present, then create it, 
+       perform TS for the build, and then persist the DG. Note that since the Garvel.lock file is present, this means
+       that the artifacts are already in the GC. However, if `garvel uninstall` had been called previously, then this
+       would fail. Therefore, even in the presence of the Garvel.lock file, we should query the GC to ensure that the
+       artifacts are present (and if not, download them).
+       
+
+    How the Garvel Cache works
+    
+    The Garvel Cache structure is shown above, but in order to handle queries about available artifacts, a Mapping file
+    will also be persisted in the GC root directory. If this file is not present, then all the dependencies will have
+    to be fetched again (for example, as a result of `garvel uninstall`).
     
     
     

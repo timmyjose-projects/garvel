@@ -417,7 +417,7 @@ public enum CLIParserImpl implements CLIParser {
 
     /**
      * Primitive rule - convert the current token's spelling
-     * into an Identifier after due error-checking.
+     * into an Identifier after due exception-checking.
      *
      * @return
      */

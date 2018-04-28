@@ -50,10 +50,10 @@ public class TOMLSourceFile {
             }
             stream.add(new CharWrapper(EOI, -1, -1));
         } catch (FileNotFoundException e1) {
-            throw new LexerException(String.format("TOML Lexer error: source file %s does not exist", filename));
+            throw new LexerException(String.format("TOML Lexer exception: source file %s does not exist", filename));
 
         } catch (IOException e1) {
-            throw new LexerException(String.format("TOML Lexer error: while trying to read source file %s", filename));
+            throw new LexerException(String.format("TOML Lexer exception: while trying to read source file %s", filename));
         }
     }
 

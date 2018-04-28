@@ -4,13 +4,11 @@ import com.tzj.garvel.core.net.api.NetworkConnector;
 import com.tzj.garvel.core.net.api.NetworkConnectorFactory;
 import com.tzj.garvel.core.net.api.NetworkConstants;
 import com.tzj.garvel.core.net.api.NetworkService;
-import com.tzj.garvel.core.net.api.buffers.DynamicBuffer;
+import com.tzj.garvel.common.buffers.DynamicBuffer;
 import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
 public enum NetworkServiceImpl implements NetworkService {

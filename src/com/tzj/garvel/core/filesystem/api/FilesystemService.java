@@ -29,4 +29,8 @@ public interface FilesystemService {
     String loadClassPathFileAsString(String garvelConfigTemplate) throws FilesystemFrameworkException;
 
     Path makeFileWithContents(String configFilePath, String configString) throws FilesystemFrameworkException;
+
+    void copyFile(String destinationFile, String sourceFile) throws FilesystemFrameworkException;
+
+    Object loadSerializedObject(String filename, Class<?> clazz) throws FilesystemFrameworkException;
 }

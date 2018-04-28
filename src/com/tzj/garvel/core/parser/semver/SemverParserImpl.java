@@ -32,7 +32,7 @@ public class SemverParserImpl implements SemverParser {
 
     private void accept(final SemverTokenType expectedKind) throws SemverParserException {
         if (currentToken.kind() != expectedKind) {
-            throw new SemverParserException(String.format("Semver Parser error at col %d. Expected to accept token of kind %s, found token of kind %s",
+            throw new SemverParserException(String.format("Semver Parser exception at col %d. Expected to accept token of kind %s, found token of kind %s",
                     currentToken.columnNumber(), expectedKind, currentToken.kind()));
         }
 

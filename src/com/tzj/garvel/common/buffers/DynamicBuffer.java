@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.net.api.buffers;
+package com.tzj.garvel.common.buffers;
 
 import com.tzj.garvel.core.net.api.exception.buffers.BufferException;
 

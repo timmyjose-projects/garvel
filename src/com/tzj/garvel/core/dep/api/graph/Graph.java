@@ -4,6 +4,8 @@ import java.io.Externalizable;
 import java.util.List;
 
 public interface Graph extends Externalizable {
+    void addVertex(int v);
+
     void addEdge(int v1, int v2);
 
     List<Integer> getAdjacentVertices(int v);
@@ -14,10 +16,5 @@ public interface Graph extends Externalizable {
 
     void display();
 
-    Graph.Kind kind();
-
-    enum Kind {
-        DIRECTED,
-        UNDIRECTED;
-    }
+    GraphKind kind();
 }

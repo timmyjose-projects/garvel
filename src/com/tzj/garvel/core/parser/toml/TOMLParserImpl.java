@@ -103,7 +103,7 @@ public class TOMLParserImpl implements TOMLParser {
             accept(TOMLTokenType.LIB);
         } catch (TOMLParserException e) {
             // This means that the `lib` section is probably missing, and we should try for the `bin` section before
-            // declaring an error.
+            // declaring an exception.
             return null;
         }
 

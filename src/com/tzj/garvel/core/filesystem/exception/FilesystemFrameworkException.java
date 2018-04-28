@@ -1,6 +1,6 @@
 package com.tzj.garvel.core.filesystem.exception;
 
-import com.tzj.garvel.common.spi.error.GarvelCheckedException;
+import com.tzj.garvel.common.spi.exception.GarvelCheckedException;
 
 public class FilesystemFrameworkException extends GarvelCheckedException {
     private static final long serialVersionUID = 42242782075139131L;

@@ -1,4 +1,4 @@
-package com.tzj.garvel.common.spi.error;
+package com.tzj.garvel.common.spi.exception;
 
 public class GarvelCheckedException extends Exception {
     private static final long serialVersionUID = -2538293604499766859L;

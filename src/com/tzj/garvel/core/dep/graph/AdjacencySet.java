@@ -2,6 +2,7 @@ package com.tzj.garvel.core.dep.graph;
 
 import com.tzj.garvel.core.dep.api.exception.GraphUncheckedException;
 import com.tzj.garvel.core.dep.api.graph.Graph;
+import com.tzj.garvel.core.dep.api.graph.GraphKind;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -10,40 +11,48 @@ import java.util.*;
 
 public class AdjacencySet implements Graph {
     private static final long serialVersionUID = -847254791596283923L;
-    private Vertex[] vertices;
-    private int n;
-    private Graph.Kind kind;
 
-    public AdjacencySet(final int n, final Graph.Kind kind) {
-        this.n = n;
+    private List<Vertex> vertices;
+    private GraphKind kind;
 
-        this.vertices = new Vertex[n];
+    public AdjacencySet(final int n, final GraphKind kind) {
+        this.vertices = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            vertices[i] = new Vertex(i);
+            vertices.add(i, new Vertex(i));
         }
 
         this.kind = kind;
     }
 
+    public AdjacencySet(final GraphKind kind) {
+        this.vertices = new ArrayList<>();
+        this.kind = kind;
+    }
+
+    @Override
+    public void addVertex(final int v) {
+        vertices.add(new Vertex(v));
+    }
+
     @Override
     public void addEdge(final int v1, final int v2) {
-        if (v1 < 0 || v1 >= n || v2 < 0 || v2 >= n) {
-            throw new GraphUncheckedException(String.format("invalid vertex of vertices %d, %d\n", v1, v2));
+        if (v1 < 0 || v1 >= size() || v2 < 0 || v2 >= size()) {
+            throw new GraphUncheckedException(String.format("invalid vertex or vertices: %d, %d\n", v1, v2));
         }
 
-        vertices[v1].vs.add(v2);
-        if (kind == Kind.UNDIRECTED) {
-            vertices[v2].vs.add(v1);
+        vertices.get(v1).vs.add(v2);
+        if (kind == GraphKind.UNDIRECTED) {
+            vertices.get(v2).vs.add(v1);
         }
     }
 
     @Override
     public List<Integer> getAdjacentVertices(final int v) {
-        if (v < 0 || v >= n) {
+        if (v < 0 || v >= size()) {
             throw new GraphUncheckedException(String.format("invalid vertex %d\n", v));
         }
 
-        List<Integer> vs = new ArrayList<>(vertices[v].vs);
+        List<Integer> vs = new ArrayList<>(vertices.get(v).vs);
 
         Collections.sort(vs);
 
@@ -52,17 +61,17 @@ public class AdjacencySet implements Graph {
 
     @Override
     public int getIndegree(final int v) {
-        if (kind == Kind.UNDIRECTED) {
+        if (kind == GraphKind.UNDIRECTED) {
             throw new GraphUncheckedException("indegree is not specified for undirected graphs\n");
         }
 
-        if (v < 0 || v >= n) {
+        if (v < 0 || v >= size()) {
             throw new GraphUncheckedException(String.format("invalid vertex, %d\n", v));
         }
 
         int d = 0;
-        for (int i = 0; i < n; i++) {
-            if (vertices[i].vs.contains(v)) {
+        for (int i = 0; i < size(); i++) {
+            if (vertices.get(i).vs.contains(v)) {
                 d++;
             }
         }
@@ -72,14 +81,14 @@ public class AdjacencySet implements Graph {
 
     @Override
     public int size() {
-        return n;
+        return vertices.size();
     }
 
     @Override
     public void display() {
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < size(); i++) {
             System.out.printf("%d: ", i);
-            for (int v : vertices[i].vs) {
+            for (int v : vertices.get(i).vs) {
                 System.out.printf("%d ", v);
             }
             System.out.println();
@@ -87,7 +96,7 @@ public class AdjacencySet implements Graph {
     }
 
     @Override
-    public Kind kind() {
+    public GraphKind kind() {
         return kind;
     }
 

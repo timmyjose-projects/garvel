@@ -85,7 +85,7 @@ public class HelpPages {
             "Run the specified target (as specified in the `bin` section of the `Garvel.gl` file).\n" +
             "If no target-name is specified, and if the project is runnable i.e., the `main-class` key has been\n" +
             "specified in the `lib` section of the `Garvel.gl` file, then the project itself will be run, otherwise\n" +
-            "an error message will be issued.\n" +
+            "an exception message will be issued.\n" +
             "\n" +
             "USAGE:\n" +
             "    garvel run [target-name]\n" +

@@ -1,8 +1,8 @@
 package com.tzj.garvel.core.dep.api.repo;
 
 import com.tzj.garvel.core.CoreModuleLoader;
-import com.tzj.garvel.core.GarvelCoreConstants;
 import com.tzj.garvel.core.dep.api.exception.RepositoryLoaderException;
+import com.tzj.garvel.core.net.api.NetworkConstants;
 import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 
 /**
@@ -36,7 +36,7 @@ public abstract class RepositoryLoader {
         if (checkRepoStatus()) {
             // replace the periods with forwards slashes to construct the correct URL
             String modGroupId = groupId.replace(".", "/");
-            return kind.getUrl() + GarvelCoreConstants.FORWARD_SLASH + modGroupId + GarvelCoreConstants.FORWARD_SLASH + artifactId;
+            return kind.getUrl() + NetworkConstants.FORWARD_SLASH + modGroupId + NetworkConstants.FORWARD_SLASH + artifactId;
         }
 
         return nextLoader.constructArtifactUrl(groupId, artifactId);

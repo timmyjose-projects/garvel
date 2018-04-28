@@ -1,0 +1,15 @@
+HOMEPAGE : HomepageEntry{url='"https://github.com/timmyjose/garvel"'}
+DEPENDENCIES : DependenciesEntry{dependencies={log4j/log4j={PATCH=[17], MAJOR=[1], MINOR=[2]}, junit/junit={PATCH=[2], MAJOR=[4], MINOR=[1]}}}
+LICENCE : LicenceEntry{licence='"MIT"'}
+MAIN_CLASS : MainClassEntry{mainClassPath='"com/tzj/garvel/cli/CLI"'}
+CATEGORIES : CategoriesEntry{categories=["standalone", "jar"]}
+CLASSPATH : ClassPathEntry{paths=["./"]}
+KEYWORDS : KeywordsEntry{keywords=["package manager", "dependency manager", "build manager"]}
+TARGETS : BinSectionEntry{targets={}}
+NAME : NameEntry{name='"Garvel"'}
+README : ReadmeEntry{url='"https://github.com/timmyjose/garvel/blob/master/README.md"'}
+LICENCE_FILE : LicenceFileEntry{licenceUrl='"N/A"'}
+FAT_JAR : FatJarEntry{isFatJar=false}
+VERSION : VersionEntry{name='"0.1.0"'}
+DESCRIPTION : DescriptionEntry{description='"A dependency and package manager for Java"'}
+AUTHORS : AuthorsEntry{authors=["zoltan.jose@gmail.com"]}
