@@ -7,11 +7,17 @@ public class Artifact {
     private String groupId;
     private String artifactId;
     private String version;
+    private int id;
 
-    public Artifact(final String groupId, final String artifactId, final String version) {
+    public Artifact(final int id, final String groupId, final String artifactId, final String version) {
+        this.id = id;
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getGroupId() {

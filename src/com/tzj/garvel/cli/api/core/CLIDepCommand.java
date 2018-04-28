@@ -28,7 +28,7 @@ public class CLIDepCommand extends CLICommand {
         try {
             final DepCommandResult result = (DepCommandResult) CoreServiceImpl.INSTANCE.runCommand(CommandType.DEP, params);
 
-            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "The available versions are:\n", result.getVersions());
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "%s\n", result.getVersions());
 
             if (result.isDependenciesInformationAvailable()) {
                 UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "The dependency tree for version %s is:\n",

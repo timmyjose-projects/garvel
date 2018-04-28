@@ -7,8 +7,7 @@ public class DepCommandResult extends CommandResult {
     private boolean dependenciesInformationAvailable;
     private String dependencyGraphString;
 
-    public DepCommandResult(final String versions) {
-        this.versions = versions;
+    public DepCommandResult() {
     }
 
     public boolean isDependenciesInformationAvailable() {

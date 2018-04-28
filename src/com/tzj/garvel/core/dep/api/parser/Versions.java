@@ -4,17 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Versions {
-    List<String> versions;
+    private String latestVersion;
+    private String releaseVersion;
+    private List<String> availableVersions;
 
     public Versions() {
-        this.versions = new ArrayList<>();
+        this.availableVersions = new ArrayList<>();
     }
 
-    public List<String> getVersions() {
-        return versions;
+    public String getLatestVersion() {
+        return latestVersion;
     }
 
-    public void addVersion(final String version) {
-        versions.add(version);
+    public void setLatestVersion(final String latestVersion) {
+        this.latestVersion = latestVersion;
+    }
+
+    public String getReleaseVersion() {
+        return releaseVersion;
+    }
+
+    public void setReleaseVersion(final String releaseVersion) {
+        this.releaseVersion = releaseVersion;
+    }
+
+    public List<String> getAvailableVersions() {
+        return availableVersions;
+    }
+
+    public void addAvailableVersion(final String version) {
+        availableVersions.add(version);
     }
 }

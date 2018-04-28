@@ -5,7 +5,11 @@ import com.tzj.garvel.common.spi.core.VCSType;
 import com.tzj.garvel.common.spi.util.UtilService;
 import com.tzj.garvel.core.CoreServiceImpl;
 
+import java.io.FileInputStream;
 import java.nio.file.Path;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import static com.tzj.garvel.common.spi.core.VCSType.*;
@@ -16,6 +20,7 @@ public enum UtilServiceImpl implements UtilService {
     private static final Map<String, VCSType> validVCS;
     private static final Set<String> validCommands;
     private static final double LEVENSHTEIN_THRESHOLD = 0.50;
+    private static final int BUF_SIZE = 8192; // 8KB
 
     static {
         validVCS = new HashMap<>();
@@ -158,6 +163,13 @@ public enum UtilServiceImpl implements UtilService {
         return vcs;
     }
 
+    /**
+     * Display the given String on the console.
+     *
+     * @param newline
+     * @param format
+     * @param values
+     */
     @Override
     public void displayFormattedToConsole(boolean newline, final String format, final Object... values) {
         if (newline) {
@@ -191,6 +203,52 @@ public enum UtilServiceImpl implements UtilService {
         }
 
         return true;
+    }
+
+    /**
+     * Generate the MD5 Hash of the given path.
+     *
+     * @param path
+     * @return
+     */
+    @Override
+    public String getMD5(final Path path) {
+        return getHash(path, "MD5");
+    }
+
+    /**
+     * Generate the SHA1 hash of the given path.
+     *
+     * @param path
+     * @return
+     */
+    @Override
+    public String getSHA1(final Path path) {
+        return getHash(path, "SHA1");
+    }
+
+    private String getHash(final Path path, final String algorithm) {
+        try {
+            final StringBuffer sb = new StringBuffer();
+            final MessageDigest md = MessageDigest.getInstance(algorithm);
+            final DigestInputStream in = new DigestInputStream(new FileInputStream(path.toFile()), md);
+
+            byte[] buffer = new byte[BUF_SIZE];
+            while (in.read(buffer) != -1) {
+                //
+            }
+
+            in.close();
+
+            byte[] bytes = md.digest();
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(String.format("%02x", bytes[i] & 0xff));
+            }
+
+            return sb.toString();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**

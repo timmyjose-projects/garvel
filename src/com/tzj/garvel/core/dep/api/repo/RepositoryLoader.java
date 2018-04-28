@@ -1,6 +1,9 @@
 package com.tzj.garvel.core.dep.api.repo;
 
+import com.tzj.garvel.core.CoreModuleLoader;
+import com.tzj.garvel.core.GarvelCoreConstants;
 import com.tzj.garvel.core.dep.api.exception.RepositoryLoaderException;
+import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 
 /**
  * The common functionality associated with a repository goes
@@ -21,7 +24,21 @@ public abstract class RepositoryLoader {
         return nextLoader;
     }
 
-    protected abstract boolean checkRepoStatus();
+    public boolean checkRepoStatus() {
+        try {
+            return CoreModuleLoader.INSTANCE.getNetworkFramework().checkUrlAvailable(kind.getUrl());
+        } catch (NetworkServiceException e) {
+            return false;
+        }
+    }
 
-    public abstract String constructArtifactUrl(final String groupId, final String artifactId) throws RepositoryLoaderException;
+    public String constructArtifactUrl(final String groupId, final String artifactId) throws RepositoryLoaderException {
+        if (checkRepoStatus()) {
+            // replace the periods with forwards slashes to construct the correct URL
+            String modGroupId = groupId.replace(".", "/");
+            return kind.getUrl() + GarvelCoreConstants.FORWARD_SLASH + modGroupId + GarvelCoreConstants.FORWARD_SLASH + artifactId;
+        }
+
+        return nextLoader.constructArtifactUrl(groupId, artifactId);
+    }
 }

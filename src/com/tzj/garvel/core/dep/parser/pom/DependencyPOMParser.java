@@ -1,15 +1,21 @@
 package com.tzj.garvel.core.dep.parser.pom;
 
-import com.tzj.garvel.core.dep.api.parser.DepParser;
+import com.tzj.garvel.core.dep.api.exception.DependencyManagerException;
 import com.tzj.garvel.core.dep.api.parser.Dependencies;
+import com.tzj.garvel.core.dep.api.parser.DependencyParser;
 import com.tzj.garvel.core.dep.api.parser.Versions;
 
-public class DepPOMParser implements DepParser {
+public class DependencyPOMParser implements DependencyParser {
     private String pomUrl;
     private Dependencies dependencies;
 
-    public DepPOMParser(final String pomUrl) {
+    public DependencyPOMParser(final String pomUrl) {
         this.pomUrl = pomUrl;
+    }
+
+    @Override
+    public void parse() throws DependencyManagerException {
+
     }
 
     @Override

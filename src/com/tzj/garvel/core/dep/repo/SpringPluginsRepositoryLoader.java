@@ -12,22 +12,4 @@ public class SpringPluginsRepositoryLoader extends RepositoryLoader {
         kind = RepositoryKind.SPRING_PLUGINS;
         nextLoader = new SpringLibsRepositoryLoader();
     }
-
-    @Override
-    protected boolean checkRepoStatus() {
-        try {
-            return CoreModuleLoader.INSTANCE.getNetworkFramework().checkUrlAvailable(kind.getUrl());
-        } catch (NetworkServiceException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public String constructArtifactUrl(final String groupId, final String artifactId) throws RepositoryLoaderException {
-        if (checkRepoStatus()) {
-            return kind.getUrl() + GarvelCoreConstants.FORWARD_SLASH + groupId + GarvelCoreConstants.FORWARD_SLASH + artifactId;
-        }
-
-        return nextLoader.constructArtifactUrl(groupId, artifactId);
-    }
 }

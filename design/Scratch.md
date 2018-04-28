@@ -166,13 +166,12 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
       groupId,
       artifactId,
       version
-      id
     }
     
-    The integer `id` will be used as the id for Graph operations. The dependency structure will be created by the
-    Graph logic, and there will be a mapping from the ids to the actual Artifact objects.Ò
+    An external integer, `id`, will be used as the id for Graph operations. The dependency structure will be created by the
+    Graph logic, and there will be a mapping from the ids to the actual Artifact objects. Custom operations wil be
+    provided via the callback mechanism.
     
-        
     Start off with the specified artifact, and then transitively keep collecting the lists of dependencies for this
     artifact, creating a Dependency Graph (Directed Graph) along the way. Finally, perform a Topological Sort on the
     dependencies. If there is no cycle detected, then download the dependencies in parallel, and update the Garvel

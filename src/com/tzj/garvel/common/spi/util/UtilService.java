@@ -17,5 +17,9 @@ public interface UtilService {
     void displayFormattedToConsole(boolean newline, String format, Object... values);
 
     boolean validateArtifactVersion(String version);
+
+    String getMD5(Path path);
+
+    String getSHA1(Path path);
 }
 

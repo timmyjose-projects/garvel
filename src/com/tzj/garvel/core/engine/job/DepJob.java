@@ -2,10 +2,17 @@ package com.tzj.garvel.core.engine.job;
 
 import com.tzj.garvel.common.spi.core.command.result.DepCommandResult;
 import com.tzj.garvel.core.concurrent.api.Job;
+import com.tzj.garvel.core.dep.api.exception.DependencyManagerException;
 import com.tzj.garvel.core.dep.api.exception.RepositoryLoaderException;
+import com.tzj.garvel.core.dep.api.parser.DependencyParser;
+import com.tzj.garvel.core.dep.api.parser.DependencyParserFactory;
+import com.tzj.garvel.core.dep.api.parser.DependencyParserKind;
+import com.tzj.garvel.core.dep.api.parser.Versions;
 import com.tzj.garvel.core.dep.api.repo.RepositoryLoader;
 import com.tzj.garvel.core.dep.api.repo.RepositoryLoaderFactory;
 import com.tzj.garvel.core.engine.exception.JobException;
+
+import java.util.List;
 
 public class DepJob implements Job<DepCommandResult> {
     private final String groupId;
@@ -32,7 +39,7 @@ public class DepJob implements Job<DepCommandResult> {
      */
     @Override
     public DepCommandResult call() throws JobException {
-        DepCommandResult result = null;
+        DepCommandResult result = new DepCommandResult();
 
         if (queryDependencyGraph()) {
             return result;
@@ -64,23 +71,62 @@ public class DepJob implements Job<DepCommandResult> {
         }
 
         // get the maven metadata file and populate version info
-        String versions = getVersionsForDependency();
-        result.setVersions(versions);
+        result.setVersions(getVersionsForDependency(repoUrl));
 
         // if the --show-dependencies flag was supplier, then
         // get the artifact POM (using version) and populate
         // the transitive dependency information.
-        String dependencies = getTransitiveDependencies();
-        result.setDependenciesInformationAvailable(true);
-        result.setDependencyGraphString(dependencies);
+        final String deps = getTransitiveDependencies(repoUrl);
+        if (deps != null) {
+            result.setDependenciesInformationAvailable(true);
+            result.setDependencyGraphString(deps);
+        }
     }
 
-    private String getTransitiveDependencies() {
+    /**
+     * Retrieve the transitive dependencies of the artifact.
+     *
+     * @param repoUrl
+     * @return
+     */
+    private String getTransitiveDependencies(final String repoUrl) {
         return null;
     }
 
-    private String getVersionsForDependency() {
-        StringBuffer sb = new StringBuffer();
+    /**
+     * Retrieve the versions information from the maven-metadata.xml file
+     * at the proper url.
+     *
+     * @param repoUrl
+     * @return
+     */
+    private String getVersionsForDependency(final String repoUrl) throws JobException {
+        final DependencyParser parser = DependencyParserFactory.getParser(DependencyParserKind.METADATA, repoUrl);
+        try {
+            parser.parse();
+        } catch (DependencyManagerException e) {
+            throw new JobException(e.getErrorString());
+        }
+
+        final StringBuffer sb = new StringBuffer();
+        final Versions versions = parser.getVersions();
+
+        if (versions.getLatestVersion() != null) {
+            sb.append(String.format("Latest version: %s\n", versions.getLatestVersion()));
+        }
+
+        if (versions.getReleaseVersion() != null) {
+            sb.append(String.format("Release version: %s\n", versions.getReleaseVersion()));
+        }
+
+        final List<String> availableVersions = versions.getAvailableVersions();
+        if (availableVersions != null && !availableVersions.isEmpty()) {
+            sb.append("Available versions:\n");
+
+            for (String version : availableVersions) {
+                sb.append(String.format("\t%s\n", version));
+            }
+        }
 
         return sb.toString();
     }
