@@ -12,9 +12,9 @@ public class GarvelCoreConstants {
     // Garvel config
     public static final String GARVEL_HOME_DIR = System.getProperty("user.home");
 
-    public static final String GARVEL_DIR = ".garvel";
+    public static final String GARVEL_DIR = GARVEL_HOME_DIR + File.separator + ".garvel";
 
-    public static final String GARVEL_CACHE_DIR = "cache";
+    public static final String GARVEL_CACHE_DIR = GARVEL_DIR + File.separator + "cache";
 
     public static final String GARVEL_CACHE_FILE = GARVEL_CACHE_DIR +
             File.separator + "cache.mapping";

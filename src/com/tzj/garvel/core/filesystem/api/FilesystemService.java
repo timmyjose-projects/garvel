@@ -22,6 +22,8 @@ public interface FilesystemService {
 
     Path makeDirectory(final String directory) throws FilesystemFrameworkException;
 
+    Path makeDirectoryHierarchy(final String directory) throws FilesystemFrameworkException;
+
     Path makeFile(final String filename) throws FilesystemFrameworkException;
 
     void deleteDirectory(final String directory) throws FilesystemFrameworkException;

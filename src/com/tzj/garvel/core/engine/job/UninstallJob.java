@@ -27,6 +27,7 @@ public class UninstallJob implements Job<UninstallCommandResult> {
         final UninstallCommandResult uninstallResult = new UninstallCommandResult();
         final FilesystemService fs = CoreModuleLoader.INSTANCE.getFileSystemFramework();
 
+        //@TODO - Create a Visitor that will delete the hierarachy recursively.
         if (!fs.checkDirectoryExists(garvelCache)) {
             uninstallResult.setGarvelCache(true);
         } else {

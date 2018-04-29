@@ -33,6 +33,14 @@ public abstract class RepositoryLoader {
         }
     }
 
+    /**
+     * Construct the base URL for the artifact.
+     *
+     * @param groupId
+     * @param artifactId
+     * @return
+     * @throws RepositoryLoaderException
+     */
     public String constructBaseUrl(final String groupId, final String artifactId) throws RepositoryLoaderException {
         if (checkRepoStatus()) {
             // replace the periods with forwards slashes to construct the correct URL
@@ -43,6 +51,14 @@ public abstract class RepositoryLoader {
         return nextLoader.constructBaseUrl(groupId, artifactId);
     }
 
+    /**
+     * Construct the Maven Medatadata XML file URL.
+     *
+     * @param groupId
+     * @param artifactId
+     * @return
+     * @throws RepositoryLoaderException
+     */
     public String constructMetadataUrl(final String groupId, final String artifactId) throws RepositoryLoaderException {
         if (checkRepoStatus()) {
             // replace the periods with forwards slashes to construct the correct URL
@@ -54,6 +70,15 @@ public abstract class RepositoryLoader {
         return nextLoader.constructMetadataUrl(groupId, artifactId);
     }
 
+    /**
+     * Construct the POM XML file URL.
+     *
+     * @param groupId
+     * @param artifactId
+     * @param version
+     * @return
+     * @throws RepositoryLoaderException
+     */
     public String constructPOMUrl(final String groupId, final String artifactId, final String version) throws RepositoryLoaderException {
         if (checkRepoStatus()) {
             final String modGroupId = groupId.replace(".", "/");
@@ -66,5 +91,28 @@ public abstract class RepositoryLoader {
         }
 
         return nextLoader.constructPOMUrl(groupId, artifactId, version);
+    }
+
+    /**
+     * Construct the JAR file Url for the artifact.
+     *
+     * @param groupId
+     * @param artifactId
+     * @param version
+     * @return
+     * @throws RepositoryLoaderException
+     */
+    public String constructJARFileUrl(final String groupId, final String artifactId, final String version) throws RepositoryLoaderException {
+        if (checkRepoStatus()) {
+            final String modGroupId = groupId.replace(".", "/");
+
+            return String.format(kind.getUrl() + NetworkConstants.FORWARD_SLASH + modGroupId + NetworkConstants.FORWARD_SLASH +
+                    artifactId + NetworkConstants.FORWARD_SLASH +
+                    version + NetworkConstants.FORWARD_SLASH +
+                    artifactId + NetworkConstants.DASH + version +
+                    RepositoryConstants.POM);
+        }
+
+        return nextLoader.constructJARFileUrl(groupId, artifactId, version);
     }
 }

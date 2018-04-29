@@ -69,15 +69,22 @@ public class DependencyPOMParser extends DependencyParser {
         final String metadataSHA1 = UtilServiceImpl.INSTANCE.getSHA1(pomFilePath);
 
         try {
-            final String md5Hash = CoreModuleLoader.INSTANCE.getNetworkFramework().downloadTextFileAsString(pomMD5Url);
-            final String sha1Hash = CoreModuleLoader.INSTANCE.getNetworkFramework().downloadTextFileAsString(pomSHA1Url);
+            final String md5HashFull = CoreModuleLoader.INSTANCE.getNetworkFramework().downloadTextFileAsString(pomMD5Url);
+            final String sha1HashFull = CoreModuleLoader.INSTANCE.getNetworkFramework().downloadTextFileAsString(pomSHA1Url);
+
+            // some Hash files tend to contain extra text. so split at the first whitespace
+            final String md5Hash = md5HashFull.split(" ")[0];
+            final String sha1Hash = sha1HashFull.split(" ")[0];
 
             if (metadataMD5 == null || metadataSHA1 == null || md5Hash == null || sha1Hash == null) {
                 throw new DependencyManagerException("POM file validation failed: hashes do not match");
             }
 
+            // some libs such as javaee-api-5.0-2.pom appear to have incorrect hashes in their files, so
+            // do not fail at this stage. Log it (if available), and move on.
             if (!metadataMD5.equalsIgnoreCase(md5Hash) || !sha1Hash.equalsIgnoreCase(sha1Hash)) {
-                throw new DependencyManagerException("POM file validation failed: hashes do not match");
+                //@TODO log message
+                //throw new DependencyManagerException("POM file validation failed: hashes do not match");
             }
         } catch (NetworkServiceException e) {
             throw new DependencyManagerException("failed to download the MD5 and/or SHA1 hash files for validation\n");

@@ -26,8 +26,8 @@ public class InstallJob implements Job<InstallCommandResult> {
      */
     @Override
     public InstallCommandResult call() throws JobException {
-        final String garvelRoot = GarvelCoreConstants.GARVEL_HOME_DIR + File.separator + GarvelCoreConstants.GARVEL_DIR;
-        final String garvelCache = garvelRoot + File.separator + GarvelCoreConstants.GARVEL_CACHE_DIR;
+        final String garvelRoot =  GarvelCoreConstants.GARVEL_DIR;
+        final String garvelCache = GarvelCoreConstants.GARVEL_CACHE_DIR;
 
         final InstallCommandResult installResult = new InstallCommandResult();
         final FilesystemService fs = CoreModuleLoader.INSTANCE.getFileSystemFramework();

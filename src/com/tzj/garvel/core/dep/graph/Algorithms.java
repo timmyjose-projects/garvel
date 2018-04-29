@@ -28,6 +28,22 @@ public class Algorithms {
 
         cb.pre();
 
+        List<Integer> vs = new ArrayList<>();
+        doTopoSort(g, vs);
+
+        if (vs.size() != g.size()) {
+            throw new GraphCheckedException("Cycle detected");
+        }
+
+        cb.invoke(vs);
+        cb.post();
+    }
+
+    /**
+     * For unconnected graphs, we need to perform Topological Sort on all the vertices,
+     * collating the results along the way.
+     */
+    private static void doTopoSort(final Graph g, List<Integer> vs) {
         Queue<Integer> q = new ArrayDeque<>();
 
         Map<Integer, Integer> indegs = new HashMap<>();
@@ -35,13 +51,12 @@ public class Algorithms {
             int d = g.getIndegree(i);
 
             if (d == 0) {
-                q.add(d);
+                q.add(i);
             }
 
             indegs.put(i, d);
         }
 
-        List<Integer> vs = new ArrayList<>();
         while (!q.isEmpty()) {
             int v = q.remove();
 
@@ -55,13 +70,6 @@ public class Algorithms {
                 }
             }
         }
-
-        if (vs.size() != g.size()) {
-            throw new GraphCheckedException("Cycle detected");
-        }
-
-        cb.invoke(vs);
-        cb.post();
     }
 
     /**

@@ -12,5 +12,5 @@ public class NetworkConstants {
 
     public static final String DASH = "-";
 
-    public static final String DOT = ".";
+    public static final int BUF_SIZE = 8192; // 8KB default
 }

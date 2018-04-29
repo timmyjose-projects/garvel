@@ -1,5 +1,6 @@
 package com.tzj.garvel.core.dep.resolver;
 
+import com.tzj.garvel.common.util.UtilServiceImpl;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.GarvelCoreConstants;
 import com.tzj.garvel.core.cache.api.DependenciesEntry;
@@ -24,10 +25,7 @@ import com.tzj.garvel.core.dep.graph.GraphIdGenerator;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 import com.tzj.garvel.core.parser.api.visitor.semver.SemverKey;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The basic resolver for dependencies. This resolver does not handle cyclic
@@ -117,11 +115,11 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
 
         // analyse using Topological Sort - artifactsOrdering now
         // contains the correct ordering of dependencies.
-        doTopologicalAnalysis(dependencyGraph, artifactsOrdering);
+        final List<Artifact> finalArtifactsOrdering = doTopologicalAnalysis(dependencyGraph, artifactsOrdering);
 
         store(dependencyGraph);
 
-        return artifactsOrdering;
+        return finalArtifactsOrdering;
     }
 
     /**
@@ -158,7 +156,7 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
             depParser = DependencyParserFactory.getParser(DependencyParserKind.POM, pomUrl);
             depParser.parse();
         } catch (DependencyManagerException e) {
-            e.printStackTrace();
+            throw new DependencyResolverException(String.format("resolver failed: %s\n", e.getErrorString()));
         }
 
         final Dependencies transDepsWrapper = depParser.getDependencies();
@@ -179,6 +177,7 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
             g.getArtifactMapping().put(id, transDep);
 
             updateDependencyGraphWithTransitiveDependencies(g, transDep, gen, repoLoader, id);
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Resolving dependency %s... DONE", transDep.toString());
         }
     }
 
@@ -201,6 +200,7 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
             // update the dependency graph with this dependency' dependencies
             // (depth-first exploration)
             updateDependencyGraphWithTransitiveDependencies(g, dep, gen, repoLoader, id);
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Resolving dependency %s... DONE", dep.toString());
         }
     }
 
@@ -285,16 +285,16 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
 
         List<Artifact> artifactsOrdering = new ArrayList<>();
 
-        doTopologicalAnalysis(dependencyGraph, artifactsOrdering);
+        final List<Artifact> finalArtifactsOrdering = doTopologicalAnalysis(dependencyGraph, artifactsOrdering);
 
         store(dependencyGraph);
 
-        return artifactsOrdering;
+        return finalArtifactsOrdering;
     }
 
     /**
      * Carry out Topological Analysis by checking if the dependencies have a cyclic dependency anywhere. If so, fail the
-     * process imeediately. Otherwise, return the proper ordering of dependencies for this project. This will be then used to
+     * process immediately. Otherwise, return the proper ordering of dependencies for this project. This will be then used to
      * download the dependencies and populate the Garvel Cache (it is done in a separate step to avoid corrupt state, at the
      * cost of performance).
      *
@@ -302,7 +302,7 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
      * @param artifactsOrdering
      * @throws DependencyResolverException
      */
-    private void doTopologicalAnalysis(final DependencyGraph dependencyGraph, final List<Artifact> artifactsOrdering) throws DependencyResolverException {
+    private List<Artifact> doTopologicalAnalysis(final DependencyGraph dependencyGraph, final List<Artifact> artifactsOrdering) throws DependencyResolverException {
         GraphCallback<List<Integer>> cb = new GraphCollectArtifactsCallback(dependencyGraph.getArtifactMapping(), artifactsOrdering);
 
         try {
@@ -310,6 +310,59 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
         } catch (GraphCheckedException e) {
             throw new DependencyResolverException(String.format("resolver failed to analyse dependencies: %s\n", e.getErrorString()));
         }
+
+        // in case there are multiple versions of a dependency listed, take the newest version (if it is
+        // not possible to determine that, pick the first one).
+
+        Map<String, String> versionCheckMap = new HashMap<>();
+
+        Iterator<Artifact> it = artifactsOrdering.iterator();
+        while (it.hasNext()) {
+            Artifact artifact = it.next();
+
+            final String key = artifact.getGroupId() + "/" + artifact.getArtifactId();
+            if (versionCheckMap.containsKey(key)) {
+                // simple algorithm - assuming that at least the MAJOR.MINOR.[PATCH] scheme is
+                // respected, compare them in order
+                String[] oldVersion = versionCheckMap.get(key).split("\\.");
+                String[] newVersion = artifact.getVersion().split("\\.");
+
+                if (oldVersion.length < newVersion.length) {
+                    it.remove();
+                } else if (oldVersion.length > newVersion.length) {
+                    versionCheckMap.put(key, artifact.getVersion());
+                } else {
+                    try {
+                        for (int i = 0; i < oldVersion.length; i++) {
+                            if (Integer.parseInt(oldVersion[i]) < Integer.parseInt(newVersion[i])) {
+                                versionCheckMap.put(key, artifact.getVersion());
+                                break;
+                            } else if (Integer.parseInt(oldVersion[i]) > Integer.parseInt(newVersion[i])) {
+                                it.remove();
+                                break;
+                            }
+                        }
+                    } catch (NumberFormatException ex) {
+                        // keep the first version found
+                        it.remove();
+                    }
+                }
+            } else {
+                versionCheckMap.put(key, artifact.getVersion());
+            }
+        }
+
+        List<Artifact> finalArtifactsOrdering = new ArrayList<>();
+        for (final Artifact dep : artifactsOrdering) {
+            final String key = dep.getGroupId() + "/" + dep.getArtifactId();
+            final String version = dep.getVersion();
+
+            if (versionCheckMap.containsKey(key) && versionCheckMap.get(key).equalsIgnoreCase(version)) {
+                finalArtifactsOrdering.add(dep);
+            }
+        }
+
+        return finalArtifactsOrdering;
     }
 
     /**

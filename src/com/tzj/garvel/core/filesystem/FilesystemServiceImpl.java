@@ -189,6 +189,40 @@ public enum FilesystemServiceImpl implements FilesystemService {
     }
 
     /**
+     * Create the whole hierarchy of directories, creating
+     * non-existent ones along the way.
+     *
+     * @param directory
+     * @return
+     * @throws FilesystemFrameworkException
+     */
+    @Override
+    public Path makeDirectoryHierarchy(final String directory) throws FilesystemFrameworkException {
+        Path rootDirectory = null;
+        final Path directoryPath = Paths.get(directory);
+
+        try {
+            final OsType os = getOs();
+            switch (os) {
+
+                case MACOS:
+                case LINUX:
+                    rootDirectory = Files.createDirectories(directoryPath, PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString(GarvelCoreConstants.POSIX_PERMISSIONS)));
+                    break;
+                case WINDOWS:
+                    rootDirectory = Files.createDirectories(directoryPath);
+                    break;
+                default:
+                    throw new FilesystemFrameworkException("Unsupported OS. Aborting...");
+            }
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(e.getLocalizedMessage());
+        }
+
+        return rootDirectory;
+    }
+
+    /**
      * Create the file at the path specified by the name.
      *
      * @param filename

@@ -98,8 +98,8 @@ public enum NetworkServiceImpl implements NetworkService {
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                  BufferedWriter writer = new BufferedWriter(outputFile)) {
-                String line = null;
 
+                String line = null;
                 while ((line = reader.readLine()) != null) {
                     writer.write(line);
                     writer.newLine();
@@ -118,11 +118,31 @@ public enum NetworkServiceImpl implements NetworkService {
     /**
      * Download a binary file from the given url, into the given location.
      *
-     * @param url
+     * @param urlString
      */
     @Override
-    public void downloadBinaryFile(final String url, final String downloadLocation) throws NetworkServiceException {
+    public void downloadBinaryFile(final String urlString, final String downloadLocation) throws NetworkServiceException {
+        try {
+            final NetworkConnector connector = NetworkConnectorFactory.getConnector();
 
+            final URL url = new URL(urlString);
+            final HttpURLConnection conn = connector.getConnection(url);
+
+            try (BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
+                 BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(downloadLocation))) {
+
+                byte[] buffer = new byte[NetworkConstants.BUF_SIZE];
+                int count = -1;
+
+                while ((count = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, count);
+                }
+            } catch (IOException e) {
+                throw e;
+            }
+        } catch (IOException e) {
+            throw new NetworkServiceException(String.format("Failed to download binary file %s: %s\n", urlString, e.getLocalizedMessage()));
+        }
     }
 
     @Override
