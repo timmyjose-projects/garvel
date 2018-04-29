@@ -177,23 +177,27 @@ public enum DependencyManagerServiceImpl implements DependencyManagerService {
 
             final Map<SemverKey, List<String>> versionInfo = entry.getValue();
             if (versionInfo.containsKey(SemverKey.MAJOR)) {
-                sb.append(versionInfo.get(SemverKey.MAJOR));
+                sb.append(versionInfo.get(SemverKey.MAJOR).get(0));
             }
 
             if (versionInfo.containsKey(SemverKey.MINOR)) {
-                sb.append(versionInfo.get(SemverKey.MINOR));
+                sb.append(",");
+                sb.append(versionInfo.get(SemverKey.MINOR).get(0));
             }
 
             if (versionInfo.containsKey(SemverKey.PATCH)) {
-                sb.append(versionInfo.get(SemverKey.PATCH));
+                sb.append(",");
+                sb.append(versionInfo.get(SemverKey.PATCH).get(0));
             }
 
             if (versionInfo.containsKey(SemverKey.PRERELEASE)) {
-                sb.append(versionInfo.get(SemverKey.PRERELEASE));
+                sb.append("-");
+                sb.append(versionInfo.get(SemverKey.PRERELEASE).get(0));
             }
 
             if (versionInfo.containsKey(SemverKey.BUILD)) {
-                sb.append(SemverKey.BUILD);
+                sb.append("+");
+                sb.append(versionInfo.get(SemverKey.BUILD).get(0));
             }
 
             flat.add(sb.toString());

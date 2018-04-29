@@ -24,6 +24,9 @@ public class Artifact implements Externalizable {
         this.version = version;
     }
 
+    public Artifact() {
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

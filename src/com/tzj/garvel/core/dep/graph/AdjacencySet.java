@@ -4,16 +4,22 @@ import com.tzj.garvel.core.dep.api.exception.GraphUncheckedException;
 import com.tzj.garvel.core.dep.api.graph.Graph;
 import com.tzj.garvel.core.dep.api.graph.GraphKind;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.*;
 
+@SuppressWarnings("unchecked")
 public class AdjacencySet implements Graph {
     private static final long serialVersionUID = -847254791596283923L;
 
     private List<Vertex> vertices;
     private GraphKind kind;
+
+    // needed for deserialization
+    public AdjacencySet() {
+    }
 
     public AdjacencySet(final int n, final GraphKind kind) {
         this.vertices = new ArrayList<>();
@@ -102,21 +108,39 @@ public class AdjacencySet implements Graph {
 
     @Override
     public void writeExternal(final ObjectOutput out) throws IOException {
-
+        out.writeObject(vertices);
+        out.writeObject(kind);
     }
 
     @Override
     public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
-
+        vertices = (List<Vertex>) in.readObject();
+        kind = (GraphKind) in.readObject();
     }
 
-    private class Vertex {
+    static class Vertex implements Externalizable {
         int v;
         Set<Integer> vs;
+
+        // for deserialization
+        public Vertex() {
+        }
 
         public Vertex(final int v) {
             this.v = v;
             this.vs = new HashSet<>();
+        }
+
+        @Override
+        public void writeExternal(final ObjectOutput out) throws IOException {
+            out.writeInt(v);
+            out.writeObject(vs);
+        }
+
+        @Override
+        public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
+            v = in.readInt();
+            vs = (Set<Integer>) in.readObject();
         }
     }
 }

@@ -258,6 +258,10 @@ public enum UtilServiceImpl implements UtilService {
      * @return
      */
     public boolean pathExists(final Path path) {
+        if (path == null) {
+            return false;
+        }
+
         return path.toFile().exists();
     }
 }

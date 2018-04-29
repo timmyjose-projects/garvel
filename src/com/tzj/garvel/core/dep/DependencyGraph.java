@@ -22,9 +22,12 @@ public class DependencyGraph implements Externalizable {
     private Graph g;
     private Map<Integer, Artifact> artifactMapping;
 
-    public DependencyGraph(final Graph g) {
+    // needed for deserialization
+    public DependencyGraph() {}
+
+    public DependencyGraph(final Graph g, final Map<Integer, Artifact> artifactMapping) {
         this.g = g;
-        this.artifactMapping = new HashMap<>();
+        this.artifactMapping = artifactMapping;
     }
 
     public Graph getG() {
@@ -32,7 +35,6 @@ public class DependencyGraph implements Externalizable {
     }
 
     public Map<Integer, Artifact> getArtifactMapping() {
-
         return artifactMapping;
     }
 
