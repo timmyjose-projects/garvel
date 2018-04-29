@@ -10,8 +10,12 @@ import com.tzj.garvel.core.dep.api.exception.DependencyManagerException;
 import com.tzj.garvel.core.dep.api.resolver.DependencyResolverContext;
 import com.tzj.garvel.core.dep.api.resolver.DependencyResolverOperation;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
+import com.tzj.garvel.core.parser.api.visitor.semver.SemverKey;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Thie module handles all the Dependency Management for Garvel.
@@ -44,7 +48,6 @@ public enum DependencyManagerServiceImpl implements DependencyManagerService {
             if (configHasChanged) {
                 deleteGarvelLockFile();
                 final boolean dependencyGraphExists = checkDependencyGraphExists();
-                DependencyGraph dependencyGraph = null;
 
                 if (dependencyGraphExists) {
                     artifactsOrdering = ctx.resolveStrategy(DependencyResolverOperation.UPDATE_AND_ANALYSE);
@@ -140,9 +143,64 @@ public enum DependencyManagerServiceImpl implements DependencyManagerService {
         final DependenciesEntry configDeps = CacheManagerServiceImpl.INSTANCE.getConfigDependencies();
         final DependenciesEntry lockDeps = CacheManagerServiceImpl.INSTANCE.getLockDependencies();
 
-        boolean hasChanged = false;
-        // some diffing logic here
+        // sanity check
+        if (configDeps == null || lockDeps == null) {
+            return true;
+        }
 
-        return hasChanged;
+        final Map<String, Map<SemverKey, List<String>>> configMapping = configDeps.getDependencies();
+        final Map<String, Map<SemverKey, List<String>>> lockMapping = lockDeps.getDependencies();
+
+        final List<String> sanitizedConfigDeps = sanitize(configMapping);
+        final List<String> sanitizedLockDeps = sanitize(lockMapping);
+
+        // check insertion/deletion
+        if (sanitizedConfigDeps.size() != sanitizedLockDeps.size()) {
+            return true;
+        }
+
+        // check version change
+        if (!sanitizedConfigDeps.equals(sanitizedLockDeps)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private List<String> sanitize(final Map<String, Map<SemverKey, List<String>>> mapping) {
+        List<String> flat = new ArrayList<>();
+
+        StringBuffer sb = null;
+        for (Map.Entry<String, Map<SemverKey, List<String>>> entry : mapping.entrySet()) {
+            sb = new StringBuffer();
+            sb.append(entry.getKey());
+
+            final Map<SemverKey, List<String>> versionInfo = entry.getValue();
+            if (versionInfo.containsKey(SemverKey.MAJOR)) {
+                sb.append(versionInfo.get(SemverKey.MAJOR));
+            }
+
+            if (versionInfo.containsKey(SemverKey.MINOR)) {
+                sb.append(versionInfo.get(SemverKey.MINOR));
+            }
+
+            if (versionInfo.containsKey(SemverKey.PATCH)) {
+                sb.append(versionInfo.get(SemverKey.PATCH));
+            }
+
+            if (versionInfo.containsKey(SemverKey.PRERELEASE)) {
+                sb.append(versionInfo.get(SemverKey.PRERELEASE));
+            }
+
+            if (versionInfo.containsKey(SemverKey.BUILD)) {
+                sb.append(SemverKey.BUILD);
+            }
+
+            flat.add(sb.toString());
+        }
+
+        Collections.sort(flat);
+
+        return flat;
     }
 }

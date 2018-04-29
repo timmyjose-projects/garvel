@@ -8,7 +8,6 @@ public class Patch implements SemverAST {
     private IntegerLiteral patch;
 
     public Patch(final IntegerLiteral patch) {
-
         this.patch = patch;
     }
 
@@ -22,7 +21,6 @@ public class Patch implements SemverAST {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(patch);
     }
 

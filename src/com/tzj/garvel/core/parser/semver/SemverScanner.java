@@ -33,7 +33,7 @@ public class SemverScanner {
 
     // test
     public static void main(String[] args) {
-        final String semver = "garvel 0.1.0-nightly+beta";
+        final String semver = "4.12-beta-3";
 
         SemverScanner scanner = new SemverScanner(semver);
         while (scanner.hasMoreTokens()) {
@@ -264,6 +264,7 @@ public class SemverScanner {
             case 'X':
             case 'Y':
             case 'Z':
+            case '-':
                 return true;
 
             default:

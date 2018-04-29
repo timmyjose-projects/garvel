@@ -6,7 +6,7 @@ Semver ::= Version ("-" PreRelease |  "+" Build | "-" PreRelease "+" Build)
 ```
 
 ```
-Version ::= major "." minor "." patch
+Version ::= major "." minor ["." patch]
 ```
 
 ```

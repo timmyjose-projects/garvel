@@ -239,7 +239,9 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
     will also be persisted in the GC root directory. If this file is not present, then all the dependencies will have
     to be fetched again (for example, as a result of `garvel uninstall`).
     
-    
+    IMPORTANT: Mapping between semver and Maven naming schemes needs to be taken care of in future versions. Right now,
+    the scheme is to use major + minor + [path] + [prerelease | build | prerelease + build] and then let any errors be
+    handled when actually fetching the artifact from the repository. 
     
     
     

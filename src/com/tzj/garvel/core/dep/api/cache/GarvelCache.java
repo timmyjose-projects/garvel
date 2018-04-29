@@ -15,7 +15,7 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class GarvelCache implements Externalizable {
     private static final long serialVersionUID = -7195654373684604629L;
-    
+
     private Map<Artifact, String> cacheMapping;
 
     @Override

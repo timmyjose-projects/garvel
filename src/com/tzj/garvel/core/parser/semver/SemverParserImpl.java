@@ -17,7 +17,7 @@ public class SemverParserImpl implements SemverParser {
 
     // test
     public static void main(String[] args) throws SemverParserException {
-        final String semverString = "4.1.2";
+        final String semverString = "4.12-beta-3";
 
         SemverParser parser = new SemverParserImpl(semverString);
         Semver semver = parser.parse();
@@ -154,7 +154,7 @@ public class SemverParserImpl implements SemverParser {
     }
 
     /**
-     * Version ::= MAJOR "." MINOR "." PATCH
+     * Version ::= MAJOR "." MINOR ["." PATCH]
      *
      * @return
      */
@@ -162,8 +162,12 @@ public class SemverParserImpl implements SemverParser {
         final Major major = parseMajor();
         accept(PERIOD);
         final Minor minor = parseMinor();
-        accept(PERIOD);
-        final Patch patch = parsePatch();
+
+        Patch patch = null;
+        if (currentToken.kind() == PERIOD) {
+            accept(PERIOD);
+            patch = parsePatch();
+        }
 
         return new Version(major, minor, patch);
     }

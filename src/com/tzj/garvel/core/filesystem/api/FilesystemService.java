@@ -12,6 +12,10 @@ public interface FilesystemService {
 
     String loadFileAsString(final String filename) throws FilesystemFrameworkException;
 
+    Path checkDirectoryExistsGetPath(final String directory);
+
+    Path checkFileExistsGetPath(final String filename);
+
     boolean checkDirectoryExists(final String directory);
 
     boolean checkFileExists(final String filename);
@@ -32,5 +36,7 @@ public interface FilesystemService {
 
     void copyFile(String destinationFile, String sourceFile) throws FilesystemFrameworkException;
 
-    Object loadSerializedObject(String filename, Class<?> clazz) throws FilesystemFrameworkException;
+    <T> T loadSerializedObject(String filename, Class<T> clazz) throws FilesystemFrameworkException;
+
+    void storeSerializedObject(Object object, String filename) throws FilesystemFrameworkException;
 }

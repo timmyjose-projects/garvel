@@ -92,6 +92,24 @@ public enum FilesystemServiceImpl implements FilesystemService {
     }
 
     /**
+     * Check if directory represented by the name exists. If so,
+     * return that path.
+     *
+     * @param directory
+     * @return
+     */
+    @Override
+    public Path checkDirectoryExistsGetPath(final String directory) {
+        final Path dirPath = Paths.get(directory);
+
+        if (!dirPath.toFile().exists()) {
+            return null;
+        }
+
+        return dirPath;
+    }
+
+    /**
      * Check if directory represented by the name exists.
      *
      * @param directory
@@ -100,6 +118,24 @@ public enum FilesystemServiceImpl implements FilesystemService {
     @Override
     public boolean checkDirectoryExists(final String directory) {
         return Paths.get(directory).toFile().exists();
+    }
+
+    /**
+     * Check if the file represented by the name exists. If so,
+     * return that path.
+     *
+     * @param filename
+     * @return
+     */
+    @Override
+    public Path checkFileExistsGetPath(final String filename) {
+        final Path filePath = Paths.get(filename);
+
+        if (!filePath.toFile().exists()) {
+            return null;
+        }
+
+        return filePath;
     }
 
     /**
@@ -112,6 +148,7 @@ public enum FilesystemServiceImpl implements FilesystemService {
     public boolean checkFileExists(final String filename) {
         return Paths.get(filename).toFile().exists();
     }
+
 
     /**
      * Create the directory at the path specified by the name.
@@ -321,7 +358,33 @@ public enum FilesystemServiceImpl implements FilesystemService {
      * @return
      */
     @Override
-    public Object loadSerializedObject(final String filename, final Class<?> clazz) throws FilesystemFrameworkException {
-        return null;
+    public <T> T loadSerializedObject(final String filename, final Class<T> clazz) throws FilesystemFrameworkException {
+        T object = null;
+
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
+            object = clazz.cast(in.readObject());
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(String.format("failed to load binary object in %s\n", filename));
+        } catch (ClassNotFoundException e) {
+            throw new FilesystemFrameworkException(String.format("failed to load binary object in %s\n", filename));
+        }
+
+        return object;
+    }
+
+    /**
+     * Serialize and store the object as the specified filename.
+     *
+     * @param object
+     * @param filename
+     * @throws FilesystemFrameworkException
+     */
+    @Override
+    public void storeSerializedObject(final Object object, final String filename) throws FilesystemFrameworkException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
+            out.writeObject(object);
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(String.format("failed to save binary object in %s\n", filename));
+        }
     }
 }

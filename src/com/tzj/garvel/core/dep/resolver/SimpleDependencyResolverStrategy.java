@@ -74,7 +74,7 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
     }
 
     /**
-     * 1. Get the list of all dependencies from the cache.
+     * 1. Get the list of all dependencies from the Core Cache.
      * 2. Create a new directed Graph.
      * 3. For each dependency in the list above, create a new vertex
      * in the graph and assign a unique id to it.
@@ -124,7 +124,17 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
         return artifactsOrdering;
     }
 
+    /**
+     * Persist the Dependency Graph. At this point, the target/deps directory is guaranteed to be present.
+     *
+     * @param dependencyGraph
+     * @throws DependencyResolverException
+     */
     private void store(final DependencyGraph dependencyGraph) throws DependencyResolverException {
-        // store the DG in the Project's `target` dir.
+        try {
+            CoreModuleLoader.INSTANCE.getFileSystemFramework().storeSerializedObject(dependencyGraph, GarvelCoreConstants.GARVEL_PROJECT_DEPS_FILE);
+        } catch (FilesystemFrameworkException e) {
+            throw new DependencyResolverException("dependency analysis failed: unable to store dependency graph\n");
+        }
     }
 }

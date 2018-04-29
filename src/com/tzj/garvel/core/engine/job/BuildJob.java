@@ -13,6 +13,7 @@ import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class BuildJob implements Job<BuildCommandResult> {
@@ -44,13 +45,13 @@ public class BuildJob implements Job<BuildCommandResult> {
      */
     @Override
     public BuildCommandResult call() throws JobException {
-        BuildCommandResult result = null;
+        BuildCommandResult result = new BuildCommandResult();
 
         // 1. create target directory hierarchy
         createTargetHierarchy(result);
 
         // 2. Parse the project config file and populate the Core Cache.
-        populateCoreCache(result);
+        populateCoreCache();
 
         // 3. Analyse the dependencies.
         List<String> depsClassPath = analyseDependencies();
@@ -100,10 +101,9 @@ public class BuildJob implements Job<BuildCommandResult> {
     /**
      * Step 2 - Populate the Core cache by parsing the Garvel/gl file.
      *
-     * @param result
      * @throws JobException
      */
-    private void populateCoreCache(final BuildCommandResult result) throws JobException {
+    private void populateCoreCache() throws JobException {
         try {
             CoreModuleLoader.INSTANCE.getCacheManager().populateCoreCaches();
         } catch (CacheManagerException e) {
@@ -112,7 +112,8 @@ public class BuildJob implements Job<BuildCommandResult> {
     }
 
     /**
-     * Step 1 - create the `target`, `target/build`, and `target/deps` directories atomically.
+     * Step 1 - create the `target`, `target/build`, and `target/deps` directories, if they are not
+     * present (due to a previously invoked earlier `clean` ccommand).
      *
      * @param result
      * @throws JobException
@@ -165,16 +166,34 @@ public class BuildJob implements Job<BuildCommandResult> {
 
     private Path createDepsDir(final Path targetDirPath) throws FilesystemFrameworkException {
         final String depsDir = targetDirPath.toFile().getAbsolutePath() + File.separator + "deps";
+
+        final Path checkDeps = CoreModuleLoader.INSTANCE.getFileSystemFramework().checkDirectoryExistsGetPath(depsDir);
+        if (checkDeps != null) {
+            return checkDeps;
+        }
+
         return CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(depsDir);
     }
 
     private Path createBuildDir(final Path targetDirPath) throws FilesystemFrameworkException {
         final String buildDir = targetDirPath.toFile().getAbsolutePath() + File.separator + "build";
+
+        final Path checkBuild = CoreModuleLoader.INSTANCE.getFileSystemFramework().checkDirectoryExistsGetPath(buildDir);
+        if (checkBuild != null) {
+            return checkBuild;
+        }
+
         return CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(buildDir);
     }
 
     private Path createTargetDir() throws FilesystemFrameworkException {
         final String targetDir = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + "target";
+
+        final Path checkTarget = CoreModuleLoader.INSTANCE.getFileSystemFramework().checkDirectoryExistsGetPath(targetDir);
+        if (checkTarget != null) {
+            return checkTarget;
+        }
+
         return CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(targetDir);
     }
 }

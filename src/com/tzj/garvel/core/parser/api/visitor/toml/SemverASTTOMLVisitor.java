@@ -44,12 +44,14 @@ public class SemverASTTOMLVisitor implements SemverASTVisitor {
 
     @Override
     public void visit(final Patch patchAst) {
-        if (dependency.getValue().get(SemverKey.PATCH) != null) {
-            dependency.getValue().get(SemverKey.MAJOR).add(patchAst.getPatch().getSpelling());
-        } else {
-            final List<String> patches = new ArrayList<>();
-            patches.add(patchAst.getPatch().getSpelling());
-            dependency.getValue().put(SemverKey.PATCH, patches);
+        if (patchAst != null) {
+            if (dependency.getValue().get(SemverKey.PATCH) != null) {
+                dependency.getValue().get(SemverKey.MAJOR).add(patchAst.getPatch().getSpelling());
+            } else {
+                final List<String> patches = new ArrayList<>();
+                patches.add(patchAst.getPatch().getSpelling());
+                dependency.getValue().put(SemverKey.PATCH, patches);
+            }
         }
     }
 
