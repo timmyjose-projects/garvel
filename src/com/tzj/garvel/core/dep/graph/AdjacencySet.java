@@ -119,6 +119,8 @@ public class AdjacencySet implements Graph {
     }
 
     static class Vertex implements Externalizable {
+        private static final long serialVersionUID = 2962963098964258155L;
+
         int v;
         Set<Integer> vs;
 

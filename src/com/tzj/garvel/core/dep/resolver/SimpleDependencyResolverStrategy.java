@@ -8,7 +8,14 @@ import com.tzj.garvel.core.dep.api.Artifact;
 import com.tzj.garvel.core.dep.api.exception.DependencyManagerException;
 import com.tzj.garvel.core.dep.api.exception.DependencyResolverException;
 import com.tzj.garvel.core.dep.api.exception.GraphCheckedException;
+import com.tzj.garvel.core.dep.api.exception.RepositoryLoaderException;
 import com.tzj.garvel.core.dep.api.graph.*;
+import com.tzj.garvel.core.dep.api.parser.Dependencies;
+import com.tzj.garvel.core.dep.api.parser.DependencyParser;
+import com.tzj.garvel.core.dep.api.parser.DependencyParserFactory;
+import com.tzj.garvel.core.dep.api.parser.DependencyParserKind;
+import com.tzj.garvel.core.dep.api.repo.RepositoryLoader;
+import com.tzj.garvel.core.dep.api.repo.RepositoryLoaderFactory;
 import com.tzj.garvel.core.dep.api.resolver.DependencyResolverOperation;
 import com.tzj.garvel.core.dep.api.resolver.DependencyResolverStrategy;
 import com.tzj.garvel.core.dep.graph.Algorithms;
@@ -72,10 +79,8 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
      * @return
      */
     private List<Artifact> updateAndAnalyse() throws DependencyResolverException {
-        final DependencyGraph dependencyGraph = null;
-        store(dependencyGraph);
-
-        return null;
+        //@TODO Implement the above.For now, it simply redirects to createAndAnalyse
+        return createAndAnalyse();
     }
 
     /**
@@ -104,15 +109,15 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
         final DependenciesEntry projectDependencies = CoreModuleLoader.INSTANCE.getCacheManager().getConfigDependencies();
         List<Artifact> sanitizedProjectDependencies = sanitizeProjectDependencies(projectDependencies);
 
-        // add the project dependencies as vertices of the graph
+        // add the project dependencies as vertices of the graph. and
+        // update the dependency graph with the transitive dependencies of
+        // each project dependency
         final GraphIdGenerator idGenerator = new GraphIdGenerator();
         updateDependencyGraphWithProjectDependencies(dependencyGraph, sanitizedProjectDependencies, idGenerator);
 
-        // update the dependency graph with the transitive dependencies of each project dependency
-        updateTransitiveDependencies(dependencyGraph, idGenerator);
-
-        // analyse using Topological Sort
-
+        // analyse using Topological Sort - artifactsOrdering now
+        // contains the correct ordering of dependencies.
+        doTopologicalAnalysis(dependencyGraph, artifactsOrdering);
 
         store(dependencyGraph);
 
@@ -121,14 +126,60 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
 
     /**
      * Update the dependency graph with the transitive dependencies of the project dependencies.
+     * <p>
+     * 1. For each project dependency, construct the POM URL for that project, and download the `dependencies`
+     * section from that POM file.
+     * <p>
+     * 2. For each POM dependency, construct its POM URL and query for the POM, and download its own dependencies.
+     * <p>
+     * 4. This process is carried out for each dependency till such time as no POM is found and/or no further
+     * dependencies are found.
+     * <p>
+     * 5. The updated dependency graph is now ready for further analysis.
      *
-     * 1.
-     *
-     * @param dependencyGraph
-     * @param idGenerator
+     * @param g
+     * @param dep
+     * @param gen
+     * @parama gen
+     * @parama repoLoader
+     * @parama srcId
      */
-    private void updateTransitiveDependencies(final DependencyGraph dependencyGraph, final GraphIdGenerator idGenerator) {
+    private void updateDependencyGraphWithTransitiveDependencies(final DependencyGraph g, final Artifact dep, final GraphIdGenerator gen, final RepositoryLoader repoLoader, int srcId) throws DependencyResolverException {
+        String pomUrl = null;
 
+        try {
+            pomUrl = repoLoader.constructPOMUrl(dep.getGroupId(), dep.getArtifactId(), dep.getVersion());
+        } catch (RepositoryLoaderException e) {
+            throw new DependencyResolverException(String.format("resolver failed: %s\n", e.getErrorString()));
+        }
+
+        DependencyParser depParser = null;
+        try {
+            depParser = DependencyParserFactory.getParser(DependencyParserKind.POM, pomUrl);
+            depParser.parse();
+        } catch (DependencyManagerException e) {
+            e.printStackTrace();
+        }
+
+        final Dependencies transDepsWrapper = depParser.getDependencies();
+
+        if (transDepsWrapper == null) {
+            return;
+        }
+
+        final List<Artifact> transDeps = transDepsWrapper.getDependencies();
+        if (transDeps == null || transDeps.isEmpty()) {
+            return;
+        }
+
+        for (final Artifact transDep : transDeps) {
+            final int id = gen.getId();
+            g.getG().addVertex(id);
+            g.getG().addEdge(srcId, id);
+            g.getArtifactMapping().put(id, transDep);
+
+            updateDependencyGraphWithTransitiveDependencies(g, transDep, gen, repoLoader, id);
+        }
     }
 
     /**
@@ -139,11 +190,17 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
      * @param deps
      * @param gen
      */
-    private void updateDependencyGraphWithProjectDependencies(final DependencyGraph g, final List<Artifact> deps, final GraphIdGenerator gen) {
-        for (Artifact dep : deps) {
+    private void updateDependencyGraphWithProjectDependencies(final DependencyGraph g, final List<Artifact> deps, final GraphIdGenerator gen) throws DependencyResolverException {
+        final RepositoryLoader repoLoader = RepositoryLoaderFactory.getLoader();
+
+        for (final Artifact dep : deps) {
             final int id = gen.getId();
             g.getG().addVertex(id);
             g.getArtifactMapping().put(id, dep);
+
+            // update the dependency graph with this dependency' dependencies
+            // (depth-first exploration)
+            updateDependencyGraphWithTransitiveDependencies(g, dep, gen, repoLoader, id);
         }
     }
 
@@ -227,6 +284,25 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
         }
 
         List<Artifact> artifactsOrdering = new ArrayList<>();
+
+        doTopologicalAnalysis(dependencyGraph, artifactsOrdering);
+
+        store(dependencyGraph);
+
+        return artifactsOrdering;
+    }
+
+    /**
+     * Carry out Topological Analysis by checking if the dependencies have a cyclic dependency anywhere. If so, fail the
+     * process imeediately. Otherwise, return the proper ordering of dependencies for this project. This will be then used to
+     * download the dependencies and populate the Garvel Cache (it is done in a separate step to avoid corrupt state, at the
+     * cost of performance).
+     *
+     * @param dependencyGraph
+     * @param artifactsOrdering
+     * @throws DependencyResolverException
+     */
+    private void doTopologicalAnalysis(final DependencyGraph dependencyGraph, final List<Artifact> artifactsOrdering) throws DependencyResolverException {
         GraphCallback<List<Integer>> cb = new GraphCollectArtifactsCallback(dependencyGraph.getArtifactMapping(), artifactsOrdering);
 
         try {
@@ -234,10 +310,6 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
         } catch (GraphCheckedException e) {
             throw new DependencyResolverException(String.format("resolver failed to analyse dependencies: %s\n", e.getErrorString()));
         }
-
-        store(dependencyGraph);
-
-        return artifactsOrdering;
     }
 
     /**

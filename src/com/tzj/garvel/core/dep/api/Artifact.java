@@ -27,6 +27,12 @@ public class Artifact implements Externalizable {
     public Artifact() {
     }
 
+    public Artifact(final String groupId, final String artifactId, final String version) {
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.version = version;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

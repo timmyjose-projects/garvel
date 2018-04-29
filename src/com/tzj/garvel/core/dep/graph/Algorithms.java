@@ -45,6 +45,7 @@ public class Algorithms {
         while (!q.isEmpty()) {
             int v = q.remove();
 
+            vs.add(v);
             for (int vv : g.getAdjacentVertices(v)) {
                 int d = indegs.get(vv) - 1;
 

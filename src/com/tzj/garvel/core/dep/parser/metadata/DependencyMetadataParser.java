@@ -21,22 +21,25 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class DependencyMetadataParser implements DependencyParser {
+/**
+ * Retrieves and parses the metadata for the project.
+ */
+public class DependencyMetadataParser extends DependencyParser {
     private String metadataUrl;
     private String metadataMD5Url;
     private String metadataSHA1Url;
     private Versions versions;
 
-    public DependencyMetadataParser(final String url) {
+    public DependencyMetadataParser(final String metadataUrl) {
         this.versions = new Versions();
-        this.metadataUrl = url + File.separator + RepositoryConstants.METADATA;
+        this.metadataUrl = metadataUrl;
         this.metadataMD5Url = this.metadataUrl + RepositoryConstants.MD5;
         this.metadataSHA1Url = this.metadataUrl + RepositoryConstants.SHA1;
     }
 
     // test
     public static void main(String[] args) throws DependencyManagerException {
-        final String url = RepositoryKind.CENTRAL.getUrl() + File.separator + "junit/junit";
+        final String url = RepositoryKind.CENTRAL.getUrl() + File.separator + "junit/junit/maven-metadata.xml";
         DependencyParser parser = DependencyParserFactory.getParser(DependencyParserKind.METADATA, url);
         parser.parse();
     }
@@ -149,16 +152,6 @@ public class DependencyMetadataParser implements DependencyParser {
                 }
             }
         }
-    }
-
-    private final Node findTagAmongstChildren(final NodeList children, final String nodeName) {
-        for (int i = 0; i < children.getLength(); i++) {
-            if (children.item(i) != null && children.item(i).getNodeName() != null && children.item(i).getNodeName().equalsIgnoreCase(nodeName)) {
-                return children.item(i);
-            }
-        }
-
-        return null;
     }
 
     @Override

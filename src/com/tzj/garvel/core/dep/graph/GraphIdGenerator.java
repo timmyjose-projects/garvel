@@ -12,7 +12,7 @@ public class GraphIdGenerator {
     private AtomicInteger id;
 
     public GraphIdGenerator() {
-        this.id = new AtomicInteger(0);
+        this.id = new AtomicInteger(-1);
     }
 
     public GraphIdGenerator(final int start) {

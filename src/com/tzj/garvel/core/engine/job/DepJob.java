@@ -62,21 +62,21 @@ public class DepJob implements Job<DepCommandResult> {
      */
     private void queryRepos(final DepCommandResult result) throws JobException {
         final RepositoryLoader repoLoader = RepositoryLoaderFactory.getLoader();
-        String repoUrl = null;
+        String metadataUrl = null;
 
         try {
-            repoUrl = repoLoader.constructArtifactUrl(groupId, artifactId);
+            metadataUrl = repoLoader.constructMetadataUrl(groupId, artifactId);
         } catch (RepositoryLoaderException e) {
             throw new JobException(e.getErrorString());
         }
 
         // get the maven metadata file and populate version info
-        result.setVersions(getVersionsForDependency(repoUrl));
+        result.setVersions(getVersionsForDependency(metadataUrl));
 
         // if the --show-dependencies flag was supplier, then
         // get the artifact POM (using version) and populate
         // the transitive dependency information.
-        final String deps = getTransitiveDependencies(repoUrl);
+        final String deps = getTransitiveDependencies(metadataUrl);
         if (deps != null) {
             result.setDependenciesInformationAvailable(true);
             result.setDependencyGraphString(deps);
@@ -97,11 +97,11 @@ public class DepJob implements Job<DepCommandResult> {
      * Retrieve the versions information from the maven-metadata.xml file
      * at the proper url.
      *
-     * @param repoUrl
+     * @param metadataUrl
      * @return
      */
-    private String getVersionsForDependency(final String repoUrl) throws JobException {
-        final DependencyParser parser = DependencyParserFactory.getParser(DependencyParserKind.METADATA, repoUrl);
+    private String getVersionsForDependency(final String metadataUrl) throws JobException {
+        final DependencyParser parser = DependencyParserFactory.getParser(DependencyParserKind.METADATA, metadataUrl);
         try {
             parser.parse();
         } catch (DependencyManagerException e) {
@@ -134,8 +134,8 @@ public class DepJob implements Job<DepCommandResult> {
     /**
      * Query the Garvel cache ($HOME/.garvel/cache), if available.
      *
-     * @throws JobException
      * @param result
+     * @throws JobException
      */
     private boolean queryLocalCache(final DepCommandResult result) throws JobException {
         return false;
@@ -144,8 +144,8 @@ public class DepJob implements Job<DepCommandResult> {
     /**
      * Query the project's Dependency Graph, if available.
      *
-     * @throws JobException
      * @param result
+     * @throws JobException
      */
     private boolean queryDependencyGraph(final DepCommandResult result) throws JobException {
         return false;

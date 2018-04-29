@@ -9,4 +9,8 @@ public class NetworkConstants {
 
     // useful to have a constant here for forming URLs
     public static final String FORWARD_SLASH = "/";
+
+    public static final String DASH = "-";
+
+    public static final String DOT = ".";
 }
