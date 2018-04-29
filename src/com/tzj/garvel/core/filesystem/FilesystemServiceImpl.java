@@ -1,16 +1,15 @@
 package com.tzj.garvel.core.filesystem;
 
 import com.tzj.garvel.core.GarvelCoreConstants;
+import com.tzj.garvel.core.filesystem.api.CleanJobVisitor;
 import com.tzj.garvel.core.filesystem.api.OsType;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 import com.tzj.garvel.core.filesystem.api.FilesystemService;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.nio.file.attribute.PosixFilePermissions;
+import java.util.EnumSet;
 
 import static com.tzj.garvel.common.parser.GarvelConstants.EOL;
 
@@ -285,6 +284,26 @@ public enum FilesystemServiceImpl implements FilesystemService {
             Files.deleteIfExists(path);
         } catch (IOException e) {
             throw new FilesystemFrameworkException(String.format("Unable to delete directory \"%s\": %s\n", path.toString(), e.getLocalizedMessage()));
+        }
+    }
+
+    /**
+     * Delete the entire directory hierarchy by walking the tree recursively and deleting all
+     * entries in post-order fashion.
+     *
+     * @param path
+     * @throws FilesystemFrameworkException
+     */
+    @Override
+    public void deleteDirectoryHierarchy(final Path path) throws FilesystemFrameworkException {
+        if (!path.toFile().exists()) {
+            return;
+        }
+
+        try {
+            Files.walkFileTree(path, EnumSet.noneOf(FileVisitOption.class), Integer.MAX_VALUE, new CleanJobVisitor());
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(String.format("Unable to delete directory hierarchy starting at \"%s\": %s\n", path.toString(), e.getLocalizedMessage()));
         }
     }
 

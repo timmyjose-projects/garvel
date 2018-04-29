@@ -11,6 +11,9 @@ import com.tzj.garvel.core.filesystem.api.FilesystemService;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class UninstallJob implements Job<UninstallCommandResult> {
     private final UninstallCommandParams cmdParams;
@@ -20,35 +23,18 @@ public class UninstallJob implements Job<UninstallCommandResult> {
     }
 
     @Override
-    public UninstallCommandResult call() throws Exception {
-        final String garvelRoot = GarvelCoreConstants.GARVEL_HOME_DIR + File.separator + GarvelCoreConstants.GARVEL_DIR;
-        final String garvelCache = garvelRoot + File.separator + GarvelCoreConstants.GARVEL_CACHE_DIR;
+    public UninstallCommandResult call() throws JobException {
+        final Path garvelPath = Paths.get(GarvelCoreConstants.GARVEL_DIR);
 
         final UninstallCommandResult uninstallResult = new UninstallCommandResult();
         final FilesystemService fs = CoreModuleLoader.INSTANCE.getFileSystemFramework();
 
-        //@TODO - Create a Visitor that will delete the hierarachy recursively.
-        if (!fs.checkDirectoryExists(garvelCache)) {
-            uninstallResult.setGarvelCache(true);
-        } else {
-            try {
-                fs.deleteDirectory(garvelCache);
-                uninstallResult.setGarvelCache(true);
-            } catch (FilesystemFrameworkException e) {
-                throw new JobException(String.format("Failed to delete the Garvel cache directory, %s: %s\n", garvelCache, e.getErrorString()));
-            }
-        }
-
-        // the root has to be deleted last
-        if (!fs.checkDirectoryExists(garvelRoot)) {
-            uninstallResult.setGarvelRoot(true);
-        } else {
-            try {
-                fs.deleteDirectory(garvelRoot);
-                uninstallResult.setGarvelRoot(true);
-            } catch (FilesystemFrameworkException e) {
-                throw new JobException(String.format("Failed to delete the Garvel root directory, %s: %s\n", garvelRoot, e.getErrorString()));
-            }
+        try {
+            fs.deleteDirectoryHierarchy(garvelPath);
+            uninstallResult.setGarvelRoot(fs.checkDirectoryExists(GarvelCoreConstants.GARVEL_DIR));
+            uninstallResult.setGarvelCache(fs.checkDirectoryExists(GarvelCoreConstants.GARVEL_CACHE_DIR));
+        } catch (FilesystemFrameworkException e) {
+            throw new JobException(String.format("Unable to uninstall Garvel: %s", e.getErrorString()));
         }
 
         return uninstallResult;

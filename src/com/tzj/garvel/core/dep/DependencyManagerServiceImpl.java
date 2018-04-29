@@ -79,7 +79,8 @@ public enum DependencyManagerServiceImpl implements DependencyManagerService {
                 saveGarvelLockFile();
             }
         } else {
-            // lock file does not exist -implies that the dependency graph also does not exist.
+            // lock file does not exist - implies that the dependency graph also does not exist.
+            artifactsOrdering = ctx.resolveStrategy(DependencyResolverOperation.CREATE_AND_ANALYSE);
             classPaths = createClassPathEntries(artifactsOrdering);
             saveGarvelLockFile();
         }

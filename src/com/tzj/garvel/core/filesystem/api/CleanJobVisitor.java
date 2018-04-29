@@ -1,4 +1,4 @@
-package com.tzj.garvel.core.engine.job.visitors;
+package com.tzj.garvel.core.filesystem.api;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -18,14 +18,12 @@ import java.nio.file.attribute.BasicFileAttributes;
 public class CleanJobVisitor implements FileVisitor<Path> {
     @Override
     public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-        // log to the main Garvel log here
         return FileVisitResult.CONTINUE;
     }
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        Files.delete(file);
-
+        Files.deleteIfExists(file);
         return FileVisitResult.CONTINUE;
     }
 
@@ -37,7 +35,7 @@ public class CleanJobVisitor implements FileVisitor<Path> {
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
         if (exc == null) {
-            Files.delete(dir);
+            Files.deleteIfExists(dir);
             return FileVisitResult.CONTINUE;
         } else {
             throw exc;

@@ -4,7 +4,6 @@ import com.tzj.garvel.common.spi.core.command.CommandResult;
 
 public class UninstallCommandResult extends CommandResult {
     private boolean garvelRoot;
-    private boolean garvelRegistry;
     private boolean garvelCache;
 
     public boolean isGarvelRoot() {
@@ -13,14 +12,6 @@ public class UninstallCommandResult extends CommandResult {
 
     public void setGarvelRoot(final boolean garvelRoot) {
         this.garvelRoot = garvelRoot;
-    }
-
-    public boolean isGarvelRegistry() {
-        return garvelRegistry;
-    }
-
-    public void setGarvelRegistry(final boolean garvelRegistry) {
-        this.garvelRegistry = garvelRegistry;
     }
 
     public boolean isGarvelCache() {

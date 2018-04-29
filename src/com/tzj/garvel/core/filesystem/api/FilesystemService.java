@@ -30,6 +30,8 @@ public interface FilesystemService {
 
     void deleteDirectory(Path path) throws FilesystemFrameworkException;
 
+    void deleteDirectoryHierarchy(final Path path) throws FilesystemFrameworkException;
+
     void deleteFile(final String filename) throws FilesystemFrameworkException;
 
     String loadClassPathFileAsString(String garvelConfigTemplate) throws FilesystemFrameworkException;

@@ -5,7 +5,7 @@ import com.tzj.garvel.common.spi.core.command.result.CleanCommandResult;
 import com.tzj.garvel.core.GarvelCoreConstants;
 import com.tzj.garvel.core.concurrent.api.Job;
 import com.tzj.garvel.core.engine.exception.JobException;
-import com.tzj.garvel.core.engine.job.visitors.CleanJobVisitor;
+import com.tzj.garvel.core.filesystem.api.CleanJobVisitor;
 
 import java.io.File;
 import java.io.IOException;

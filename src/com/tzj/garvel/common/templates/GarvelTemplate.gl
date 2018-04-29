@@ -32,7 +32,7 @@ licence-file = "<link to a custom licence file, is applicable>"
 [dependencies]
 
 junit/junit = "4.12"
-org.apache.logging.log4j/log4j-core = "2.11.0"
+log4j/log4j = "1.2.17"
 
 
 # This section is optional. By default, Garvel will generate the project
