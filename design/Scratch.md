@@ -233,7 +233,7 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
        artifacts are present (and if not, download them).
        
 
-    How the Garvel Cache works
+    How the Garvel Cache works?
     
     The Garvel Cache structure is shown above, but in order to handle queries about available artifacts, a Mapping file
     will also be persisted in the GC root directory. If this file is not present, then all the dependencies will have
@@ -244,7 +244,7 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
     handled when actually fetching the artifact from the repository. 
     
     
-    How compilation works
+    How compilation works?
     
     Incremental compilation will not be suppported for 1.0 - it's basically all or nothing for now. To this end, a new
     abstraction layer will be introduced similar to the Dependency Manager framework - basic compilation strategy, which
@@ -261,6 +261,41 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
     schemes to speed up compilation.
     
     
+    How running a target works?
     
+    Given a target in the Garvel.gl file, say `foo = "com.foo.bar.Main", here are the steps that will be followed to 
+    execute this target:
+    
+       1).     
+            
+    
+    
+    Post 1.0, all issues and change requests will be logged on, and monitored through, Github.
+    
+    
+    
+   ### Future Feature List
+   
+   * Support `javadoc` and Cargo-like documentation using a common interface.
+   
+   * Support System Comppiler.
+   
+   * Support Fat JAR creation.
+   
+   * Create a generic test interface to support common test platforms as well as Cargo-like test framework.
+   
+   * Full support for JDK modules (currently it works only on pre-Java 9 style Java projects - 
+   basically projects without modules);
+   
+   * Support for proper incremental compilation.
+   
+   * Support for dependency graph update (instead of creating and replacing as is done for now);
+   
+   * Support `garvel run` with all possible combinations of classes with `main` methods (private, nested, static, etc.).
+     Also, remove the explicit dependency on build. If there is a jar file in the `target` directory, that should be sufficient
+     to run the target.
+   
+   
+   
     
     

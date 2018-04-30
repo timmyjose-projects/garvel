@@ -24,7 +24,7 @@ junit/junit = "4.12"
 
 [lib]
 
-main-class = "com/tzj/garvel/cli/CLI" # required if section is present
+main-class = "com.tzj.garvel.cli.CLI" # required if section is present
 fat-jar = "false" # default # optional
 
 
@@ -33,4 +33,7 @@ fat-jar = "false" # default # optional
 # "target_name" : "path" format
 # at least one bin target required
 [bin]
+
+one = "com.tzj.garvel.playground.javacompiler.ThreadsafeCounter"
+
 

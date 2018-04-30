@@ -101,20 +101,39 @@ public class BasicBuildStrategy implements BuildStrategy {
         final String manifestVersion = getManifestVersion(cache);
         final String mainClass = getMainClass(cache);
 
-        final JarFileCreatorOptions options = new JarFileCreatorOptions(jarName, manifestVersion, mainClass);
+        JarFileCreatorOptions options = null;
+        if (mainClass != null) {
+            options = new JarFileCreatorOptions(jarName, manifestVersion, mainClass);
+        } else {
+            options = new JarFileCreatorOptions(jarName, manifestVersion);
+        }
 
         return options;
     }
 
     /**
      * Return the Main-Class attribute from the Garvel.gl configuration file.
+     * The name is normalized from com.foo.Bar to com/foo/Bar as required by
+     * the JAR specification.
+     * <p>
+     * If this attribute is not present, skip it.
      *
      * @param cache
      * @return
      */
     private String getMainClass(final CacheManagerService cache) {
-        final MainClassEntry mainClassEntry = (MainClassEntry) cache.getEntry(CacheKey.MAIN_CLASS);
-        return mainClassEntry.getMainClassPath();
+        if (cache.containsCacheKey(CacheKey.MAIN_CLASS)) {
+            final MainClassEntry mainClassEntry = (MainClassEntry) cache.getEntry(CacheKey.MAIN_CLASS);
+            String mainClassName = mainClassEntry.getMainClassPath();
+
+            if (mainClassName != null && !mainClassName.isEmpty()) {
+                mainClassName = mainClassName.replace(".", "/");
+            }
+
+            return mainClassName;
+        }
+
+        return null;
     }
 
     /**

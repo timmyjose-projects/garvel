@@ -10,6 +10,9 @@ public class ThreadsafeCounter {
     private static final Random random = new Random();
     private static final List<Integer> numbers = new ArrayList<>();
 
+    public ThreadsafeCounter() {
+    }
+
     public static void main(String[] args) throws InterruptedException {
         Counter counter = new Counter();
 

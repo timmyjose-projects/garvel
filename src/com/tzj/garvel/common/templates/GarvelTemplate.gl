@@ -35,6 +35,7 @@ licence-file = "<link to a custom licence file, is applicable>"
 #log4j/log4j = "1.2.17"
 
 
+#
 # This section is optional. By default, Garvel will generate the project
 # JAR file in the `target` directory. If this section is present, the
 # given `mainclass` attribute will be used to create a runnable jar.
@@ -42,20 +43,25 @@ licence-file = "<link to a custom licence file, is applicable>"
 # with all dependencies bundled together into a single "fat jar".
 #
 # Also, if thie section is present, it must come before the `bin` section.
-
+#
 [lib]
 
-main-class = "com/foo/bar/Main" # required if section is present
-fat-jar = "false" # default # optional
+#main-class = "com.foo.bar.Main"
+fat-jar = "false"
 
+
+#
 # targets for `garvel run`
 # optional for project.
 # target_name : "path" format
-# at least one bin target required if this section
-# is present
+#
+# The target class must have a default, zero-argument constructor, and
+# the `main` method.
+#
 
 [bin]
 
-one = "/bin/one/Main"
-two = "/bin/two/Main"
-three = "/bin/three/Client"
+#target1 = "com.foo.bar.Main" # normal class
+#target2 = "com.foo.bar.Main$Baz" # nested class
+
+

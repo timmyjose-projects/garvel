@@ -6,13 +6,16 @@ import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandType;
 import com.tzj.garvel.common.spi.core.command.param.RunCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.RunCommandResult;
+import com.tzj.garvel.common.util.UtilServiceImpl;
 
 public class CLIRunCommand extends CLICommand {
     private final String target;
+    private String[] args;
 
-    public CLIRunCommand(final CLICommandOption opts, final String target) {
+    public CLIRunCommand(final CLICommandOption opts, final String target, final String[] args) {
         super(opts);
         this.target = target;
+        this.args = args;
     }
 
     /**
@@ -21,7 +24,7 @@ public class CLIRunCommand extends CLICommand {
      */
     @Override
     public void execute() {
-        final RunCommandParams params = new RunCommandParams(target);
+        final RunCommandParams params = new RunCommandParams(target, args);
         try {
             final RunCommandResult result = (RunCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.RUN, params);
 
@@ -31,12 +34,17 @@ public class CLIRunCommand extends CLICommand {
 
             checkSuccess(result);
 
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Target \"%s\" was run successfully\n", target);
         } catch (CommandException e) {
-            CLIErrorHandler.errorAndExit("Unable to create run target \"%s\". Reason = %s", target, e.getErrorString());
+            CLIErrorHandler.errorAndExit("Unable to run target \"%s\". Reason = %s", target, e.getErrorString());
         }
     }
 
     private void checkSuccess(final RunCommandResult result) {
+        if (result.isRunSuccessful()) {
+            return;
+        }
 
+        CLIErrorHandler.errorAndExit("Unable to run target \"%s\".\n");
     }
 }

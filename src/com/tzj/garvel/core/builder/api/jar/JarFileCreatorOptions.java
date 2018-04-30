@@ -11,6 +11,11 @@ public class JarFileCreatorOptions {
         this.mainClass = mainClass;
     }
 
+    public JarFileCreatorOptions(final String jarFileName, final String manifestVersion) {
+        this.jarFileName = jarFileName;
+        this.manifestVersion = manifestVersion;
+    }
+
     public String getJarFileName() {
         return jarFileName;
     }

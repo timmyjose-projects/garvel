@@ -104,9 +104,9 @@ public class CLIAstCommandDispatchVisitor implements CLIAstVisitor {
     public void visit(final RunCommandAst runCommand) {
         CLICommand run = null;
         if (runCommand.getTarget() == null) {
-            run = new CLIRunCommand(opts, "none");
+            run = new CLIRunCommand(opts, "none", runCommand.getArguments());
         } else {
-            run = new CLIRunCommand(opts, runCommand.getTarget().getId().spelling());
+            run = new CLIRunCommand(opts, runCommand.getTarget().getId().spelling(), runCommand.getArguments());
         }
 
         run.execute();

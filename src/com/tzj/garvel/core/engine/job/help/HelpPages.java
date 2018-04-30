@@ -88,10 +88,11 @@ public class HelpPages {
             "an exception message will be issued.\n" +
             "\n" +
             "USAGE:\n" +
-            "    garvel run [target-name]\n" +
+            "    garvel run [target-name] [target-args]*\n" +
             "\n" +
             "ARGS:\n" +
-            "    target-name the target name (as specified in the `bin` section of the `Garvel.gl` file). Optional.\n\n";
+            "    target-name the target name (as specified in the `bin` section of the `Garvel.gl` file). Optional.\n" +
+            "    target-args zero or more arguments to the target\n\n";
 
     public static final String depCommand = "garvel-dep\n" +
             "For the given jar, lists all the currently available versions, and if the `--show-dependencies` option is\n" +

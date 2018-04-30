@@ -12,6 +12,10 @@ import com.tzj.garvel.cli.exception.CLIErrorHandler;
  * @author tzj
  */
 public class CLI {
+    // for `garvel run`
+    public CLI() {
+    }
+
     /**
      * Entrypoint for Garvel (CLI).
      *

@@ -5,6 +5,7 @@ import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
 import com.tzj.garvel.common.spi.core.command.param.BuildCommandParams;
 import com.tzj.garvel.common.spi.core.command.param.InstallCommandParams;
+import com.tzj.garvel.common.spi.core.command.param.RunCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.RunCommandResult;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.concurrent.api.Job;
@@ -36,7 +37,8 @@ public class RunCommand extends Command {
 
     @Override
     public CommandResult execute(final CommandParams params) throws CommandException {
-        final Job<RunCommandResult> job = new RunJob();
+        final RunCommandParams cmdParams = (RunCommandParams) params;
+        final Job<RunCommandResult> job = new RunJob(cmdParams.getTarget(), cmdParams.getArgs());
         final Future<RunCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().submit(job);
 
         RunCommandResult cmdRes = null;

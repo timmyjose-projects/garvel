@@ -59,7 +59,9 @@ public class NormalJarFileCreator implements JarFileCreator {
     private Manifest getManifest(final JarFileCreatorOptions options) {
         Manifest mf = new Manifest();
         mf.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, options.getManifestVersion());
-        mf.getMainAttributes().put(Attributes.Name.MAIN_CLASS, options.getMainClass());
+        if (options.getMainClass() != null) {
+            mf.getMainAttributes().put(Attributes.Name.MAIN_CLASS, options.getMainClass());
+        }
 
         return mf;
     }

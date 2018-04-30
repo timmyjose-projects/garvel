@@ -16,7 +16,7 @@ Command ::= help Command-Name
            | new [--vcs Identifier] PATH
            | build
            | clean
-           | run [TargetName]
+           | run [TargetName] [TargetArgs]
            | test
            | dep [(-s | --show-dependencies) VERSION] Dependency-Name
 ```
@@ -31,6 +31,10 @@ CommandIdentifier ::= "help" | "list" | "version" | "new" | "build" | "clean" | 
 
 ```
 TargetName ::= Identifier 
+```
+
+```
+Target Args ::= Identifier (Identifier)*
 ```
 
 ```

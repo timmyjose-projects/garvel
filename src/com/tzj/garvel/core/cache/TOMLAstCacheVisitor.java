@@ -35,7 +35,7 @@ public class TOMLAstCacheVisitor implements TOMLAstVisitor {
     @Override
     public void visit(final BinPairAst targetAst) {
         final BinSectionEntry targets = (BinSectionEntry) cache.get(CacheKey.TARGETS);
-        targets.getTargets().put(targetAst.getKey().spelling(), targetAst.getValue().spelling());
+        targets.getTargets().put(strip(targetAst.getKey().spelling()), strip(targetAst.getValue().spelling()));
     }
 
     @Override
@@ -156,7 +156,7 @@ public class TOMLAstCacheVisitor implements TOMLAstVisitor {
      * @return
      */
     private String strip(final String spelling) {
-        if (spelling == null || spelling.isEmpty()) {
+        if (spelling == null || spelling.isEmpty() || !spelling.startsWith("\"")) {
             return spelling;
         }
 

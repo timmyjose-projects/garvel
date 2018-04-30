@@ -105,6 +105,18 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
     }
 
     /**
+     * Some of the keys are optional, and so this method needs to be
+     * invoked before those operations.
+     *
+     * @param key
+     * @return
+     */
+    @Override
+    public boolean containsCacheKey(final CacheKey key) {
+        return configCache.containsKey(key);
+    }
+
+    /**
      * Given the key, return the corresponding cache entry, or null if
      * not available.
      *

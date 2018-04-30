@@ -13,5 +13,7 @@ public interface CacheManagerService {
 
     DependenciesEntry getLockDependencies();
 
+    boolean containsCacheKey(final CacheKey key);
+
     CacheEntry getEntry(final CacheKey key);
 }

@@ -11,6 +11,9 @@ import com.tzj.garvel.cli.parser.scanner.CLIScanner;
 import com.tzj.garvel.common.spi.core.VCSType;
 import com.tzj.garvel.common.util.UtilServiceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.EOT;
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.IDENTIFIER;
 import static com.tzj.garvel.cli.api.parser.scanner.CLITokenType.SHOW_DEPENDENCIES;
@@ -210,6 +213,17 @@ public enum CLIParserImpl implements CLIParser {
                     runCommand.setTarget(target);
                 }
 
+                if (currentToken.kind() == IDENTIFIER) {
+                    final List<String> argsList = parseTargetArguments();
+                    final String[] arguments = new String[argsList.size()];
+
+                    for (int i = 0; i < argsList.size(); i++) {
+                        arguments[i] = argsList.get(i);
+                    }
+
+                    runCommand.setArguments(arguments);
+                }
+
                 command = runCommand;
             }
             break;
@@ -279,6 +293,31 @@ public enum CLIParserImpl implements CLIParser {
         depName = new DependencyNameAst(parts[0], parts[1]);
 
         return depName;
+    }
+
+    /**
+     * TargetArgs ::= Identifier (Identifier)*
+     *
+     * @return
+     */
+    private List<String> parseTargetArguments() {
+        final List<String> arguments = new ArrayList<>();
+
+        while (currentToken.kind() == IDENTIFIER) {
+            try {
+                final Identifier argument = parseIdentifier();
+                arguments.add(argument.spelling());
+            } catch (CLIException e) {
+                if (arguments.isEmpty()) {
+                    CLIErrorHandler.errorAndExit("Missing target argument for `run` command");
+                } else {
+                    CLIErrorHandler.errorAndExit("Invalid target argument for `run` command: \"%s\"",
+                            currentToken.spelling());
+                }
+            }
+        }
+
+        return arguments;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.tzj.garvel.core.builder.api.compiler;
 
 import com.tzj.garvel.core.builder.api.CompilationResult;
+import com.tzj.garvel.core.builder.api.exception.CompilationException;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -21,5 +22,5 @@ public interface Compiler {
      *
      * @return CompilationResult
      */
-    CompilationResult compile(final Path buildDirPath, List<File> srcFiles, List<String> compilationOptions);
+    CompilationResult compile(final Path buildDirPath, List<File> srcFiles, List<String> compilationOptions) throws CompilationException;
 }
