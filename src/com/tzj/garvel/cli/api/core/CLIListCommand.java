@@ -19,9 +19,13 @@ public class CLIListCommand extends CLICommand {
     public void execute() {
         final ListCommandParams params = new ListCommandParams();
         try {
-            final ListCommandResult commands = (ListCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.LIST, params);
+            final ListCommandResult result = (ListCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.LIST, params);
 
-            final List<String> validCommands = commands.getValidCommands();
+            if (result == null) {
+                CLIErrorHandler.errorAndExit("list command failed: internal error");
+            }
+
+            final List<String> validCommands = result.getValidCommands();
             UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Installed commands:");
 
             for (String command : validCommands) {

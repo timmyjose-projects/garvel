@@ -28,6 +28,10 @@ public class CLIDepCommand extends CLICommand {
         try {
             final DepCommandResult result = (DepCommandResult) CoreServiceImpl.INSTANCE.runCommand(CommandType.DEP, params);
 
+            if (result == null) {
+                CLIErrorHandler.errorAndExit("dep command failed: internal error");
+            }
+
             UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "%s\n", result.getVersions());
 
             if (result.isDependenciesInformationAvailable()) {

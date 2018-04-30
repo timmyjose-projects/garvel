@@ -35,9 +35,13 @@ public class CLINewCommand extends CLICommand {
      */
     @Override
     public void execute() {
-        NewCommandParams params = new NewCommandParams(vcs, path);
+        final NewCommandParams params = new NewCommandParams(vcs, path);
         try {
             NewCommandResult result = (NewCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.NEW, params);
+
+            if (result == null) {
+                CLIErrorHandler.errorAndExit("new command failed: internal error");
+            }
 
             checkSuccess(result);
 

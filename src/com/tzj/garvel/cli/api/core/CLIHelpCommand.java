@@ -24,6 +24,11 @@ public class CLIHelpCommand extends CLICommand {
         HelpCommandParams params = new HelpCommandParams(commandName);
         try {
             HelpCommandResult result = (HelpCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.HELP, params);
+
+            if (result == null) {
+                CLIErrorHandler.errorAndExit("help command failed: internal error");
+            }
+
             UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, result.getHelpContents());
         } catch (CommandException e) {
             CLIErrorHandler.errorAndExit("Unable to display help for \"%s\". Reason = %s\n", commandName, e.getLocalizedMessage());

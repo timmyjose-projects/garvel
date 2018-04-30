@@ -23,6 +23,11 @@ public class CLIVersionCommand extends CLICommand {
         VersionCommandResult result = null;
         try {
             result = (VersionCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.VERSION, params);
+
+            if (result == null) {
+                CLIErrorHandler.errorAndExit("version command failed: internal error");
+            }
+
             UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, result.getVersionSemverString());
         } catch (CommandException e) {
             CLIErrorHandler.errorAndExit("Unable to fetch version. Reason = " + e.getLocalizedMessage());

@@ -22,6 +22,10 @@ public class CLICleanCommand extends CLICommand {
         try {
             CleanCommandResult result = (CleanCommandResult) CoreServiceImpl.INSTANCE.runCommand(CommandType.CLEAN, params);
 
+            if (result == null) {
+                CLIErrorHandler.errorAndExit("clean command failed: internal error");
+            }
+
             checkSuccess(result);
             UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Project cleaned up successfully.");
         } catch (CommandException e) {

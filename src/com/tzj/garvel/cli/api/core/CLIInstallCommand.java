@@ -19,6 +19,10 @@ public class CLIInstallCommand extends CLICommand {
         try {
             final InstallCommandResult result = (InstallCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.INSTALL, params);
 
+            if (result == null) {
+                CLIErrorHandler.errorAndExit("install command failed: internal error");
+            }
+
             checkSuccess(result);
             UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Installed Garvel successfully.");
         } catch (CommandException e) {
