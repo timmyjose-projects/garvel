@@ -160,9 +160,9 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
                     }
                 }
             } catch (CommandException e) {
-                throw new DependencyResolverException(String.format("Either the artifact (%s) or the version (%s) is invalid.\n" +
+                throw new DependencyResolverException(String.format("Either the artifact (%s) and/or the version (%s) is invalid.\n" +
                                 "Please run the `garvel dep` command to see the full list of valid versions for a valid artifact\n",
-                        dependency, dependencyName));
+                        dependencyName, dependency.getVersion()));
             }
         }
     }

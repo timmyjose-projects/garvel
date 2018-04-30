@@ -62,9 +62,13 @@ public class JarFileCreatorFileVisitor implements FileVisitor<Path> {
 
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+        if (exc != null) {
+            throw exc;
+        }
+
         URI newdirUri = URI.create(dir.toFile().getAbsolutePath());
 
-        if (dir.toFile().exists()) {
+        if (!dir.toFile().exists()) {
             JarEntry newDirEntry = new JarEntry(buildDirUri.relativize(newdirUri).toString());
             newDirEntry.setTime(dir.toFile().lastModified());
             jarStream.putNextEntry(newDirEntry);

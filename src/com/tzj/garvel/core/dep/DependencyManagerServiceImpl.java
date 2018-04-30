@@ -208,7 +208,7 @@ public enum DependencyManagerServiceImpl implements DependencyManagerService {
     }
 
     /**
-     * Download the project depencies into the Garvel Cache, creating
+     * Download the project dependencies into the Garvel Cache, creating
      * the required directories on the fly.
      *
      * @param artifactsOrdering

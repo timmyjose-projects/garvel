@@ -10,7 +10,7 @@
 
 name = "<Your project name>"
 version = "0.1.0"
-classpath = [ "./" ] # apart from the dependencies
+classpath = [ "." ] # apart from the dependencies
 authors = [ "you@your-email.com" ]
 description = "<project description>"
 homepage = "<your homepage, or perhaps a github url>"

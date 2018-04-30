@@ -48,38 +48,6 @@ public enum NetworkServiceImpl implements NetworkService {
     }
 
     /**
-     * Download a text file from the given url, into the given location.
-     *
-     * @param urlString
-     */
-    @Override
-    public void downloadTextFile(final String urlString, final String downloadLocation) throws NetworkServiceException {
-        final String filename = urlString.substring(urlString.lastIndexOf("/") + 1, urlString.length());
-        final String outputFile = downloadLocation + File.separator + filename;
-
-        try {
-            final NetworkConnector connector = NetworkConnectorFactory.getConnector();
-
-            final URL url = new URL(urlString);
-            final HttpURLConnection conn = connector.getConnection(url);
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                 BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-                String line = null;
-
-                while ((line = reader.readLine()) != null) {
-                    writer.write(line);
-                    writer.newLine();
-                }
-            } catch (IOException e) {
-                throw e;
-            }
-        } catch (IOException e) {
-            throw new NetworkServiceException(String.format("Failed to download text file %s: %s\n", urlString, e.getLocalizedMessage()));
-        }
-    }
-
-    /**
      * Download the file contents as a String.
      *
      * @param urlString
@@ -121,7 +89,7 @@ public enum NetworkServiceImpl implements NetworkService {
      * @param urlString
      */
     @Override
-    public void downloadBinaryFile(final String urlString, final String downloadLocation) throws NetworkServiceException {
+    public void downloadBinaryFile(final String urlString, final String targetFile) throws NetworkServiceException {
         try {
             final NetworkConnector connector = NetworkConnectorFactory.getConnector();
 
@@ -129,7 +97,40 @@ public enum NetworkServiceImpl implements NetworkService {
             final HttpURLConnection conn = connector.getConnection(url);
 
             try (BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
-                 BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(downloadLocation))) {
+                 BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(targetFile))) {
+
+                byte[] buffer = new byte[NetworkConstants.BUF_SIZE];
+                int count = -1;
+
+                while ((count = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, count);
+                }
+            } catch (IOException e) {
+                throw e;
+            }
+        } catch (IOException e) {
+            throw new NetworkServiceException(String.format("Failed to download binary file %s: %s\n", urlString, e.getLocalizedMessage()));
+        }
+    }
+
+    /**
+     * Download a text file from the given url, into the given location. To avoid issues with encoding.
+     * process the stream as a byte stream instead of a character stream.
+     *
+     * @param urlString
+     */
+    @Override
+    public void downloadTextFile(final String urlString, final String downloadLocation) throws NetworkServiceException {
+        try {
+            final String outputFile = downloadLocation
+                    + File.separator + urlString.substring(urlString.lastIndexOf("/") + 1, urlString.length());
+            final NetworkConnector connector = NetworkConnectorFactory.getConnector();
+
+            final URL url = new URL(urlString);
+            final HttpURLConnection conn = connector.getConnection(url);
+
+            try (BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
+                 BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
 
                 byte[] buffer = new byte[NetworkConstants.BUF_SIZE];
                 int count = -1;

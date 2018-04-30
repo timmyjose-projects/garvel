@@ -154,7 +154,6 @@ public class BuildJob implements Job<BuildCommandResult> {
         }
 
         result.setTargetDir(targetDirPath);
-        result.setBuildDir(buildDirPath);
         result.setDepsDir(depsDirPath);
     }
 

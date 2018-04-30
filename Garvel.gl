@@ -7,7 +7,7 @@
 
 name = "garvel"
 version = "0.1.0"
-classpath = [ "./" ] # apart from the dependencies
+classpath = [ "." ] # apart from the dependencies
 authors = [ "zoltan.jose@gmail.com" ]
 description = "A dependency and package manager for Java"
 homepage = "https://github.com/timmyjose/garvel"
@@ -20,7 +20,7 @@ licence-file =  "N/A"
 # the external dependencies for this project
 [dependencies]
 
-junit/junit = "4.1.12"
+junit/junit = "4.12"
 
 [lib]
 

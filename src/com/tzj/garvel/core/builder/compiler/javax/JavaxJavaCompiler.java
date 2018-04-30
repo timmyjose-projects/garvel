@@ -38,7 +38,10 @@ public class JavaxJavaCompiler implements Compiler {
             List<String> diagMessages = new ArrayList<>(diags.getDiagnostics().size());
 
             for (Diagnostic<? extends JavaFileObject> d : diags.getDiagnostics()) {
-                diagMessages.add(String.format("%s:%d:%s\n", d.getSource().getName(), d.getLineNumber(), d.getSource().toUri()));
+                diagMessages.add(String.format("%s:%d: %s\n",
+                        d.getSource().getName(),
+                        d.getLineNumber(),
+                        d.getMessage(Locale.getDefault())));
             }
             compilationResult.setDiagnostics(diagMessages);
         } else {

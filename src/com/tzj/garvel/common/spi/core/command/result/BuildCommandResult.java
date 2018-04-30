@@ -6,7 +6,6 @@ import java.nio.file.Path;
 
 public class BuildCommandResult extends CommandResult {
     private Path targetDir;
-    private Path buildDir;
     private Path depsDir;
     private Path jarFile;
 
@@ -19,14 +18,6 @@ public class BuildCommandResult extends CommandResult {
 
     public void setTargetDir(final Path targetDir) {
         this.targetDir = targetDir;
-    }
-
-    public Path getBuildDir() {
-        return buildDir;
-    }
-
-    public void setBuildDir(final Path buildDir) {
-        this.buildDir = buildDir;
     }
 
     public Path getDepsDir() {

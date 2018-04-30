@@ -193,16 +193,38 @@ public class BasicBuildStrategy implements BuildStrategy {
      * These options can be possibly be read from the config file in future versions,
      * or be configurable by the user via the Garvel.gl configuration file.
      * Currently, these are hardcoded in.
+     * Also, all the entries specified in the Garvel.gl file are added here as
+     * custom classpath entries.
      *
      * @return
      */
     private List<String> getCompilationOptions(final String classPathString, final Path buildDirPath) {
-        return Arrays.asList(
-                CompilationOption.XLINT.toString(),
-                CompilationOption.TARGET_DIR.toString(),
-                String.format(buildDirPath.toFile().getAbsolutePath()),
-                CompilationOption.CLASSPATH.toString(),
-                String.format("%s%s%s%s%s", ".", File.pathSeparator, "java.class.path", File.pathSeparator, classPathString)
-        );
+        List<String> compilationOptions = new ArrayList<>();
+
+        // general options
+        compilationOptions.add(CompilationOption.XLINT.toString());
+        compilationOptions.add(CompilationOption.TARGET_DIR.toString());
+        compilationOptions.add(String.format(buildDirPath.toFile().getAbsolutePath()));
+
+        // fill in the classpath entries
+        // at the very end
+        compilationOptions.add(CompilationOption.CLASSPATH.toString());
+        // always add the current directory
+        compilationOptions.add(".");
+
+        final ClassPathEntry classpathEntry = (ClassPathEntry) CoreModuleLoader.INSTANCE.getCacheManager()
+                .getEntry(CacheKey.CLASSPATH);
+
+        if (classpathEntry.getPaths() != null) {
+            final List<String> paths = classpathEntry.getPaths();
+            for (String path : paths) {
+                if (!compilationOptions.contains(path)) {
+                    compilationOptions.add(File.pathSeparator);
+                    compilationOptions.add(path);
+                }
+            }
+        }
+
+        return compilationOptions;
     }
 }

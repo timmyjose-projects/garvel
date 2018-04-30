@@ -27,14 +27,14 @@ public class CLIBuildCommand extends CLICommand {
             }
 
             checkSuccess(result);
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Project built successfully");
         } catch (CommandException e) {
-            CLIErrorHandler.errorAndExit("Build failed with exception message: %s", e.getErrorString());
+            CLIErrorHandler.errorAndExit("Build failed: %s", e.getErrorString());
         }
     }
 
     private void checkSuccess(final BuildCommandResult result) {
         if (exists(result.getTargetDir()) &&
-                exists(result.getBuildDir()) &&
                 exists(result.getDepsDir()) &&
                 exists(result.getJarFile())) {
             return;

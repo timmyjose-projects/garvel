@@ -77,14 +77,14 @@ public class DependencyPOMParser extends DependencyParser {
             final String sha1Hash = sha1HashFull.split(" ")[0];
 
             if (metadataMD5 == null || metadataSHA1 == null || md5Hash == null || sha1Hash == null) {
-                throw new DependencyManagerException("POM file validation failed: hashes do not match");
+                throw new DependencyManagerException(String.format("POM file validation failed: hashes do not match for url: %s", pomUrl));
             }
 
             if (!metadataMD5.equalsIgnoreCase(md5Hash) || !sha1Hash.equalsIgnoreCase(sha1Hash)) {
-                throw new DependencyManagerException("POM file validation failed: hashes do not match");
+                throw new DependencyManagerException(String.format("POM file validation failed: hashes do not match for url: %s", pomUrl));
             }
         } catch (NetworkServiceException e) {
-            throw new DependencyManagerException("failed to download the MD5 and/or SHA1 hash files for validation\n");
+            throw new DependencyManagerException(String.format("failed to download the MD5 and/or SHA1 hash files for validation for url: %s", pomUrl));
         }
 
         return pomFilePath;

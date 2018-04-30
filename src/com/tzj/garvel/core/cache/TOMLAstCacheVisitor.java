@@ -1,7 +1,6 @@
 package com.tzj.garvel.core.cache;
 
 import com.tzj.garvel.core.cache.api.*;
-import com.tzj.garvel.core.parser.api.SemverParser;
 import com.tzj.garvel.core.parser.api.ast.toml.*;
 import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
 
@@ -63,7 +62,7 @@ public class TOMLAstCacheVisitor implements TOMLAstVisitor {
 
         final List<Identifier> astPaths = classpathAst.getClassPath();
         for (Identifier path : astPaths) {
-            paths.add(path.spelling());
+            paths.add(strip(path.spelling()));
         }
 
         final ClassPathEntry classpath = new ClassPathEntry(paths);
