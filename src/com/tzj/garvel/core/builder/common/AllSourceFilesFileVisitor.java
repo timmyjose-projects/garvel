@@ -8,11 +8,15 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
-class AllFilesFileVisitor implements FileVisitor<Path> {
-    private final List<File> tree;
+/**
+ * This will recursively walk the source root to find all the
+ * source files in the project.
+ */
+public class AllSourceFilesFileVisitor implements FileVisitor<Path> {
+    private List<File> sourceFiles;
 
-    public AllFilesFileVisitor(final List<File> tree) {
-        this.tree = tree;
+    public AllSourceFilesFileVisitor(final List<File> sourceFiles) {
+        this.sourceFiles = sourceFiles;
     }
 
     @Override
@@ -22,7 +26,10 @@ class AllFilesFileVisitor implements FileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        tree.add(file.toFile());
+        if (file.toFile().exists() && file.toFile().getName().endsWith(".java")) {
+            sourceFiles.add(file.toFile());
+        }
+
         return FileVisitResult.CONTINUE;
     }
 
@@ -33,7 +40,10 @@ class AllFilesFileVisitor implements FileVisitor<Path> {
 
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-        tree.add(dir.toFile());
+        if (exc != null) {
+            throw exc;
+        }
+
         return FileVisitResult.CONTINUE;
     }
 }

@@ -21,10 +21,9 @@ public enum FilesystemServiceImpl implements FilesystemService {
      * as much for the specific version.
      *
      * @return
-     * @throws FilesystemFrameworkException
      */
     @Override
-    public OsType getOs() throws FilesystemFrameworkException {
+    public OsType getOs() {
         OsType os = OsType.UNKNOWN;
         String osString = System.getProperty("os.name");
 

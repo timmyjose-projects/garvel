@@ -27,6 +27,10 @@ public class GarvelCoreConstants {
     // Garvel project config
     public static final String GARVEL_PROJECT_ROOT = System.getProperty("user.dir");
 
+    // all packages under this root are considered part of the source tree
+    public static final String GARVEL_PROJECT_SOURCE_ROOT = GARVEL_PROJECT_ROOT +
+            File.separator + "src";
+
     public static final String GARVEl_PROJECT_CONFIG_FILE = GARVEL_PROJECT_ROOT +
             File.separator + "Garvel.gl";
 
@@ -48,7 +52,10 @@ public class GarvelCoreConstants {
 
     // this should be moved to an external file that can be auto-incremented
     // with each build (post bootstrap of garvel to garvel)
-    public static final String GARVEL_VERSION = "0.0.1";
+    // Note that this provides Garvel's own version, not the project
+    // version, which should be queried from the cache, and which
+    // should be that specified in the Garvel.gl file.
+    public static final String GARVEL_GARVEL_VERSION = "0.0.1";
 
     // this should be moved to an external file that can be auto-incremented
     public static final List<String> installedCommands = Arrays.asList(

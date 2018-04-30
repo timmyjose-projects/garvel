@@ -7,7 +7,7 @@ import java.io.ObjectOutput;
 import java.util.Objects;
 
 /**
- * Represents the basic artifact in Garvel.
+ * Represents the basic jar in Garvel.
  * This useful Value Object is used both by the Dependency Graph
  * as well as the Garvel Cache.
  */

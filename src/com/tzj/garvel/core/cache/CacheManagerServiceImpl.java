@@ -100,6 +100,23 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
         return null;
     }
 
+    /**
+     * Given the key, return the corresponding cache entry, or null if
+     * not available.
+     *
+     * @param key
+     * @return
+     * @throws CacheManagerException
+     */
+    @Override
+    public CacheEntry getEntry(final CacheKey key) {
+        if (configCache.containsKey(key)) {
+            return configCache.get(key);
+        }
+
+        return null;
+    }
+
     private void populateConfigCache(final ConfigAst config) {
         configCache = new HashMap<>();
 

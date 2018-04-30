@@ -10,7 +10,7 @@ public enum ConfigManagerServiceImpl implements ConfigManagerService {
 
     @Override
     public String getVersion() {
-        return GarvelCoreConstants.GARVEL_VERSION;
+        return GarvelCoreConstants.GARVEL_GARVEL_VERSION;
     }
 
     @Override

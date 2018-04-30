@@ -1,8 +1,12 @@
 package com.tzj.garvel.core.engine.job;
 
 import com.tzj.garvel.common.spi.core.command.result.BuildCommandResult;
+import com.tzj.garvel.common.util.UtilServiceImpl;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.GarvelCoreConstants;
+import com.tzj.garvel.core.builder.api.exception.BuildException;
+import com.tzj.garvel.core.builder.api.strategy.BuildContext;
+import com.tzj.garvel.core.builder.strategy.BasicBuildStrategy;
 import com.tzj.garvel.core.cache.exception.CacheManagerException;
 import com.tzj.garvel.core.concurrent.api.Job;
 import com.tzj.garvel.core.dep.api.exception.DependencyManagerException;
@@ -13,7 +17,6 @@ import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class BuildJob implements Job<BuildCommandResult> {
@@ -27,8 +30,8 @@ public class BuildJob implements Job<BuildCommandResult> {
      * also help in incremental builds where only the changed source files will be compiled (based on checking
      * the timestamp of the class files against the source file).
      * <p>
-     * 2). Parse the Garvel.gl file and populate the Core Cache. If there are any changes (new artifact,
-     * changed version of existing artifact), then contact Maven Central and then update the Garvel cache at
+     * 2). Parse the Garvel.gl file and populate the Core Cache. If there are any changes (new jar,
+     * changed version of existing jar), then contact Maven Central and then update the Garvel cache at
      * $HOME/.garvel/cache, as well as update the Dependency Graph of the project itself. The downloaded artifacts
      * will be checksummed using both MD5 and SHA1. For now, only HTTP support will be provided, which should be
      * extended to HTTPS support in later versions.
@@ -54,33 +57,40 @@ public class BuildJob implements Job<BuildCommandResult> {
         populateCoreCache();
 
         // 3. Analyse the dependencies.
-        List<String> depsClassPath = analyseDependencies();
+        List<String> artifactPaths = analyseDependencies();
 
         // 4. Compile the project.
-        compileProject(depsClassPath);
-
-        // 5. Generate the project artifacts.
-        generateProjectArtifacts(result);
+        // 5. generate the project artifacts
+        buildProject(artifactPaths, result);
 
         return result;
     }
 
     /**
+     * Step 4 - Compile the project sources into the `target/build` directory.
+     * <p>
+     * 1. Convert the dependencies paths to OS-specific classpath entries.
+     * 2. Pass this list to the builder along with the desired compilation
+     * strategy.
+     * 3. Build the project.
+     * <p>
      * Step 5 - Generate the project artifacts in the `target` directory.
      *
+     * @param artifactPaths
      * @param result
      */
-    private void generateProjectArtifacts(final BuildCommandResult result) {
+    private void buildProject(final List<String> artifactPaths, final BuildCommandResult result) throws JobException {
+        String classPathString = UtilServiceImpl.INSTANCE.convertStringsToOSSpecificClassPathString(artifactPaths);
+        Path jarFilePath = null;
 
-    }
+        try {
+            final BuildContext ctx = new BuildContext(new BasicBuildStrategy());
+            jarFilePath = ctx.executeStrategy(classPathString);
+        } catch (BuildException e) {
+            throw new JobException(String.format("Project Build failed: %s\n", e.getErrorString()));
+        }
 
-    /**
-     * Step 4 - Compile the project sources into the `target/build` directory.
-     *
-     * @param depsClassPath
-     */
-    private void compileProject(final List<String> depsClassPath) {
-
+        result.setJarFile(jarFilePath);
     }
 
     /**

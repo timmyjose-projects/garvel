@@ -1,9 +1,9 @@
 package com.tzj.garvel.core;
 
+import com.tzj.garvel.core.builder.BuildServiceImpl;
+import com.tzj.garvel.core.builder.api.BuildService;
 import com.tzj.garvel.core.cache.CacheManagerServiceImpl;
 import com.tzj.garvel.core.cache.api.CacheManagerService;
-import com.tzj.garvel.core.builder.CompilerServiceImpl;
-import com.tzj.garvel.core.builder.api.CompilerService;
 import com.tzj.garvel.core.concurrent.ConcurrencyServiceImpl;
 import com.tzj.garvel.core.concurrent.api.ConcurrencyService;
 import com.tzj.garvel.core.config.ConfigManagerServiceImpl;
@@ -40,12 +40,13 @@ public enum CoreModuleLoader {
     }
 
     /**
-     * The available Java compilers in the builder module.
+     * The available Java compilers and JAR file
+     * reators in the builder module.
      *
      * @return
      */
-    public CompilerService getCompilerFramework() {
-        return CompilerServiceImpl.INSTANCE;
+    public BuildService getCompilerFramework() {
+        return BuildServiceImpl.INSTANCE;
     }
 
     /**

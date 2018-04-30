@@ -26,7 +26,7 @@ public class TOMLAstCacheVisitor implements TOMLAstVisitor {
 
         final List<Identifier> astAuths = authorsAst.getAuthors();
         for (Identifier author : astAuths) {
-            auths.add(author.spelling());
+            auths.add(strip(author.spelling()));
         }
 
         final AuthorsEntry authors = new AuthorsEntry(auths);
@@ -50,7 +50,7 @@ public class TOMLAstCacheVisitor implements TOMLAstVisitor {
 
         final List<Identifier> astCats = categoriesAst.getCategories();
         for (Identifier cat : astCats) {
-            cats.add(cat.spelling());
+            cats.add(strip(cat.spelling()));
         }
 
         final CategoriesEntry categories = new CategoriesEntry(cats);
@@ -84,13 +84,14 @@ public class TOMLAstCacheVisitor implements TOMLAstVisitor {
 
     @Override
     public void visit(final DescriptionAst descriptionAst) {
-        final DescriptionEntry description = new DescriptionEntry(descriptionAst.getDescription().spelling());
+        final DescriptionEntry description = new DescriptionEntry(strip(descriptionAst.getDescription().spelling()));
         cache.put(CacheKey.DESCRIPTION, description);
     }
 
+
     @Override
     public void visit(final HomepageAst homepageAst) {
-        final HomepageEntry homepage = new HomepageEntry(homepageAst.getHomepage().spelling());
+        final HomepageEntry homepage = new HomepageEntry(strip(homepageAst.getHomepage().spelling()));
         cache.put(CacheKey.HOMEPAGE, homepage);
     }
 
@@ -100,7 +101,7 @@ public class TOMLAstCacheVisitor implements TOMLAstVisitor {
 
         final List<Identifier> astKeywords = keywordsAst.getKeywords();
         for (Identifier kw : astKeywords) {
-            kws.add(kw.spelling());
+            kws.add(strip(kw.spelling()));
         }
 
         final KeywordsEntry keywords = new KeywordsEntry(kws);
@@ -109,37 +110,37 @@ public class TOMLAstCacheVisitor implements TOMLAstVisitor {
 
     @Override
     public void visit(final LicenceAst licenceAst) {
-        final LicenceEntry licence = new LicenceEntry(licenceAst.getLicence().spelling());
+        final LicenceEntry licence = new LicenceEntry(strip(licenceAst.getLicence().spelling()));
         cache.put(CacheKey.LICENCE, licence);
     }
 
     @Override
     public void visit(final LicenceFileAst licenceFileAst) {
-        final LicenceFileEntry licenceFile = new LicenceFileEntry(licenceFileAst.getLicenceFile().spelling());
+        final LicenceFileEntry licenceFile = new LicenceFileEntry(strip(licenceFileAst.getLicenceFile().spelling()));
         cache.put(CacheKey.LICENCE_FILE, licenceFile);
     }
 
     @Override
     public void visit(final NameAst nameAst) {
-        final NameEntry name = new NameEntry(nameAst.getName().spelling());
+        final NameEntry name = new NameEntry(strip(nameAst.getName().spelling()));
         cache.put(CacheKey.NAME, name);
     }
 
     @Override
     public void visit(final ReadmeAst readmeAst) {
-        final ReadmeEntry readme = new ReadmeEntry(readmeAst.getReadme().spelling());
+        final ReadmeEntry readme = new ReadmeEntry(strip(readmeAst.getReadme().spelling()));
         cache.put(CacheKey.README, readme);
     }
 
     @Override
     public void visit(final VersionAst versionAst) {
-        final VersionEntry version = new VersionEntry(versionAst.getVersion().spelling());
+        final VersionEntry version = new VersionEntry(strip(versionAst.getVersion().spelling()));
         cache.put(CacheKey.VERSION, version);
     }
 
     @Override
     public void visit(final MainClassAst mainClassAst) {
-        final MainClassEntry mainClass = new MainClassEntry(mainClassAst.getMainClass().spelling());
+        final MainClassEntry mainClass = new MainClassEntry(strip(mainClassAst.getMainClass().spelling()));
         cache.put(CacheKey.MAIN_CLASS, mainClass);
     }
 
@@ -147,5 +148,26 @@ public class TOMLAstCacheVisitor implements TOMLAstVisitor {
     public void visit(final LibSectionAst libSectionAst) {
         final FatJarEntry fatJar = new FatJarEntry(libSectionAst.isFatJar());
         cache.put(CacheKey.FAT_JAR, fatJar);
+    }
+
+    /**
+     * Strip any extra quotes at the beginning and end of the string.
+     *
+     * @param spelling
+     * @return
+     */
+    private String strip(final String spelling) {
+        if (spelling == null || spelling.isEmpty()) {
+            return spelling;
+        }
+
+        StringBuffer sb = new StringBuffer();
+        if (spelling.startsWith("\"")) {
+            for (int i = 1; i < spelling.length() - 1; i++) {
+                sb.append(spelling.charAt(i));
+            }
+        }
+
+        return sb.toString();
     }
 }

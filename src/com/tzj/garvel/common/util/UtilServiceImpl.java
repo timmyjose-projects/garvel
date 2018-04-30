@@ -1,10 +1,15 @@
 package com.tzj.garvel.common.util;
 
 import com.tzj.garvel.common.spi.core.CoreService;
+import com.tzj.garvel.common.spi.core.CoreServiceLoader;
 import com.tzj.garvel.common.spi.core.VCSType;
 import com.tzj.garvel.common.spi.util.UtilService;
+import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.CoreServiceImpl;
+import com.tzj.garvel.core.filesystem.api.OsType;
+import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Path;
 import java.security.DigestInputStream;
@@ -180,7 +185,7 @@ public enum UtilServiceImpl implements UtilService {
     }
 
     /**
-     * A valid artifact version is in the "[0-9]+.[0-9]+.[0-9]*" format.
+     * A valid jar version is in the "[0-9]+.[0-9]+.[0-9]*" format.
      * Since this can vary considerablt, only basic checks are provided here,
      * offloading proper validation onto Core.
      *
@@ -225,6 +230,24 @@ public enum UtilServiceImpl implements UtilService {
     @Override
     public String getSHA1(final Path path) {
         return getHash(path, "SHA1");
+    }
+
+    /**
+     * Conver the given absolute paths to platform-specific classpath entries.
+     *
+     * @param paths
+     * @return
+     */
+    @Override
+    public String convertStringsToOSSpecificClassPathString(final List<String> paths) {
+        StringBuffer sb = new StringBuffer();
+
+        for (final String path : paths) {
+            sb.append(path);
+            sb.append(File.pathSeparator);
+        }
+
+        return sb.toString();
     }
 
     private String getHash(final Path path, final String algorithm) {

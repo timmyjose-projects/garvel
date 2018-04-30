@@ -1,12 +1,11 @@
-package com.tzj.garvel.core.builder.api;
+package com.tzj.garvel.core.builder.api.jar;
 
-public class JarFileFields {
+public class JarFileCreatorOptions {
     private String jarFileName;
-    private int manifestVersion;
+    private String manifestVersion;
     private String mainClass;
 
-    public JarFileFields(final String jarFileName, final int manifestVersion, final String mainClass) {
-
+    public JarFileCreatorOptions(final String jarFileName, final String manifestVersion, final String mainClass) {
         this.jarFileName = jarFileName;
         this.manifestVersion = manifestVersion;
         this.mainClass = mainClass;
@@ -16,7 +15,7 @@ public class JarFileFields {
         return jarFileName;
     }
 
-    public int getManifestVersion() {
+    public String getManifestVersion() {
         return manifestVersion;
     }
 

@@ -148,7 +148,7 @@ public enum DependencyManagerServiceImpl implements DependencyManagerService {
             }
 
             store(garvelCache);
-            return garvelCache.getPaths(unavailableArtifacts);
+            return garvelCache.getPaths(artifactsOrdering);
         } else {
             return createNewCache(artifactsOrdering);
         }

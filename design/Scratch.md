@@ -244,5 +244,23 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
     handled when actually fetching the artifact from the repository. 
     
     
+    How compilation works
+    
+    Incremental compilation will not be suppported for 1.0 - it's basically all or nothing for now. To this end, a new
+    abstraction layer will be introduced similar to the Dependency Manager framework - basic compilation strategy, which
+    can be switch over to a more advanced compilation scheem in later versions.
+    
+    Simple Strategy:
+    
+    This is the strategy that will be followed for 1.0. In this case, the entire project source tree is is built together
+    into the target/build directory, the project artifact(s) generated, and then the build directory is deleted. 
+    
+    Advanced Strategy:
+    
+    This can have many more varieties, but I am thinking, at the very least, some intelligent incremental compilation
+    schemes to speed up compilation.
+    
+    
+    
     
     

@@ -1,7 +1,5 @@
 package com.tzj.garvel.core.builder.common;
 
-import javax.tools.JavaCompiler;
-
 public enum CompilationOption {
     XLINT("-Xlint"),
     DEBUG("-g"),

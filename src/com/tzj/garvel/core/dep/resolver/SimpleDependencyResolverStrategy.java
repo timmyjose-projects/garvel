@@ -226,7 +226,7 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
 
             final String[] parts = artifactId.split("/");
             if (parts == null || parts.length != 2 || parts[0] == null || parts[0].isEmpty() || parts[1] == null || parts[1].isEmpty()) {
-                throw new DependencyResolverException("resolver failed to get artifact information");
+                throw new DependencyResolverException("resolver failed to get jar information");
             }
 
             artifact.setGroupId(parts[0]);
@@ -234,7 +234,7 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
 
             final Map<SemverKey, List<String>> versionInfo = dep.getValue();
             if (versionInfo == null || versionInfo.isEmpty()) {
-                throw new DependencyResolverException("resolver failed to get artifact information");
+                throw new DependencyResolverException("resolver failed to get jar information");
             }
 
             StringBuffer versionBuffer = new StringBuffer();

@@ -34,7 +34,7 @@ public abstract class RepositoryLoader {
     }
 
     /**
-     * Construct the base URL for the artifact.
+     * Construct the base URL for the jar.
      *
      * @param groupId
      * @param artifactId
@@ -94,7 +94,7 @@ public abstract class RepositoryLoader {
     }
 
     /**
-     * Construct the JAR file Url for the artifact.
+     * Construct the JAR file Url for the jar.
      *
      * @param groupId
      * @param artifactId

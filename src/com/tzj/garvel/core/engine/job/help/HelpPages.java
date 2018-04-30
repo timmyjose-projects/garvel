@@ -60,7 +60,7 @@ public class HelpPages {
             "    PATH                the name of the new project. Valid identifiers for the platform will be accepted.\n\n";
 
     public static final String buildCommand = "garvel-build\n" +
-            "Builds the current project. The project artifact will be deployed in the `target` directory under project root, either as a \n" +
+            "Builds the current project. The project jar will be deployed in the `target` directory under project root, either as a \n" +
             "single JAR file (default) containing the project's contents, or if the `--fat-jar` key has been specified in the `Garvel.gl` file, as a\n" +
             "single fat JAR file with all the dependencies bundled in.\n\n" +
             "In addition, if the `lib` section is present, then the mandatory `main-class` key will ensure that the built JAR file is a runnable JAR file\n" +
@@ -94,13 +94,13 @@ public class HelpPages {
             "    target-name the target name (as specified in the `bin` section of the `Garvel.gl` file). Optional.\n\n";
 
     public static final String depCommand = "garvel-dep\n" +
-            "For the given artifact, lists all the currently available versions, and if the `--show-dependencies` option is\n" +
-            "supplied, then lists all the artifacts the specific version of the artifact depends upon.\n" +
+            "For the given jar, lists all the currently available versions, and if the `--show-dependencies` option is\n" +
+            "supplied, then lists all the artifacts the specific version of the jar depends upon.\n" +
             "\n" +
             "USAGE:\n" +
             "    garvel dep [-s | --show-dependencies ] ARTIFACT\n" +
             "\n" +
             "ARGS:\n" +
-            "    [-s | --show-dependencies <version> ] display the dependencies for this artifact version.\n" +
-            "    ARTIFACT                             the  artifact (in `groupId/artifactId` format) whose metadata we are interested in.\n\n";
+            "    [-s | --show-dependencies <version> ] display the dependencies for this jar version.\n" +
+            "    ARTIFACT                             the  jar (in `groupId/artifactId` format) whose metadata we are interested in.\n\n";
 }

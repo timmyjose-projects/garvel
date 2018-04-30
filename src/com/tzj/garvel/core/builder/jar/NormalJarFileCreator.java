@@ -1,9 +1,9 @@
-package com.tzj.garvel.core.builder.artifact;
+package com.tzj.garvel.core.builder.jar;
 
-import com.tzj.garvel.core.builder.api.JarFileCreatorService;
-import com.tzj.garvel.core.builder.api.JarFileFields;
+import com.tzj.garvel.core.builder.api.jar.JarFileCreator;
+import com.tzj.garvel.core.builder.api.jar.JarFileCreatorOptions;
 import com.tzj.garvel.core.builder.common.JarFileCreatorFileVisitor;
-import com.tzj.garvel.core.builder.exception.JarFileCreationException;
+import com.tzj.garvel.core.builder.api.exception.JarFileCreationException;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,22 +18,22 @@ import java.util.jar.Attributes;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
-public class NormalJarFileCreator implements JarFileCreatorService {
-    private Path buildDirPath;
-    private JarFileFields fields;
-
-    public NormalJarFileCreator(final Path buildDirPath, final JarFileFields fields) {
-        this.buildDirPath = buildDirPath;
-        this.fields = fields;
-    }
-
+public class NormalJarFileCreator implements JarFileCreator {
+    /**
+     * Create the JAR File.
+     *
+     * @param buildDirPath
+     * @param options
+     * @return
+     * @throws JarFileCreationException
+     */
     @Override
-    public Path createJarFile() throws JarFileCreationException {
-        Manifest mf = getManifest();
+    public Path createJarFile(final Path buildDirPath, final JarFileCreatorOptions options) throws JarFileCreationException {
+        Manifest mf = getManifest(options);
 
         JarOutputStream jarStream = null;
         try {
-            jarStream = new JarOutputStream(new FileOutputStream(fields.getJarFileName()), mf);
+            jarStream = new JarOutputStream(new FileOutputStream(options.getJarFileName()), mf);
         } catch (IOException e) {
             throw new JarFileCreationException(String.format("Unable to create the JAR file: %s", e.getLocalizedMessage()));
         }
@@ -47,20 +47,19 @@ public class NormalJarFileCreator implements JarFileCreatorService {
             throw new JarFileCreationException(String.format("Unable to create the JAR file: %s", e.getLocalizedMessage()));
         }
 
-
         try {
             jarStream.close();
         } catch (IOException e) {
             throw new JarFileCreationException(String.format("Unable to create the JAR file: %s", e.getLocalizedMessage()));
         }
 
-        return Paths.get(fields.getJarFileName());
+        return Paths.get(options.getJarFileName());
     }
 
-    private Manifest getManifest() {
+    private Manifest getManifest(final JarFileCreatorOptions options) {
         Manifest mf = new Manifest();
-        mf.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, fields.getManifestVersion());
-        mf.getMainAttributes().put(Attributes.Name.MAIN_CLASS, fields.getMainClass());
+        mf.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, options.getManifestVersion());
+        mf.getMainAttributes().put(Attributes.Name.MAIN_CLASS, options.getMainClass());
 
         return mf;
     }

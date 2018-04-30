@@ -250,7 +250,7 @@ public enum CLIParserImpl implements CLIParser {
 
         // double-check to ensure that version is not conflated with PATh
         if (!UtilServiceImpl.INSTANCE.validateArtifactVersion(version)) {
-            CLIErrorHandler.errorAndExit("\"%s\" does not appear to be a valid artifact version.", version);
+            CLIErrorHandler.errorAndExit("\"%s\" does not appear to be a valid jar version.", version);
         }
 
         return version;
@@ -267,7 +267,7 @@ public enum CLIParserImpl implements CLIParser {
         try {
             depNameId = parseIdentifier();
         } catch (CLIException e) {
-            CLIErrorHandler.errorAndExit("Missing artifact name for `dep` command");
+            CLIErrorHandler.errorAndExit("Missing jar name for `dep` command");
         }
 
         // validate that it is the proper format - groupId/artifactId.

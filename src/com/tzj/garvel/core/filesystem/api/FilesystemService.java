@@ -4,9 +4,10 @@ import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 
 import java.io.BufferedReader;
 import java.nio.file.Path;
+import java.util.List;
 
 public interface FilesystemService {
-    OsType getOs() throws FilesystemFrameworkException;
+    OsType getOs();
 
     BufferedReader newBufferedReader(final String filename) throws FilesystemFrameworkException;
 

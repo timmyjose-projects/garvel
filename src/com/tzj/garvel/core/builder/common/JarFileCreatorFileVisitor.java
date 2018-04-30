@@ -11,6 +11,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
+/**
+ * This Visitor walks the entire tree of compiled classes, and
+ * constructs the required JAR file.
+ */
 public class JarFileCreatorFileVisitor implements FileVisitor<Path> {
     private static final int BUF_SIZE = 8 * 1024 * 1024;
     private final URI buildDirUri;

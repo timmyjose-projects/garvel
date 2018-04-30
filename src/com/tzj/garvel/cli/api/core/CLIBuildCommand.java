@@ -22,9 +22,12 @@ public class CLIBuildCommand extends CLICommand {
         try {
             BuildCommandResult result = (BuildCommandResult) CoreServiceLoader.INSTANCE.getCoreService().runCommand(CommandType.BUILD, params);
 
+            if (result == null) {
+                CLIErrorHandler.errorAndExit("Build failed: internal error");
+            }
             checkSuccess(result);
         } catch (CommandException e) {
-            CLIErrorHandler.errorAndExit(String.format("Build failed with exception message: %s", e.getErrorString()));
+            CLIErrorHandler.errorAndExit("Build failed with exception message: %s", e.getErrorString());
         }
     }
 

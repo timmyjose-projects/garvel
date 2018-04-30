@@ -6,7 +6,7 @@ import com.tzj.garvel.core.dep.api.Artifact;
 import java.util.Map;
 
 /**
- * Used to display the transitive dependencies of an artifact using DFS.
+ * Used to display the transitive dependencies of an jar using DFS.
  */
 public class GraphDisplayCallback implements GraphCallback<Integer> {
     private Map<Integer, Artifact> mapping;

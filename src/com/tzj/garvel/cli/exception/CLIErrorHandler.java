@@ -23,7 +23,7 @@ public class CLIErrorHandler {
             "\tbuild       Compile the current project and generate artifacts\n" +
             "\tclean       Remove the target directory\n" +
             "\trun         Build and execute the specified target\n" +
-            "\tdep         Display the available versions and dependencies of the specified artifact\n\n" +
+            "\tdep         Display the available versions and dependencies of the specified jar\n\n" +
 
             "See 'garvel help <command>' for more information on a specific command.\n\n";
 

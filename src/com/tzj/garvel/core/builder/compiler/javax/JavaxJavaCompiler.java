@@ -1,7 +1,7 @@
-package com.tzj.garvel.core.builder.javax;
+package com.tzj.garvel.core.builder.compiler.javax;
 
 import com.tzj.garvel.core.builder.api.CompilationResult;
-import com.tzj.garvel.core.builder.api.Compiler;
+import com.tzj.garvel.core.builder.api.compiler.Compiler;
 import com.tzj.garvel.core.builder.common.CompilationOption;
 
 import javax.tools.*;
@@ -14,22 +14,19 @@ import java.util.*;
  * This uses the Java builder provided by the JDK Tools library.
  */
 public class JavaxJavaCompiler implements Compiler {
-    private Path buildDirPath;
-    private List<File> srcFiles;
-
-    public JavaxJavaCompiler(final Path buildDirPath, final List<File> srcFiles) {
-        this.buildDirPath = buildDirPath;
-        this.srcFiles = srcFiles;
-    }
-
+    /**
+     * Compile sources (supplied as a list of File objects) into the supplied
+     * directory.
+     *
+     * @return
+     */
     @Override
-    public CompilationResult compile(final List<String> files) {
+    public CompilationResult compile(Path buildDirPath, List<File> srcFiles, List<String> compilationOptions) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diags = new DiagnosticCollector<>();
         StandardJavaFileManager manager = compiler.getStandardFileManager(diags, Locale.getDefault(), Charset.forName("UTF-8"));
 
         Iterable<? extends JavaFileObject> units = manager.getJavaFileObjectsFromFiles(srcFiles);
-        List<String> compilationOptions = getCompilationOptions();
         final JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diags, compilationOptions, null, units);
         task.call();
 
@@ -43,24 +40,11 @@ public class JavaxJavaCompiler implements Compiler {
             for (Diagnostic<? extends JavaFileObject> d : diags.getDiagnostics()) {
                 diagMessages.add(String.format("%s:%d:%s\n", d.getSource().getName(), d.getLineNumber(), d.getSource().toUri()));
             }
+            compilationResult.setDiagnostics(diagMessages);
+        } else {
+            compilationResult.setSuccessful(true);
         }
 
         return compilationResult;
-    }
-
-    /**
-     * These options can be read from the config file in future versions.
-     * Currently, these are hardcoded in.
-     *
-     * @return
-     */
-    private List<String> getCompilationOptions() {
-        return Arrays.asList(
-                CompilationOption.XLINT.toString(),
-                CompilationOption.TARGET_DIR.toString(),
-                String.format(buildDirPath.toFile().getAbsolutePath()),
-                CompilationOption.CLASSPATH.toString(),
-                String.format("%s%s%s", ".", File.pathSeparator, "java.class.path")
-        );
     }
 }

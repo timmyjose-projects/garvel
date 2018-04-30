@@ -31,7 +31,7 @@ public class DepJob implements Job<DepCommandResult> {
      * 1. Given the Maven Coordinates, display the available versions. To this end, the local cache will be queried
      * first, and if not found, then Maven Central will be contacted for ths information.
      * <p>
-     * 2. If the `--show-dependencies` flag is supplied, then the transitive dependencies of the artifact will
+     * 2. If the `--show-dependencies` flag is supplied, then the transitive dependencies of the jar will
      * also be displayed in a suitably formatted manner.
      *
      * @return
@@ -74,7 +74,7 @@ public class DepJob implements Job<DepCommandResult> {
         result.setVersions(getVersionsForDependency(metadataUrl));
 
         // if the --show-dependencies flag was supplier, then
-        // get the artifact POM (using version) and populate
+        // get the jar POM (using version) and populate
         // the transitive dependency information.
         final String deps = getTransitiveDependencies(metadataUrl);
         if (deps != null) {
@@ -84,7 +84,7 @@ public class DepJob implements Job<DepCommandResult> {
     }
 
     /**
-     * Retrieve the transitive dependencies of the artifact.
+     * Retrieve the transitive dependencies of the jar.
      *
      * @param repoUrl
      * @return

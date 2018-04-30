@@ -3,6 +3,7 @@ package com.tzj.garvel.common.spi.util;
 import com.tzj.garvel.common.spi.core.VCSType;
 
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Common utlities for use by Garvel core and Garvel CLI/GUI.
@@ -21,5 +22,7 @@ public interface UtilService {
     String getMD5(Path path);
 
     String getSHA1(Path path);
+
+    String convertStringsToOSSpecificClassPathString(List<String> paths);
 }
 

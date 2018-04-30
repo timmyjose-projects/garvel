@@ -1,20 +1,20 @@
 package com.tzj.garvel.core.cache.api;
 
 public class VersionEntry extends CacheEntry {
-    private String name;
+    private String version;
 
-    public VersionEntry(final String name) {
-        this.name = name;
+    public VersionEntry(final String version) {
+        this.version = version;
     }
 
-    public String getName() {
-        return name;
+    public String getVersion() {
+        return version;
     }
 
     @Override
     public String toString() {
         return "VersionEntry{" +
-                "name='" + name + '\'' +
+                "version='" + version + '\'' +
                 '}';
     }
 }

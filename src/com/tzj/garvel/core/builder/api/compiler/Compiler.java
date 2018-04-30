@@ -1,5 +1,9 @@
-package com.tzj.garvel.core.builder.api;
+package com.tzj.garvel.core.builder.api.compiler;
 
+import com.tzj.garvel.core.builder.api.CompilationResult;
+
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 public interface Compiler {
@@ -15,8 +19,7 @@ public interface Compiler {
      * 4. Generate the appropriate type of JAR (and build script) inside `target`.
      * 5. Delete the `build` directory.
      *
-     * @param files
      * @return CompilationResult
      */
-    CompilationResult compile(List<String> files);
+    CompilationResult compile(final Path buildDirPath, List<File> srcFiles, List<String> compilationOptions);
 }
