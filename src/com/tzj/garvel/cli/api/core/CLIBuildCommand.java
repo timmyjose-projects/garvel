@@ -25,6 +25,7 @@ public class CLIBuildCommand extends CLICommand {
             if (result == null) {
                 CLIErrorHandler.errorAndExit("Build failed: internal error");
             }
+
             checkSuccess(result);
         } catch (CommandException e) {
             CLIErrorHandler.errorAndExit("Build failed with exception message: %s", e.getErrorString());

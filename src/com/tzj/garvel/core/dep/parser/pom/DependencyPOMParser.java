@@ -80,11 +80,8 @@ public class DependencyPOMParser extends DependencyParser {
                 throw new DependencyManagerException("POM file validation failed: hashes do not match");
             }
 
-            // some libs such as javaee-api-5.0-2.pom appear to have incorrect hashes in their files, so
-            // do not fail at this stage. Log it (if available), and move on.
             if (!metadataMD5.equalsIgnoreCase(md5Hash) || !sha1Hash.equalsIgnoreCase(sha1Hash)) {
-                //@TODO log message
-                //throw new DependencyManagerException("POM file validation failed: hashes do not match");
+                throw new DependencyManagerException("POM file validation failed: hashes do not match");
             }
         } catch (NetworkServiceException e) {
             throw new DependencyManagerException("failed to download the MD5 and/or SHA1 hash files for validation\n");

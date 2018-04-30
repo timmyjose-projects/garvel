@@ -20,6 +20,8 @@ licence-file =  "N/A"
 # the external dependencies for this project
 [dependencies]
 
+junit/junit = "4.1.12"
+
 [lib]
 
 main-class = "com/tzj/garvel/cli/CLI" # required if section is present

@@ -26,12 +26,6 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
     private Map<CacheKey, CacheEntry> configCache; // Garvel.gl
     private Map<CacheKey, CacheEntry> lockCache; // Garvel.lock, if present
 
-    //test
-    public static void main(String[] args) throws CacheManagerException {
-        CacheManagerServiceImpl.INSTANCE.populateCoreCaches();
-        CacheManagerServiceImpl.INSTANCE.display();
-    }
-
     /**
      * Populate the Core Cache with the data from the Garvel.gl configuration file.
      *
@@ -72,11 +66,21 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
         }
     }
 
+    /**
+     * Check if the config cache has been populated using Garvel.gl.
+     *
+     * @return
+     */
     @Override
     public boolean isConfigCachePopulated() {
         return configCache != null;
     }
 
+    /**
+     * Check if the lock cache has been populate using Garvel.lock.
+     *
+     * @return
+     */
     @Override
     public boolean isLockCachePopulated() {
         return lockCache != null;
@@ -117,6 +121,11 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
         return null;
     }
 
+    /**
+     * Populate the config cache.
+     *
+     * @param config
+     */
     private void populateConfigCache(final ConfigAst config) {
         configCache = new HashMap<>();
 
@@ -124,16 +133,15 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
         config.accept(configCacheFillVisitor);
     }
 
+    /**
+     * Populate the lock cache, if applicable.
+     *
+     * @param lock
+     */
     private void populateLockCache(final ConfigAst lock) {
         lockCache = new HashMap<>();
 
         TOMLAstVisitor lockCacheFillVisitor = new TOMLAstCacheVisitor(lockCache);
         lock.accept(lockCacheFillVisitor);
-    }
-
-    public void display() {
-        for (Map.Entry<CacheKey, CacheEntry> entry : configCache.entrySet()) {
-            System.out.printf("%s : %s\n", entry.getKey(), entry.getValue());
-        }
     }
 }

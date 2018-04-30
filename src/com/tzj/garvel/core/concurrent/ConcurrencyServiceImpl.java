@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 
 /**
  * A simple wrapper over an ExecutorService.
- *
  */
 public enum ConcurrencyServiceImpl implements ConcurrencyService {
     INSTANCE;
@@ -19,7 +18,7 @@ public enum ConcurrencyServiceImpl implements ConcurrencyService {
         // different strategies can be adopted based
         // on project parameters later on
         if (this.service == null) {
-            service = Executors.newSingleThreadExecutor();
+            service = Executors.newCachedThreadPool();
         }
         return service;
     }
