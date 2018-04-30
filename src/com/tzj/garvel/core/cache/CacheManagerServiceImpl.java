@@ -26,6 +26,16 @@ public enum CacheManagerServiceImpl implements CacheManagerService {
     private Map<CacheKey, CacheEntry> configCache; // Garvel.gl
     private Map<CacheKey, CacheEntry> lockCache; // Garvel.lock, if present
 
+    private CacheManagerServiceImpl() {
+        if (configCache == null) {
+            try {
+                populateCoreCaches();
+            } catch (CacheManagerException e) {
+                //
+            }
+        }
+    }
+
     /**
      * Populate the Core Cache with the data from the Garvel.gl configuration file.
      *

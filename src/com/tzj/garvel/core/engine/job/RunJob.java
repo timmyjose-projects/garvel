@@ -37,6 +37,8 @@ public class RunJob implements Job<RunCommandResult> {
      */
     @Override
     public RunCommandResult call() throws JobException {
+        //@TODO - read from the JAR file directly
+        // and run the targets
         final RunCommandResult result = new RunCommandResult();
 
         final String targetClassName = getClassNameForTarget();
