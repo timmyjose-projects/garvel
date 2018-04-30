@@ -5,6 +5,7 @@
 out/
 build/
 target/
+.DS_Store
 
 
 

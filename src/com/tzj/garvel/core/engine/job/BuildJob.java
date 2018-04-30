@@ -184,6 +184,15 @@ public class BuildJob implements Job<BuildCommandResult> {
         return CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(depsDir);
     }
 
+    /**
+     * In additiont to building the `build` directory, the entire directory structure of `src`
+     * must be created in the `build` directory. This will help during project artifact creation
+     * to include non-source files in the final JAR file. @TODO.
+     *
+     * @param targetDirPath
+     * @return
+     * @throws FilesystemFrameworkException
+     */
     private Path createBuildDir(final Path targetDirPath) throws FilesystemFrameworkException {
         final String buildDir = targetDirPath.toFile().getAbsolutePath() + File.separator + "build";
 
