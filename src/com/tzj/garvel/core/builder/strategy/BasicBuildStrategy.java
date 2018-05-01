@@ -153,10 +153,6 @@ public class BasicBuildStrategy implements BuildStrategy {
             final MainClassEntry mainClassEntry = (MainClassEntry) cache.getEntry(CacheKey.MAIN_CLASS);
             String mainClassName = mainClassEntry.getMainClassPath();
 
-            if (mainClassName != null && !mainClassName.isEmpty()) {
-                mainClassName = mainClassName.replace(".", "/");
-            }
-
             return mainClassName;
         }
 
