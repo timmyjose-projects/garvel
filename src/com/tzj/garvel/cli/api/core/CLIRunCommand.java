@@ -45,6 +45,6 @@ public class CLIRunCommand extends CLICommand {
             return;
         }
 
-        CLIErrorHandler.errorAndExit("Unable to run target \"%s\".\n");
+        CLIErrorHandler.errorAndExit("Unable to run target \"%s\".\n", target);
     }
 }

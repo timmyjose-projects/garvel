@@ -13,6 +13,9 @@ import java.util.EnumSet;
 
 import static com.tzj.garvel.common.parser.GarvelConstants.EOL;
 
+/**
+ * Handler for all File system related activities.
+ */
 public enum FilesystemServiceImpl implements FilesystemService {
     INSTANCE;
 
@@ -120,7 +123,7 @@ public enum FilesystemServiceImpl implements FilesystemService {
 
     /**
      * Check if the file represented by the name exists. If so,
-     * return that path.
+     * return that path, otherwise return null.
      *
      * @param filename
      * @return

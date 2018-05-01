@@ -14,6 +14,13 @@ public class ThreadsafeCounter {
     }
 
     public static void main(String[] args) throws InterruptedException {
+
+        if (args != null && args.length != 0) {
+            for (final String arg : args) {
+                System.out.printf("Received %s\n", arg);
+            }
+        }
+
         Counter counter = new Counter();
 
         List<Thread> threads = new ArrayList<>();

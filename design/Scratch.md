@@ -274,28 +274,31 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
     
     
     
-   ### Future Feature List
+   ### Future Feature List (post 1.0)
    
-   * Support `javadoc` and Cargo-like documentation using a common interface.
+   Priority legend: L0 (must have), L1(have, if possible), L2(nice to have), L3(low priority).
    
-   * Support System Comppiler.
+   * Support `javadoc` and Cargo-like documentation using a common interface. (L0)
    
-   * Support Fat JAR creation.
+   * Support System Comppiler. (L0)
    
-   * Create a generic test interface to support common test platforms as well as Cargo-like test framework.
+   * Support Fat JAR creation. (L0)
+   
+   * Create a generic test interface to support common test platforms as well as Cargo-like test framework. (L0)
    
    * Full support for JDK modules (currently it works only on pre-Java 9 style Java projects - 
-   basically projects without modules);
+     basically projects without modules); (L1)
    
-   * Support for proper incremental compilation.
+   * Support for proper incremental compilation. (L1)
    
-   * Support for dependency graph update (instead of creating and replacing as is done for now);
+   * Support for dependency graph update (instead of creating and replacing as is done for now); (L1)
    
    * Support `garvel run` with all possible combinations of classes with `main` methods (private, nested, static, etc.).
      Also, remove the explicit dependency on build. If there is a jar file in the `target` directory, that should be sufficient
-     to run the target.
+     to run the target. (L0) [DONE]
    
-   
+   * Include another command, `garvel show <config-name>` to show the loaded values of configuration keys. This would be 
+     useful for something like `garvel show targets` to list all targets for the project. (L2)  
    
     
     

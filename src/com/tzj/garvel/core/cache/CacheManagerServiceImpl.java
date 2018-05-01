@@ -2,18 +2,19 @@ package com.tzj.garvel.core.cache;
 
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.GarvelCoreConstants;
-import com.tzj.garvel.core.cache.api.CacheEntry;
-import com.tzj.garvel.core.cache.api.CacheKey;
-import com.tzj.garvel.core.cache.api.CacheManagerService;
-import com.tzj.garvel.core.cache.api.DependenciesEntry;
+import com.tzj.garvel.core.cache.api.*;
 import com.tzj.garvel.core.cache.exception.CacheManagerException;
 import com.tzj.garvel.core.parser.api.ast.toml.ConfigAst;
 import com.tzj.garvel.core.parser.api.visitor.toml.TOMLAstVisitor;
 import com.tzj.garvel.core.parser.exception.TOMLParserException;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.tzj.garvel.common.parser.GarvelConstants.DASH;
+import static com.tzj.garvel.core.dep.api.repo.RepositoryConstants.JAR;
 
 /**
  * Cache changes to the Garvel.gl file, Right now it doesn't make any

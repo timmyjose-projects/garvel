@@ -8,6 +8,7 @@ public class RunCommandParams extends CommandParams {
 
     public RunCommandParams(final String target, final String[] args) {
         this.target = target;
+        this.args = args;
     }
 
     public String[] getArgs() {

@@ -19,6 +19,7 @@ import com.tzj.garvel.core.engine.exception.JobException;
 import com.tzj.garvel.core.engine.job.RunJob;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -39,32 +40,16 @@ public class RunCommand extends Command {
     protected void executePrerequisite() throws CommandException {
         // if the target/<project>.jar file exists, then we can skip
         // build
-        if (checkProjectArtifactExists()) {
+        final Path jarFilePath = CoreModuleLoader.INSTANCE.getConfigManager().checkProjectJARFileExists();
+        if (jarFilePath != null && jarFilePath.toFile().exists()) {
             return;
         }
 
         try {
             prerequisiteCommand.run(new BuildCommandParams());
         } catch (CommandException e) {
-            throw new CommandException(String.format("Prerequisite (build) for run command failed, %s\n", e.getErrorString()));
+            throw new CommandException(String.format("Prerequisite (build) for run command failed, %s", e.getErrorString()));
         }
-    }
-
-    private boolean checkProjectArtifactExists() {
-        final CacheManagerService cache = CoreModuleLoader.INSTANCE
-                .getCacheManager();
-
-        final NameEntry nameEntry = (NameEntry) cache.getEntry(CacheKey.NAME);
-        final String projectName = nameEntry.getName();
-
-        final VersionEntry versionEntry = (VersionEntry) cache.getEntry(CacheKey.VERSION);
-        final String version = versionEntry.getVersion();
-
-        final String baseJarFileName = projectName + DASH + version + JAR;
-        final String qualifiedJarFileName = GarvelCoreConstants.GARVEL_PROJECT_TARGET_DIR +
-                File.separator + baseJarFileName;
-
-        return CoreModuleLoader.INSTANCE.getFileSystemFramework().checkFileExists(qualifiedJarFileName);
     }
 
     @Override

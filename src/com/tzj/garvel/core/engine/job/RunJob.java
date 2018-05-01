@@ -1,6 +1,7 @@
 package com.tzj.garvel.core.engine.job;
 
 import com.tzj.garvel.common.spi.core.command.result.RunCommandResult;
+import com.tzj.garvel.common.util.UtilServiceImpl;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.cache.api.BinSectionEntry;
 import com.tzj.garvel.core.cache.api.CacheKey;
@@ -9,10 +10,13 @@ import com.tzj.garvel.core.cache.api.MainClassEntry;
 import com.tzj.garvel.core.concurrent.api.Job;
 import com.tzj.garvel.core.engine.exception.JobException;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Path;
 import java.util.Map;
 
 public class RunJob implements Job<RunCommandResult> {
@@ -27,7 +31,8 @@ public class RunJob implements Job<RunCommandResult> {
     /**
      * Given the target class (any type other than an inner class, of course):
      * <p>
-     * 1. Check that the class is a valid class.
+     * 1. Check that the class is a valid class by trying to load it from the
+     * JAR file (so the dependency on the build command stays).
      * 2. Check that there is a default, zero-argument constructor.
      * 3. Check that it has a main method.
      * 4. Invoke the main method with the supplied arguments.
@@ -37,19 +42,18 @@ public class RunJob implements Job<RunCommandResult> {
      */
     @Override
     public RunCommandResult call() throws JobException {
-        //@TODO - read from the JAR file directly
-        // and run the targets
         final RunCommandResult result = new RunCommandResult();
 
+        // setup
         final String targetClassName = getClassNameForTarget();
-        final Class<?> clazz = checkClassIsValid(targetClassName);
+        final Class<?> clazz = validateAndLoadTargetClass(targetClassName);
         final Method mainMethod = checkForMainMethod(clazz);
-        final Constructor<?> defaultConstructor = getDefaultConstructor(clazz);
 
         // try to run the target
-        runTarget(mainMethod, defaultConstructor);
+        runTarget(mainMethod, args);
 
         result.setRunSuccessful(true);
+
         return result;
     }
 
@@ -100,39 +104,26 @@ public class RunJob implements Job<RunCommandResult> {
      * Run the main method of the target with the given arguments.
      *
      * @param mainMethod
-     * @param defaultConstructor
+     * @param targetArgs
      * @throws JobException
      */
-    private void runTarget(final Method mainMethod, final Constructor<?> defaultConstructor) throws JobException {
+    private void runTarget(final Method mainMethod, final String[] targetArgs) throws JobException {
         try {
-            final Object targetObject = defaultConstructor.newInstance();
-            mainMethod.invoke(targetObject, (Object) args);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new JobException(String.format("failed to run the target \"%s\" : %s\n", target, e.getLocalizedMessage()));
+            mainMethod.invoke(null, (Object) args);
+        } catch (IllegalAccessException e) {
+            throw new JobException(String.format("failed to run target \"%s\": %s\n",
+                    target, e.getLocalizedMessage()));
+        } catch (InvocationTargetException e) {
+            // this simply indicates that the target caused an exception. Catch it, log it,
+            // and forget about it.
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Running target \"%s\" threw an exception: %s\n",
+                    target, e.getLocalizedMessage());
+        } catch (Throwable e) {
+            // any other non-invocation errors must simply be logged, and
+            // the program must continue
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Running target \"%s\" threw an error: %s\n",
+                    target, e.getLocalizedMessage());
         }
-    }
-
-    /**
-     * For now, we only support targets that have a public zero-argument
-     * constructor.
-     *
-     * @param clazz
-     * @return
-     * @throws JobException
-     */
-    private Constructor<?> getDefaultConstructor(final Class<?> clazz) throws JobException {
-        final Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-        if (constructors != null && constructors.length != 0) {
-            for (Constructor<?> cons : constructors) {
-                final Class<?>[] typeParams = cons.getParameterTypes();
-                if (typeParams == null || typeParams.length == 0) {
-                    return cons;
-                }
-            }
-        }
-
-        throw new JobException(String.format("failed to find the public default constructor for target \"%s\".\nPlease check that you have a " +
-                "public zero-argument constructor in the target\n", target));
     }
 
     /**
@@ -171,11 +162,25 @@ public class RunJob implements Job<RunCommandResult> {
      * @return
      * @throws JobException
      */
-    private Class<?> checkClassIsValid(final String targetClassName) throws JobException {
+    private Class<?> validateAndLoadTargetClass(final String targetClassName) throws JobException {
+        final Path jarFilePath = CoreModuleLoader.INSTANCE.getConfigManager().checkProjectJARFileExists();
+
+        if (jarFilePath == null || !jarFilePath.toFile().exists()) {
+            throw new JobException("failed to load the project artifact.\nTry running the build command manually " +
+                    "before retrying this command.\n");
+        }
+
         Class<?> clazz = null;
 
         try {
-            clazz = Class.forName(targetClassName);
+            final String jarFileAbsolutePath = jarFilePath.toFile().getAbsolutePath();
+            final URL jarFileUrl = new URL("jar:file:" + jarFileAbsolutePath + "!/");
+            final URLClassLoader jarClassLoader = URLClassLoader.newInstance(new URL[]{jarFileUrl});
+
+            clazz = jarClassLoader.loadClass(targetClassName);
+        } catch (MalformedURLException e) {
+            throw new JobException("failed to load the project artifact.\nTry running the build command manually " +
+                    "before retrying this command.\n");
         } catch (ClassNotFoundException e) {
             throw new JobException(String.format("failed to load target class \"%s\" for target \"%s\".\nPlease check the class is valid\n",
                     targetClassName, target));

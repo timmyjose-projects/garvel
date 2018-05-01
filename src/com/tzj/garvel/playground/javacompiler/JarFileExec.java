@@ -1,43 +1,29 @@
 package com.tzj.garvel.playground.javacompiler;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.JarURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.jar.Attributes;
+import java.util.Scanner;
+import java.util.jar.JarFile;
 
 public class JarFileExec {
     private static final String JAR_FILE = "/Users/z0ltan/Code/Projects/Playground/testbed/foo/target/foo-1.2.3.jar";
 
-    public static void main(String[] args) {
-        final File jarFile = new File(JAR_FILE);
-        URL jarUrl = null;
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(System.in);
+        final String className = in.nextLine().trim();
 
-        try {
-            jarUrl = jarFile.toURI().toURL();
-        } catch (MalformedURLException e) {
-            System.err.println("could not create url for JAR file");
-        }
-
-        final JarClassLoader loader = new JarClassLoader(jarUrl);
-        String mainClassName = null;
-
-        try {
-            mainClassName = loader.getMainClassName();
-        } catch (IOException e) {
-            System.err.println("unable to get main class name");
-        }
+        final URL[] urls = new URL[]{new URL("jar:file:" + JAR_FILE + "!/")};
+        final URLClassLoader loader = new URLClassLoader(urls);
 
         Class<?> clazz = null;
         try {
-            clazz = loader.getMainClass(mainClassName);
+            clazz = loader.loadClass(className);
         } catch (ClassNotFoundException e) {
-            System.err.println("unable to load main class");
+            e.printStackTrace();
         }
 
         runMain(clazz, args);
@@ -58,28 +44,9 @@ public class JarFileExec {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            System.err.println(String.format("Target raised an exception: %s", e.getTargetException().getLocalizedMessage()));
+        } catch (Exception e) {
+            //
         }
-    }
-}
-
-class JarClassLoader extends URLClassLoader {
-    private URL url;
-
-    public JarClassLoader(final URL url) {
-        super(new URL[]{url});
-        this.url = url;
-    }
-
-    public String getMainClassName() throws IOException {
-        final URL u = new URL("jar", "", url + "!/");
-        final JarURLConnection conn = (JarURLConnection) u.openConnection();
-        final Attributes attr = conn.getMainAttributes();
-
-        return attr != null ? attr.getValue(Attributes.Name.MAIN_CLASS) : null;
-    }
-
-    public Class<?> getMainClass(final String mainClassName) throws ClassNotFoundException {
-        return loadClass(mainClassName);
     }
 }
