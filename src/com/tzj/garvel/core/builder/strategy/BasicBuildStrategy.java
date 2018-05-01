@@ -76,6 +76,8 @@ public class BasicBuildStrategy implements BuildStrategy {
             throw new BuildException("Build failed due to compilation errors");
         }
 
+        UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "\tCompiling project sources...DONE");
+
         // generate the project artifacts
         final JarFileCreatorOptions jarFileOptions = getJarFileOptions(classPathString);
         final Path jarFilePath = jarCreator.createJarFile(buildDirPath, jarFileOptions);
@@ -86,6 +88,8 @@ public class BasicBuildStrategy implements BuildStrategy {
         } catch (FilesystemFrameworkException e) {
             throw new BuildException(e.getErrorString());
         }
+
+        UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "\tGenerating project JAR...DONE");
 
         return jarFilePath;
     }
@@ -224,7 +228,12 @@ public class BasicBuildStrategy implements BuildStrategy {
         try {
             Files.walkFileTree(srcDirPath, opts, Integer.MAX_VALUE, new AllSourceFilesFileVisitor(sourceFiles));
         } catch (IOException e) {
-            throw new BuildException(String.format("Build failed while collecting project source files: %s\n", e.getLocalizedMessage()));
+            throw new BuildException(String.format("Build failed while collecting project source files: %s", e.getLocalizedMessage()));
+        }
+
+        // validate here - throw an error if there are no source files
+        if (sourceFiles.isEmpty()) {
+            throw new BuildException("failed: no source files present in the project");
         }
 
         return sourceFiles;

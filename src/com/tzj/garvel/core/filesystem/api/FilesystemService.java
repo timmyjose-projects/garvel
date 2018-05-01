@@ -3,8 +3,8 @@ package com.tzj.garvel.core.filesystem.api;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 
 import java.io.BufferedReader;
+import java.nio.file.FileVisitor;
 import java.nio.file.Path;
-import java.util.List;
 
 public interface FilesystemService {
     OsType getOs();
@@ -44,4 +44,6 @@ public interface FilesystemService {
     <T> T loadSerializedObject(String filename, Class<T> clazz) throws FilesystemFrameworkException;
 
     void storeSerializedObject(Object object, String filename) throws FilesystemFrameworkException;
+
+    Path makeDirectoryHierarchyWithVisitor(final Path rootPath, final String targetDir, FileVisitor<Path> fileVisitor) throws FilesystemFrameworkException;
 }

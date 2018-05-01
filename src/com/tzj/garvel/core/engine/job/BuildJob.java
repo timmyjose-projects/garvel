@@ -13,10 +13,12 @@ import com.tzj.garvel.core.dep.api.exception.DependencyManagerException;
 import com.tzj.garvel.core.dep.api.resolver.DependencyResolverContext;
 import com.tzj.garvel.core.dep.resolver.SimpleDependencyResolverStrategy;
 import com.tzj.garvel.core.engine.exception.JobException;
+import com.tzj.garvel.core.engine.job.visitors.BuildSkeletonCreatorFileVisitor;
 import com.tzj.garvel.core.filesystem.exception.FilesystemFrameworkException;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class BuildJob implements Job<BuildCommandResult> {
@@ -90,11 +92,14 @@ public class BuildJob implements Job<BuildCommandResult> {
             throw new JobException(String.format("Project Build failed: %s\n", e.getErrorString()));
         }
 
+        UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Building project artifacts.... DONE");
+
+
         result.setJarFile(jarFilePath);
     }
 
     /**
-     * Step 3 - Imvoke the Dependency Manager to analyse the dependencies, if any.
+     * Step 3 - Invoke the Dependency Manager to analyse the dependencies, if any.
      */
     private List<String> analyseDependencies() throws JobException {
         List<String> dependenciesClassPath = null;
@@ -105,6 +110,7 @@ public class BuildJob implements Job<BuildCommandResult> {
             throw new JobException(String.format("Dependency Analysis failed: %s\n", e.getErrorString()));
         }
 
+        UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Analysing Dependencies...DONE");
         return dependenciesClassPath;
     }
 
@@ -119,11 +125,13 @@ public class BuildJob implements Job<BuildCommandResult> {
         } catch (CacheManagerException e) {
             throw new JobException(String.format("failed to populate Core Caches: %s\n", e.getErrorString()));
         }
+
+        UtilServiceImpl.INSTANCE.displayFormattedToConsole(true,"Populating Core Caches...DONE");
     }
 
     /**
      * Step 1 - create the `target`, `target/build`, and `target/deps` directories, if they are not
-     * present (due to a previously invoked earlier `clean` ccommand).
+     * present (due to a previously invoked earlier `clean` command).
      *
      * @param result
      * @throws JobException
@@ -155,6 +163,8 @@ public class BuildJob implements Job<BuildCommandResult> {
 
         result.setTargetDir(targetDirPath);
         result.setDepsDir(depsDirPath);
+
+        UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Creating target directory hierarchy.... DONE");
     }
 
     /**
@@ -173,6 +183,14 @@ public class BuildJob implements Job<BuildCommandResult> {
         }
     }
 
+    /**
+     * Create the `deps` directory inside the `target` directory. This will contain the
+     * Dependency Graph for the project.
+     *
+     * @param targetDirPath
+     * @return
+     * @throws FilesystemFrameworkException
+     */
     private Path createDepsDir(final Path targetDirPath) throws FilesystemFrameworkException {
         final String depsDir = targetDirPath.toFile().getAbsolutePath() + File.separator + "deps";
 
@@ -185,15 +203,19 @@ public class BuildJob implements Job<BuildCommandResult> {
     }
 
     /**
-     * In additiont to building the `build` directory, the entire directory structure of `src`
-     * must be created in the `build` directory. This will help during project artifact creation
-     * to include non-source files in the final JAR file. @TODO.
+     * In addition to building the `build` directory, the entire directory structure of `src`
+     * must be created in the `build` directory. Also, all non-source files will be copied over to
+     * their correct directories inside the `build` directory, in preparation for project artifact
+     * generation.
+     * <p>
+     * This will help during project artifact creation to include non-source files in the final JAR file.
      *
      * @param targetDirPath
      * @return
      * @throws FilesystemFrameworkException
      */
     private Path createBuildDir(final Path targetDirPath) throws FilesystemFrameworkException {
+        final Path projectSrcPath = Paths.get(GarvelCoreConstants.GARVEL_PROJECT_SOURCE_ROOT);
         final String buildDir = targetDirPath.toFile().getAbsolutePath() + File.separator + "build";
 
         final Path checkBuild = CoreModuleLoader.INSTANCE.getFileSystemFramework().checkDirectoryExistsGetPath(buildDir);
@@ -201,9 +223,21 @@ public class BuildJob implements Job<BuildCommandResult> {
             return checkBuild;
         }
 
-        return CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(buildDir);
+        // create the entire project skeleton under $PROJECT_ROOT/src into the build
+        // directory, and copy over the non-source files into their respective
+        // directories.
+        final Path buildDirPath = CoreModuleLoader.INSTANCE.getFileSystemFramework()
+                .makeDirectoryHierarchyWithVisitor(projectSrcPath, buildDir, new BuildSkeletonCreatorFileVisitor(projectSrcPath, buildDir));
+
+        return buildDirPath;
     }
 
+    /**
+     * Create the `target` directory inside the project root.
+     *
+     * @return
+     * @throws FilesystemFrameworkException
+     */
     private Path createTargetDir() throws FilesystemFrameworkException {
         final String targetDir = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + "target";
 

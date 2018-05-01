@@ -300,5 +300,8 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
    * Include another command, `garvel show <config-name>` to show the loaded values of configuration keys. This would be 
      useful for something like `garvel show targets` to list all targets for the project. (L2)  
    
-    
+   * Instead of copying the template file (Garvel.gl) into the new project root, customise the `name` field with the newly
+     created project's name and create the configuration file. (L2)
+     
+   * Add checksum checking for downloaded artifacts. (L0).   
     

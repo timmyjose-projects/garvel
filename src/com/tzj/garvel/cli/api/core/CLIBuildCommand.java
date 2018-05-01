@@ -27,7 +27,7 @@ public class CLIBuildCommand extends CLICommand {
             }
 
             checkSuccess(result);
-            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Project built successfully");
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "\nProject built successfully");
         } catch (CommandException e) {
             CLIErrorHandler.errorAndExit("Build failed: %s", e.getErrorString());
         }

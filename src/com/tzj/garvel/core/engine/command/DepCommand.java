@@ -51,7 +51,7 @@ public class DepCommand extends Command {
         } catch (ExecutionException e) {
             if (e.getCause() != null && e.getCause() instanceof JobException) {
                 final JobException je = (JobException) e.getCause();
-                throw new CommandException(je.getErrorSting());
+                throw new CommandException(je.getErrorString());
             }
         }
 

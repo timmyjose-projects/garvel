@@ -33,9 +33,10 @@ import com.tzj.garvel.core.parser.api.visitor.semver.SemverKey;
 import java.util.*;
 
 /**
- * The basic resolver for dependencies. This resolver does not handle cyclic
- * dependencies. In addition, for version conflicts, it will return the first
- * suitable entry that it finds, leaving any potential errors to the user to handle.
+ * The basic resolver for dependencies.
+ * This resolver does not handle cyclic dependencies. In addition,
+ * for version conflicts, it will return the first suitable entry that it finds,
+ * leaving any potential errors to the user to handle.
  */
 public class SimpleDependencyResolverStrategy implements DependencyResolverStrategy {
     /**
@@ -82,7 +83,6 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
      * @return
      */
     private List<Artifact> updateAndAnalyse() throws DependencyResolverException {
-        //@TODO Implement the above.For now, it simply redirects to createAndAnalyse
         return createAndAnalyse();
     }
 

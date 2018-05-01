@@ -208,7 +208,8 @@ public enum FilesystemServiceImpl implements FilesystemService {
 
                 case MACOS:
                 case LINUX:
-                    rootDirectory = Files.createDirectories(directoryPath, PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString(GarvelCoreConstants.POSIX_PERMISSIONS)));
+                    rootDirectory = Files.createDirectories(directoryPath,
+                            PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString(GarvelCoreConstants.POSIX_PERMISSIONS)));
                     break;
                 case WINDOWS:
                     rootDirectory = Files.createDirectories(directoryPath);
@@ -441,5 +442,28 @@ public enum FilesystemServiceImpl implements FilesystemService {
         } catch (IOException e) {
             throw new FilesystemFrameworkException(String.format("failed to save binary object in %s\n", filename));
         }
+    }
+
+    /**
+     * Use the given Visitor to dictate the logic behind the creation of the directory hierarchy
+     * rooted at rootPath into the directory rooted at targetDir.
+     *
+     * @param rootPath
+     * @param targetDir
+     * @param fileVisitor
+     * @return
+     */
+    @Override
+    public Path makeDirectoryHierarchyWithVisitor(final Path rootPath, final String targetDir, final FileVisitor<Path> fileVisitor)
+            throws FilesystemFrameworkException {
+        final Path targetDirPath = Paths.get(targetDir);
+
+        try {
+            Files.walkFileTree(rootPath, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE, fileVisitor);
+        } catch (IOException e) {
+            throw new FilesystemFrameworkException(String.format("failed to create directory hierarchy: %s\n", e.getLocalizedMessage()));
+        }
+
+        return targetDirPath;
     }
 }

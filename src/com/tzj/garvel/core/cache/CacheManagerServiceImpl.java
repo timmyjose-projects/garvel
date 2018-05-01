@@ -1,5 +1,6 @@
 package com.tzj.garvel.core.cache;
 
+import com.tzj.garvel.common.util.UtilServiceImpl;
 import com.tzj.garvel.core.CoreModuleLoader;
 import com.tzj.garvel.core.GarvelCoreConstants;
 import com.tzj.garvel.core.cache.api.*;

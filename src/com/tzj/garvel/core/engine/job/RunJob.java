@@ -76,7 +76,7 @@ public class RunJob implements Job<RunCommandResult> {
                         .getCacheManager().getEntry(CacheKey.MAIN_CLASS);
                 return mainClassEntry.getMainClassPath();
             } else {
-                throw new JobException("failed to run the project.\nPlease specify the `main-class` " +
+                throw new JobException("Please specify the `main-class` " +
                         "attribute if you don't specify a bin target\n");
             }
         }
@@ -111,8 +111,7 @@ public class RunJob implements Job<RunCommandResult> {
         try {
             mainMethod.invoke(null, (Object) args);
         } catch (IllegalAccessException e) {
-            throw new JobException(String.format("failed to run target \"%s\": %s\n",
-                    target, e.getLocalizedMessage()));
+            throw new JobException(String.format("%s\n", e.getLocalizedMessage()));
         } catch (InvocationTargetException e) {
             // this simply indicates that the target caused an exception. Catch it, log it,
             // and forget about it.

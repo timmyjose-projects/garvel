@@ -47,7 +47,7 @@ public class TestCommand extends Command {
         } catch (ExecutionException e) {
             if (e.getCause() != null) {
                 final JobException je = (JobException) e.getCause();
-                throw new CommandException(je.getErrorSting());
+                throw new CommandException(je.getErrorString());
             }
         }
 
