@@ -355,7 +355,7 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
      * @throws DependencyResolverException
      */
     private List<Artifact> doTopologicalAnalysis(final DependencyGraph dependencyGraph, final List<Artifact> artifactsOrdering) throws DependencyResolverException {
-        GraphCallback<List<Integer>> cb = new GraphCollectArtifactsCallback(dependencyGraph.getArtifactMapping(), artifactsOrdering);
+        final GraphCallback<List<Integer>> cb = new GraphCollectArtifactsCallback(dependencyGraph.getArtifactMapping(), artifactsOrdering);
 
         try {
             Algorithms.topologicalSort(dependencyGraph.getG(), cb);

@@ -25,7 +25,7 @@ import java.nio.file.Paths;
 
 /**
  * Retrieve the POM file for a particular dependency, and explore its
- * own dependencies.
+ * own transitive dependencies.
  */
 public class DependencyPOMParser extends DependencyParser {
     private String pomUrl;

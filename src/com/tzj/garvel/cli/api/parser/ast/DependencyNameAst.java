@@ -9,6 +9,14 @@ public class DependencyNameAst {
         this.artifactId = artifactId;
     }
 
+    @Override
+    public String toString() {
+        return "DependencyNameAst{" +
+                "groupId='" + groupId + '\'' +
+                ", artifactId='" + artifactId + '\'' +
+                '}';
+    }
+
     public String getGroupId() {
         return groupId;
     }

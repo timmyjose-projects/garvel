@@ -6,6 +6,8 @@ import com.tzj.garvel.core.net.api.NetworkConnector;
 import com.tzj.garvel.core.net.api.NetworkConstants;
 import com.tzj.garvel.core.net.api.exception.NetworkServiceException;
 
+import java.io.File;
+
 /**
  * The common functionality associated with a repository goes
  * here.
@@ -48,6 +50,11 @@ public abstract class RepositoryLoader {
             return kind.getUrl() + NetworkConstants.FORWARD_SLASH + modGroupId + NetworkConstants.FORWARD_SLASH + artifactId;
         }
 
+        if (nextLoader == null) {
+            throw new RepositoryLoaderException(String.format("unable to construct base url for artifact \"%s%s%s\"\n",
+                    groupId, File.separator, artifactId));
+        }
+
         return nextLoader.constructBaseUrl(groupId, artifactId);
     }
 
@@ -66,6 +73,12 @@ public abstract class RepositoryLoader {
             return kind.getUrl() + NetworkConstants.FORWARD_SLASH + modGroupId + NetworkConstants.FORWARD_SLASH +
                     artifactId + NetworkConstants.FORWARD_SLASH + RepositoryConstants.METADATA;
         }
+
+        if (nextLoader == null) {
+            throw new RepositoryLoaderException(String.format("unable to construct metadata url for artifact \"%s%s%s\"\n",
+                    groupId, File.separator, artifactId));
+        }
+
 
         return nextLoader.constructMetadataUrl(groupId, artifactId);
     }
@@ -88,6 +101,11 @@ public abstract class RepositoryLoader {
                     version + NetworkConstants.FORWARD_SLASH +
                     artifactId + NetworkConstants.DASH + version +
                     RepositoryConstants.POM);
+        }
+
+        if (nextLoader == null) {
+            throw new RepositoryLoaderException(String.format("unable to construct base url for artifact \"%s%s%s:%s\"\n",
+                    groupId, File.separator, artifactId, version));
         }
 
         return nextLoader.constructPOMUrl(groupId, artifactId, version);

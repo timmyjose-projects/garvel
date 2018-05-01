@@ -99,7 +99,7 @@ public class HelpPages {
             "supplied, then lists all the artifacts the specific version of the jar depends upon.\n" +
             "\n" +
             "USAGE:\n" +
-            "    garvel dep [-s | --show-dependencies ] ARTIFACT\n" +
+            "    garvel dep [(-s | --show-dependencies) <version> ] ARTIFACT\n" +
             "\n" +
             "ARGS:\n" +
             "    [-s | --show-dependencies <version> ] display the dependencies for this jar version.\n" +

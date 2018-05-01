@@ -54,12 +54,12 @@ public class DependencyMetadataParser extends DependencyParser {
         try {
             CoreModuleLoader.INSTANCE.getNetworkFramework().downloadTextFile(metadataUrl, FilesystemConstants.TMPDIR);
         } catch (NetworkServiceException e) {
-            throw new DependencyManagerException(String.format("unable to download the metadata file (%s) for validation\n", metadataUrl));
+            throw new DependencyManagerException(String.format("unable to download the metadata file (%s) for validation.\n", metadataUrl));
         }
     }
 
     /**
-     * Validate the MD5 and SHA1 hashses against the downloaded file's generated hashes.
+     * Validate the MD5 and SHA1 hashes against the downloaded file's generated hashes.
      */
     private Path validate() throws DependencyManagerException {
         final Path metadataFilePath = Paths.get(FilesystemConstants.TMPDIR + File.separator + RepositoryConstants.METADATA);
@@ -113,9 +113,7 @@ public class DependencyMetadataParser extends DependencyParser {
 
             final Node versionTag = versioningTags.item(0);
             populateVersionInfo(versionTag);
-        } catch (ParserConfigurationException e) {
-            throw new DependencyManagerException(String.format("Failed to parse the metadata file at %s\n", metadataUrl));
-        } catch (SAXException | IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new DependencyManagerException(String.format("Failed to parse the metadata file at %s\n", metadataUrl));
         }
     }

@@ -1,9 +1,6 @@
 package com.tzj.garvel.core.dep.api;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import java.io.*;
 import java.util.Objects;
 
 /**
@@ -35,7 +32,7 @@ public class Artifact implements Externalizable {
 
     @Override
     public String toString() {
-        return groupId + "/" + artifactId + ":" + version;
+        return groupId + File.separator + artifactId + ":" + version;
     }
 
     @Override

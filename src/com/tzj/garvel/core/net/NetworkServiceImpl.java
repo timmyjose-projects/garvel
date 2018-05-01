@@ -144,7 +144,7 @@ public enum NetworkServiceImpl implements NetworkService {
 
             final int code = conn.getResponseCode();
             if (code != HttpURLConnection.HTTP_OK) {
-                throw new NetworkServiceException(String.format("Failed to download text file %s: Server returned %s\n", code));
+                throw new NetworkServiceException(String.format("Failed to download text file %s: Server returned %s\n", urlString, code));
             }
 
             conn.setReadTimeout(0);

@@ -20,7 +20,7 @@ licence-file =  "N/A"
 # the external dependencies for this project
 [dependencies]
 
-junit/junit = "4.12"
+log4j/log4j = "1.2.17"
 
 [lib]
 

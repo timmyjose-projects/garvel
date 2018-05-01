@@ -260,16 +260,6 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
     This can have many more varieties, but I am thinking, at the very least, some intelligent incremental compilation
     schemes to speed up compilation.
     
-    
-    How running a target works?
-    
-    Given a target in the Garvel.gl file, say `foo = "com.foo.bar.Main", here are the steps that will be followed to 
-    execute this target:
-    
-       1).     
-            
-    
-    
     Post 1.0, all issues and change requests will be logged on, and monitored through, Github.
     
     
@@ -277,6 +267,11 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
    ### Future Feature List (post 1.0)
    
    Priority legend: L0 (must have), L1(have, if possible), L2(nice to have), L3(low priority).
+   
+   * Increase more fault-tolerant and robust POM file handling (such as resolving variables such as ${project.version}) -
+   maybe develop a full module for this, would also help in creating a migration tool for Maven projects.
+   
+   * Https Support. (L0)
    
    * Support `javadoc` and Cargo-like documentation using a common interface. (L0)
    
@@ -303,5 +298,9 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
    * Instead of copying the template file (Garvel.gl) into the new project root, customise the `name` field with the newly
      created project's name and create the configuration file. (L2)
      
-   * Add checksum checking for downloaded artifacts. (L0).   
+   * Add checksum checking for downloaded artifacts. (L0)
+   
+   * Add query support for local dependency graph and local cache for `dep` command. (L1)
+   
+   
     

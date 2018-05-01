@@ -15,12 +15,16 @@ public class GraphDisplayCallback implements GraphCallback<Integer> {
 
     public GraphDisplayCallback(final Map<Integer, Artifact> mapping) {
         this.mapping = mapping;
+        this.buffer = new StringBuffer();
+        this.indent = "";
+    }
+
+    public StringBuffer getBuffer() {
+        return buffer;
     }
 
     @Override
     public void pre() {
-        this.buffer = new StringBuffer();
-        this.indent = "";
     }
 
     @Override
@@ -33,6 +37,9 @@ public class GraphDisplayCallback implements GraphCallback<Integer> {
 
     @Override
     public void post() {
+        if (indent.isEmpty()) {
+            return;
+        }
         indent = indent.substring(0, indent.length() - 2);
     }
 }
