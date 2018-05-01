@@ -110,7 +110,7 @@ public abstract class RepositoryLoader {
                     artifactId + NetworkConstants.FORWARD_SLASH +
                     version + NetworkConstants.FORWARD_SLASH +
                     artifactId + NetworkConstants.DASH + version +
-                    RepositoryConstants.POM);
+                    RepositoryConstants.JAR);
         }
 
         return nextLoader.constructJARFileUrl(groupId, artifactId, version);

@@ -55,8 +55,7 @@ fat-jar = "false"
 # optional for project.
 # target_name : "path" format
 #
-# The target class must have a default, zero-argument constructor, and
-# the `main` method.
+# The target class must a valid `main` method.
 #
 
 [bin]

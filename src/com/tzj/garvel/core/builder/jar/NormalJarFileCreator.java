@@ -4,6 +4,7 @@ import com.tzj.garvel.core.builder.api.jar.JarFileCreator;
 import com.tzj.garvel.core.builder.api.jar.JarFileCreatorOptions;
 import com.tzj.garvel.core.builder.common.JarFileCreatorFileVisitor;
 import com.tzj.garvel.core.builder.api.exception.JarFileCreationException;
+import org.w3c.dom.Attr;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -56,12 +57,22 @@ public class NormalJarFileCreator implements JarFileCreator {
         return Paths.get(options.getJarFileName());
     }
 
+    /**
+     * Fill in the manifest file with all the specified and required attributes.
+     *
+     * @param options
+     * @return
+     */
     private Manifest getManifest(final JarFileCreatorOptions options) {
         Manifest mf = new Manifest();
+
         mf.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, options.getManifestVersion());
+
         if (options.getMainClass() != null) {
             mf.getMainAttributes().put(Attributes.Name.MAIN_CLASS, options.getMainClass());
         }
+
+        mf.getMainAttributes().put(Attributes.Name.CLASS_PATH, options.getClassPathString());
 
         return mf;
     }

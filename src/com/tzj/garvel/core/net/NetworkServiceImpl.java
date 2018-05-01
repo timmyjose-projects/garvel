@@ -64,6 +64,13 @@ public enum NetworkServiceImpl implements NetworkService {
             final URL url = new URL(urlString);
             final HttpURLConnection conn = connector.getConnection(url);
 
+            final int code = conn.getResponseCode();
+            if (code != HttpURLConnection.HTTP_OK) {
+                throw new NetworkServiceException(String.format("Failed to download text file as string %s: Server returned %s\n", code));
+            }
+
+            conn.setReadTimeout(0);
+
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                  BufferedWriter writer = new BufferedWriter(outputFile)) {
 
@@ -95,6 +102,12 @@ public enum NetworkServiceImpl implements NetworkService {
 
             final URL url = new URL(urlString);
             final HttpURLConnection conn = connector.getConnection(url);
+
+            final int code = conn.getResponseCode();
+            if (code != HttpURLConnection.HTTP_OK) {
+                throw new NetworkServiceException(String.format("Failed to download binary file %s: Server returned %s\n", code));
+            }
+            conn.setReadTimeout(0);
 
             try (BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
                  BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(targetFile))) {
@@ -128,6 +141,13 @@ public enum NetworkServiceImpl implements NetworkService {
 
             final URL url = new URL(urlString);
             final HttpURLConnection conn = connector.getConnection(url);
+
+            final int code = conn.getResponseCode();
+            if (code != HttpURLConnection.HTTP_OK) {
+                throw new NetworkServiceException(String.format("Failed to download text file %s: Server returned %s\n", code));
+            }
+
+            conn.setReadTimeout(0);
 
             try (BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
                  BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {

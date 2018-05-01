@@ -33,6 +33,7 @@ import java.util.*;
  */
 public class BasicBuildStrategy implements BuildStrategy {
     private static final String DASH = "-";
+    private static final String SPACE = " ";
     private static final String JAR = ".jar";
 
     private Compiler compiler;
@@ -76,7 +77,7 @@ public class BasicBuildStrategy implements BuildStrategy {
         }
 
         // generate the project artifacts
-        final JarFileCreatorOptions jarFileOptions = getJarFileOptions();
+        final JarFileCreatorOptions jarFileOptions = getJarFileOptions(classPathString);
         final Path jarFilePath = jarCreator.createJarFile(buildDirPath, jarFileOptions);
 
         // delete the build directory
@@ -92,21 +93,47 @@ public class BasicBuildStrategy implements BuildStrategy {
     /**
      * Return the Jar file creation options for the project.
      *
+     * @param classPathString
      * @return
      */
-    private JarFileCreatorOptions getJarFileOptions() {
+    private JarFileCreatorOptions getJarFileOptions(final String classPathString) {
         final CacheManagerService cache = CoreModuleLoader.INSTANCE.getCacheManager();
 
         final String jarName = getJarName(cache);
         final String manifestVersion = getManifestVersion(cache);
         final String mainClass = getMainClass(cache);
 
-        JarFileCreatorOptions options = null;
-        if (mainClass != null) {
-            options = new JarFileCreatorOptions(jarName, manifestVersion, mainClass);
-        } else {
-            options = new JarFileCreatorOptions(jarName, manifestVersion);
+        final List<String> classPathStrings = getClassPathStrings(classPathString);
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 1; i < classPathStrings.size(); i++) {
+            final String path = classPathStrings.get(i);
+
+            if (path.contains(File.pathSeparator)) {
+                String[] paths = path.split(File.pathSeparator);
+
+                if (paths != null) {
+                    for (int j = 0; j < paths.length; j++) {
+                        sb.append(paths[i]);
+                        sb.append(SPACE);
+                    }
+                }
+            } else {
+                sb.append(path);
+                sb.append(SPACE);
+            }
         }
+
+        JarFileCreatorOptions options = new JarFileCreatorOptions();
+
+        options.setJarFileName(jarName);
+        options.setManifestVersion(manifestVersion);
+
+        if (mainClass != null) {
+            options.setMainClass(mainClass);
+        }
+
+        options.setClassPathString(sb.toString());
 
         return options;
     }
@@ -226,24 +253,54 @@ public class BasicBuildStrategy implements BuildStrategy {
         compilationOptions.add(String.format(buildDirPath.toFile().getAbsolutePath()));
 
         // fill in the classpath entries
-        // at the very end
-        compilationOptions.add(CompilationOption.CLASSPATH.toString());
         // always add the current directory
-        compilationOptions.add(".");
+        compilationOptions.add(CompilationOption.CLASSPATH.toString());
+        final List<String> classPathStrings = getClassPathStrings(classPathString);
 
+        StringBuffer sb = new StringBuffer();
+        sb.append(classPathStrings.get(0));
+
+        for (int i = 1; i < classPathStrings.size(); i++) {
+            sb.append(File.pathSeparator);
+            sb.append(classPathStrings.get(i));
+        }
+
+        compilationOptions.add(sb.toString());
+
+        return compilationOptions;
+    }
+
+    /**
+     * Since the classpath is used both for compilation as well as JAR file creation.
+     * have this common method return the final list of all the classpath strings for
+     * this project.
+     *
+     * @param classPathString
+     * @return
+     */
+    private List<String> getClassPathStrings(final String classPathString) {
+        List<String> finalClassPathStrings = new ArrayList<>();
+
+        // add the current directory first
+        finalClassPathStrings.add(".");
+
+        // then add the generated classpath strings
+        finalClassPathStrings.add(classPathString);
+
+        // then finally query the Core cache for any user-specified
+        // class paths
         final ClassPathEntry classpathEntry = (ClassPathEntry) CoreModuleLoader.INSTANCE.getCacheManager()
                 .getEntry(CacheKey.CLASSPATH);
 
         if (classpathEntry.getPaths() != null) {
             final List<String> paths = classpathEntry.getPaths();
             for (String path : paths) {
-                if (!compilationOptions.contains(path)) {
-                    compilationOptions.add(File.pathSeparator);
-                    compilationOptions.add(path);
+                if (!finalClassPathStrings.contains(path)) {
+                    finalClassPathStrings.add(path);
                 }
             }
         }
 
-        return compilationOptions;
+        return finalClassPathStrings;
     }
 }
