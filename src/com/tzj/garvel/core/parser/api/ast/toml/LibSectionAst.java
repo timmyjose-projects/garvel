@@ -11,6 +11,10 @@ public class LibSectionAst implements TOMLAst {
         this.fatJar = fatJar;
     }
 
+    public LibSectionAst(final MainClassAst mainClass) {
+        this.mainClass = mainClass;
+    }
+
     public LibSectionAst() {
         // optional
     }

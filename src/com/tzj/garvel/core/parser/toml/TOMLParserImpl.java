@@ -33,19 +33,6 @@ public class TOMLParserImpl implements TOMLParser {
         }
     }
 
-    // test
-    public static void main(String[] args) {
-        final String filename = "/Users/z0ltan/Code/Projects/Playground/temp/foo/Garvel.gl";
-
-        try {
-            TOMLParser parser = new TOMLParserImpl(filename);
-            final ConfigAst config = parser.parse();
-            System.out.println(config);
-        } catch (TOMLParserException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Config ::= Project-Section Dependencies-Section [ Bin-Section ]
      *
@@ -53,7 +40,24 @@ public class TOMLParserImpl implements TOMLParser {
      */
     private ConfigAst parseConfig() throws TOMLParserException {
         final ProjectSectionAst project = parseProjectSection();
-        final DependenciesSectionAst dependencies = parseDependenciesSection();
+
+        DependenciesSectionAst dependencies = new DependenciesSectionAst();
+        if (currentToken.kind() != EOT) {
+            dependencies = parseDependenciesSection();
+
+            // backtrack if the `dependencies` section was missing
+            if (dependencies == null) {
+                scanner.backtrack();
+                scanner.backtrack();
+                try {
+                    currentToken = scanner.scan();
+                } catch (TOMLScannerException e) {
+                    throw new TOMLParserException(String.format("Error while backtracking at line: %d, col: %d", currentToken.line(), currentToken.column()));
+                }
+
+                dependencies = new DependenciesSectionAst();
+            }
+        }
 
         ConfigAst config = new ConfigAst(project, dependencies);
 
@@ -123,6 +127,8 @@ public class TOMLParserImpl implements TOMLParser {
         if (currentToken.kind() != EOT && currentToken.kind() != LEFT_BRACKET) {
             final boolean fatJar = parseFatJar();
             libMetadata = new LibSectionAst(mainClass, fatJar);
+        } else {
+            libMetadata = new LibSectionAst(mainClass);
         }
 
         return libMetadata;
@@ -171,7 +177,8 @@ public class TOMLParserImpl implements TOMLParser {
         try {
             accept(TOMLTokenType.MAIN_CLASS);
         } catch (TOMLParserException e) {
-            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected to find \"main-class\" key, found \"%s\"",
+            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected to find \"main-class\" key, found \"%s\".\n" +
+                            "Note that `main-class` is mandatory if the `lib` section is specified\n",
                     currentToken.line(), currentToken.column(), currentToken.spelling()));
         }
 
@@ -294,8 +301,7 @@ public class TOMLParserImpl implements TOMLParser {
         try {
             accept(TOMLTokenType.DEPENDENCIES);
         } catch (TOMLParserException e) {
-            throw new TOMLParserException(String.format("Invalid configuration file: line: %d, col: %d, expected section \"dependencies\", found \"%s\"",
-                    currentToken.line(), currentToken.column(), currentToken.spelling()));
+            return null;
         }
 
         try {
@@ -412,7 +418,7 @@ public class TOMLParserImpl implements TOMLParser {
         final ProjectSectionAst section = new ProjectSectionAst(name, version);
 
         // optionals
-        if (currentToken.kind() != LEFT_BRACKET) {
+        if (currentToken.kind() != LEFT_BRACKET && currentToken.kind() != EOT) {
             final Set<ProjectMetadataAst> optionals = parseProjectMetadata(section);
             section.setOptionals(optionals);
         }
@@ -436,7 +442,7 @@ public class TOMLParserImpl implements TOMLParser {
     private Set<ProjectMetadataAst> parseProjectMetadata(final ProjectSectionAst section) throws TOMLParserException {
         Set<ProjectMetadataAst> optionals = new HashSet<>();
 
-        while (currentToken.kind() != LEFT_BRACKET) {
+        while (currentToken.kind() != LEFT_BRACKET && currentToken.kind() != EOT) {
             switch (currentToken.kind()) {
                 case CLASSPATH: {
                     final ClassPathAst classpath = parseClassPath();

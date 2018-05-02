@@ -52,19 +52,24 @@ public class BuildJob implements Job<BuildCommandResult> {
     public BuildCommandResult call() throws JobException {
         BuildCommandResult result = new BuildCommandResult();
 
-        // 1. create target directory hierarchy
-        createTargetHierarchy(result);
+        try {
+            // 1. create target directory hierarchy
+            createTargetHierarchy(result);
 
-        // 2. Parse the project config file and populate the Core Cache.
-        populateCoreCache();
+            // 2. Parse the project config file and populate the Core Cache.
+            populateCoreCache();
 
-        // 3. Analyse the dependencies.
-        List<String> artifactPaths = analyseDependencies();
+            // 3. Analyse the dependencies.
+            List<String> artifactPaths = analyseDependencies();
 
-        // 4. Compile the project.
-        // 5. generate the project artifacts
-        buildProject(artifactPaths, result);
-
+            // 4. Compile the project.
+            // 5. generate the project artifacts
+            buildProject(artifactPaths, result);
+        } catch (JobException e) {
+            cleanup(Paths.get(GarvelCoreConstants.GARVEL_PROJECT_TARGET_DIR));
+            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Cleaning up after failed build...DONE");
+            throw e;
+        }
         return result;
     }
 
@@ -126,7 +131,7 @@ public class BuildJob implements Job<BuildCommandResult> {
             throw new JobException(String.format("failed to populate Core Caches: %s\n", e.getErrorString()));
         }
 
-        UtilServiceImpl.INSTANCE.displayFormattedToConsole(true,"Populating Core Caches...DONE");
+        UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Populating Core Caches...DONE");
     }
 
     /**
@@ -174,9 +179,11 @@ public class BuildJob implements Job<BuildCommandResult> {
      * @param paths
      */
     private void cleanup(final Path... paths) {
-        for (Path p : paths) {
+        for (Path path : paths) {
             try {
-                CoreModuleLoader.INSTANCE.getFileSystemFramework().deleteDirectory(p);
+                CoreModuleLoader.INSTANCE
+                        .getFileSystemFramework()
+                        .deleteDirectoryHierarchy(path);
             } catch (FilesystemFrameworkException e) {
                 // don't fail because of this.
             }
@@ -239,13 +246,15 @@ public class BuildJob implements Job<BuildCommandResult> {
      * @throws FilesystemFrameworkException
      */
     private Path createTargetDir() throws FilesystemFrameworkException {
-        final String targetDir = GarvelCoreConstants.GARVEL_PROJECT_ROOT + File.separator + "target";
-
-        final Path checkTarget = CoreModuleLoader.INSTANCE.getFileSystemFramework().checkDirectoryExistsGetPath(targetDir);
+        final Path checkTarget = CoreModuleLoader.INSTANCE
+                .getFileSystemFramework()
+                .checkDirectoryExistsGetPath(GarvelCoreConstants.GARVEL_PROJECT_TARGET_DIR);
         if (checkTarget != null) {
             return checkTarget;
         }
 
-        return CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(targetDir);
+        return CoreModuleLoader.INSTANCE.
+                getFileSystemFramework()
+                .makeDirectory(GarvelCoreConstants.GARVEL_PROJECT_TARGET_DIR);
     }
 }

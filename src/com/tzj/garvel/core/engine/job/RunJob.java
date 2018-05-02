@@ -85,6 +85,11 @@ public class RunJob implements Job<RunCommandResult> {
         final BinSectionEntry targetEntries = (BinSectionEntry) CoreModuleLoader.INSTANCE
                 .getCacheManager().getEntry(CacheKey.TARGETS);
 
+        if (targetEntries == null) {
+            throw new JobException(String.format("\"%s\" is not a valid run target.\nPlease specify a valid " +
+                    "run target in the Garvel.gl file's bin section.\n", target));
+        }
+
         for (final Map.Entry<String, String> entry : targetEntries.getTargets().entrySet()) {
             if (entry.getKey().equalsIgnoreCase(target)) {
                 targetClassName = entry.getValue();

@@ -17,23 +17,7 @@ categories = [ "standalone", "jar" ]
 licence = "MIT"
 licence-file =  "N/A"
 
-# the external dependencies for this project
-[dependencies]
-
-log4j/log4j = "1.2.17"
-
 [lib]
 
-main-class = "com.tzj.garvel.cli.CLI" # required if section is present
-fat-jar = "false" # default # optional
-
-
-# targets for `garvel run --bin`
-# optional, but required for `garvel run`
-# "target_name" : "path" format
-# at least one bin target required
-[bin]
-
-one = "com.tzj.garvel.playground.javacompiler.ThreadsafeCounter"
-
-
+main-class = "com.tzj.garvel.cli.CLI"
+fat-jar = "false"

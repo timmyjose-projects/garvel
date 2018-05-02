@@ -42,9 +42,19 @@ public enum ConfigManagerServiceImpl implements ConfigManagerService {
                 .getCacheManager();
 
         final NameEntry nameEntry = (NameEntry) cache.getEntry(CacheKey.NAME);
+
+        if (nameEntry == null) {
+            return null;
+        }
+
         final String projectName = nameEntry.getName();
 
         final VersionEntry versionEntry = (VersionEntry) cache.getEntry(CacheKey.VERSION);
+
+        if (versionEntry == null) {
+            return null;
+        }
+
         final String version = versionEntry.getVersion();
 
         final String baseJarFileName = projectName + DASH + version + JAR;

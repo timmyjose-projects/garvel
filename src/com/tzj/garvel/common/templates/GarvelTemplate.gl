@@ -18,7 +18,7 @@ readme = "<link to your project's readme file>"
 keywords = [ "enter", "some", "keywords", "to", "describe", "your", "project"]
 categories = [ "what", "kind of project", "this is"] # Eg: ["web-app", "spring", "demo" ]
 licence = "<standard licence type>"
-licence-file = "<link to a custom licence file, is applicable>"
+licence-file = "<link to a custom licence file, if applicable>"
 
 
 #
@@ -46,8 +46,8 @@ licence-file = "<link to a custom licence file, is applicable>"
 #
 [lib]
 
-#main-class = "com.foo.bar.Main"
-fat-jar = "false"
+main-class = "com.foo.bar.Main"
+#fat-jar = "false"
 
 
 #
