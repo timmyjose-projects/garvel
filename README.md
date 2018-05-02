@@ -90,8 +90,8 @@ As the script output mentions, a wrapper script for the project JAR file (`garve
 `~/.bash_profile` configuration file is recommended for an easier experience, and especially if you plan to build the project using the build script:
 
 ```
-    export PATH="/Users/z0ltan/Code/Projects/garvel/target/garvel.sh":$PATH
-    alias garvel="/Users/z0ltan/Code/Projects/garvel/target/garvel.sh"
+    export PATH="<Garvel project path>/garvel/target/garvel.sh":$PATH
+    alias garvel="<Garvel project path>/garvel/target/garvel.sh"
 ```
 
 The second way is to use the garvel code itself to generate the JAR file for the project. Note that this approach requires an already existing `garvel.jar` file, and as such has a dependency on
