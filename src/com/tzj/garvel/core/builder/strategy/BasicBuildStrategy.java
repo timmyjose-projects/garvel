@@ -118,7 +118,7 @@ public class BasicBuildStrategy implements BuildStrategy {
 
                 if (paths != null) {
                     for (int j = 0; j < paths.length; j++) {
-                        sb.append(paths[i]);
+                        sb.append(paths[j]);
                         sb.append(SPACE);
                     }
                 }
@@ -297,7 +297,7 @@ public class BasicBuildStrategy implements BuildStrategy {
         final ClassPathEntry classpathEntry = (ClassPathEntry) CoreModuleLoader.INSTANCE.getCacheManager()
                 .getEntry(CacheKey.CLASSPATH);
 
-        if (classpathEntry.getPaths() != null) {
+        if (classpathEntry != null && classpathEntry.getPaths() != null) {
             final List<String> paths = classpathEntry.getPaths();
             for (String path : paths) {
                 if (!finalClassPathStrings.contains(path)) {

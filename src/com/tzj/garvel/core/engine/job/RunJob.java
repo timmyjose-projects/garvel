@@ -118,15 +118,17 @@ public class RunJob implements Job<RunCommandResult> {
         } catch (IllegalAccessException e) {
             throw new JobException(String.format("%s\n", e.getLocalizedMessage()));
         } catch (InvocationTargetException e) {
-            // this simply indicates that the target caused an exception. Catch it, log it,
-            // and forget about it.
-            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Running target \"%s\" threw an exception: %s\n",
-                    target, e.getLocalizedMessage());
+            if (e.getCause() != null) {
+                e.getCause().printStackTrace();
+            } else {
+                e.printStackTrace();
+            }
         } catch (Throwable e) {
-            // any other non-invocation errors must simply be logged, and
-            // the program must continue
-            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Running target \"%s\" threw an error: %s\n",
-                    target, e.getLocalizedMessage());
+            if (e.getCause() != null) {
+                e.getCause().printStackTrace();
+            } else {
+                e.printStackTrace();
+            }
         }
     }
 

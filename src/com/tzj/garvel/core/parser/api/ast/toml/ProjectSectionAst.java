@@ -48,7 +48,9 @@ public class ProjectSectionAst implements TOMLAst {
 
         if (optionals != null) {
             for (ProjectMetadataAst option : optionals) {
-                option.accept(visitor);
+                if (option != null) {
+                    option.accept(visitor);
+                }
             }
         }
     }

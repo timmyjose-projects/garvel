@@ -34,7 +34,11 @@ public class CLIRunCommand extends CLICommand {
 
             checkSuccess(result);
 
-            UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Target \"%s\" was run successfully\n", target);
+            if (target.equalsIgnoreCase("none")) {
+                UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Project was run successfully\n");
+            } else {
+                UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "Target \"%s\" was run successfully\n", target);
+            }
         } catch (CommandException e) {
             if (target.equalsIgnoreCase("none")) {
                 CLIErrorHandler.errorAndExit("Unable to run project. Reason = %s", e.getErrorString());

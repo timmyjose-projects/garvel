@@ -1,12 +1,7 @@
-# Configuration file for a runnable project
-# The keys are fixed. Customise the values.
-# Empty keys are not allowed.
-
-# project metadata
 [project]
 
 name = "garvel"
-version = "0.1.0"
+version = "1.0.0"
 classpath = [ "." ] # apart from the dependencies
 authors = [ "zoltan.jose@gmail.com" ]
 description = "A dependency and package manager for Java"
