@@ -35,7 +35,7 @@ public class CLIDepCommand extends CLICommand {
             UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "%s\n", result.getVersions());
 
             if (result.isDependenciesInformationAvailable()) {
-                UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "The dependency tree for version %s is: %s\n",
+                UtilServiceImpl.INSTANCE.displayFormattedToConsole(true, "The dependency tree for version %s is: \n%s",
                         version, result.getDependencyGraphString());
             }
         } catch (CommandException e) {

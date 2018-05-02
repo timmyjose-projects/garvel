@@ -1,11 +1,6 @@
 package com.tzj.garvel.core.engine.job;
 
-import com.tzj.garvel.common.spi.core.CoreServiceLoader;
-import com.tzj.garvel.common.spi.core.command.CommandException;
-import com.tzj.garvel.common.spi.core.command.CommandType;
-import com.tzj.garvel.common.spi.core.command.param.DepCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.DepCommandResult;
-import com.tzj.garvel.common.util.UtilServiceImpl;
 import com.tzj.garvel.core.concurrent.api.Job;
 import com.tzj.garvel.core.dep.DependencyGraph;
 import com.tzj.garvel.core.dep.api.Artifact;
@@ -16,7 +11,6 @@ import com.tzj.garvel.core.dep.api.graph.*;
 import com.tzj.garvel.core.dep.api.parser.*;
 import com.tzj.garvel.core.dep.api.repo.RepositoryLoader;
 import com.tzj.garvel.core.dep.api.repo.RepositoryLoaderFactory;
-import com.tzj.garvel.core.dep.graph.AdjacencySet;
 import com.tzj.garvel.core.dep.graph.Algorithms;
 import com.tzj.garvel.core.dep.graph.GraphDisplayCallback;
 import com.tzj.garvel.core.dep.graph.GraphIdGenerator;
@@ -214,8 +208,13 @@ public class DepJob implements Job<DepCommandResult> {
         DependencyParser depParser = null;
         try {
             depParser = DependencyParserFactory.getParser(DependencyParserKind.POM, pomUrl);
-            depParser.parse();
+            depParser.parse(repoLoader);
         } catch (DependencyManagerException e) {
+            // @TODO remove this with fallback schemes
+            if (e.getLocalizedMessage().contains("SNAPSHOT")) {
+                return;
+            }
+
             throw new DependencyResolverException(String.format("resolver failed: %s\n", e.getErrorString()));
         }
 
@@ -251,7 +250,7 @@ public class DepJob implements Job<DepCommandResult> {
     private String getVersionsForDependency(final String artifact, final String metadataUrl) throws JobException {
         final DependencyParser parser = DependencyParserFactory.getParser(DependencyParserKind.METADATA, metadataUrl);
         try {
-            parser.parse();
+            parser.parse(null);
         } catch (DependencyManagerException e) {
             throw new JobException(String.format("%s\n\"%s\" does not appear to be a valid artifact.\n",
                     e.getErrorString(), artifact));

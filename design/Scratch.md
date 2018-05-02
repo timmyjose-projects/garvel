@@ -303,4 +303,15 @@ This will serve as a scratchpad for items that do not fit clearly in any other d
    * Add query support for local dependency graph and local cache for `dep` command. (L1)
    
    
-    
+  Dependency Management updates:
+  
+  * Suppose we have a dependency in the project we are interested in. There are two cases here - 1). We have a variable
+  for the version such as ${project.version}. Then we need to search the <properties> section for the current project, 
+  or search the parent POM's <properties> section. 2). Suppose no version is specified for a dependency. Then the parent
+  POM (if available) needs to be checked to see if it has the same dependency under `dependencyManagement`. If so, then
+  that version is to be used.
+  
+  * Handle SNAPSHOT dependencies - maybe dynamically check different repo loaders till satisfied (?). To this end, the
+  RepositoryLoader's constructPOMUrl's checkStatus method can be modified to try and locate the specific version info
+  on all the available repos. For snapshots, additional handling needs to be taken care of while creating the POM file
+  (maven-metadata.xml could help here, get the latest version(?)).

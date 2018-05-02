@@ -201,8 +201,13 @@ public class SimpleDependencyResolverStrategy implements DependencyResolverStrat
         DependencyParser depParser = null;
         try {
             depParser = DependencyParserFactory.getParser(DependencyParserKind.POM, pomUrl);
-            depParser.parse();
+            depParser.parse(repoLoader);
         } catch (DependencyManagerException e) {
+            // @TODO remove this with fallback schemes
+            if (e.getLocalizedMessage().contains("SNAPSHOT")) {
+                return;
+            }
+
             throw new DependencyResolverException(String.format("resolver failed: %s\n", e.getErrorString()));
         }
 
