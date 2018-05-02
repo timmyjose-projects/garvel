@@ -187,7 +187,7 @@ ARGS:
 
 The term "install" is a bit misleading here. The main purpose of installation vis-a-vis `garvel` is to create the
 metadata for `garvel` itself, so that it can have a cache of downloaded dependencies for faster builds. In short,
-this step will create the `garvel` project metadata structure under `$HOME` or `%USERPROFILE%.
+this step will create the `garvel` project metadata structure under `$HOME` or `%USERPROFILE%`.
 
 Let's go ahead and install `garvel` using the `garvel install` command:
 
@@ -296,19 +296,20 @@ The `Garvel.gl` file is assumed to have the following four sections:
 Note: The relative ordering of the sections is fixed. That is to say, `project` must always be the first section, followed by `dependencies`
       (if present), and then `lib` (if present), and finally `bin` (if present). To make it clearer still, the following are all valid
       configurations:
-         * `project`
-         * `project`, `dependencies`
-         * `project`, `lib`
-         * `project`, `bin`
-         * `project`, `depedencies`, `lib`
-         * `project`, `dependencies`, `bin`
-         * `project`, `dependencies`, `lib`, `bin`
+
+  * `project`
+  * `project`, `dependencies`
+  * `project`, `lib`
+  * `project`, `bin`
+  * `project`, `depedencies`, `lib`
+  * `project`, `dependencies`, `bin`
+  * `project`, `dependencies`, `lib`, `bin`
          
-       whereas the following configurations would be invalid:
+  whereas the following configurations would be invalid:
       
-         * `dependencies` (missing `project` section)
-         * `project`, `lib`, `dependencies` (`lib` cannot preced `dependencies`)
-         * `project`, `dependencies`, `bin`, `lib` (`bin` cannot precede `lib`)
+  * `dependencies` (missing `project` section)
+  * `project`, `lib`, `dependencies` (`lib` cannot precede `dependencies`)
+  * `project`, `dependencies`, `bin`, `lib` (`bin` cannot precede `lib`)
 
 
 Next, let's trim down our `Garvel.gl` file down to the bare essentials:
