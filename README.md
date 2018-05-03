@@ -2,8 +2,8 @@
 
 A dependency and build manager for Java, loosely inspired by the Cargo tool for Rust, that aims to provide a simplified and powerful way to manage complex projects.
 
-This started out as an edificational project that would provide a more modern (and XML-less) way of managing a broad-range of Java projects - from simple projets to 
-extremely complex projects. Garvel does not impose any hard restricstions on the layout of the project apart from the basic initial layout.
+This started out as an edificational project that would provide a more modern (and XML-less) way of managing a broad-range of Java projects - from simple projects to 
+extremely complex projects. Garvel does not impose any hard restrictions on the layout of the project apart from the basic initial layout.
 
 Post version 1.0, the idea is to improve the project not only in terms of performance, but also in terms of scope and robustness. Contributors are, of course,
 very much welcome to help take this from an educational project into a robust system that may be used for real-world production systems.
@@ -15,7 +15,7 @@ very much welcome to help take this from an educational project into a robust sy
 purely from code, though, a custom build script is provided. This build script will generate the `garvel.jar` file as well as a `garvel.sh` wrapper to run the
 JAR file. 
 
-Once the initial JAR file has been generated, there is no more actual dependence on the build script. As of version 1.0 though, the best way of delivering the
+Once the initial JAR file has been generated, there is no more actual dependency on the build script. As of version 1.0 though, the best way of delivering the
 project artifacts has not been finalised.
 
 
@@ -25,7 +25,7 @@ You will need a working Java compiler (JDK version 7 or above). This project has
 undertaking).
 
 Also note that the available build script (as of version 1.0) works only on UNIX-like systems. A stub file is available for Windows, but that has to be filled
-in. If anybody with experience writign Windows batch scripts wishes to help with that, that would be very welcome! 
+in. If anybody with experience writing Windows batch scripts wishes to help with that, that would be very welcome! 
 
 However, as noted in the previous section, once the initial JAR (created by the build script) is available, then it should be possible to bootstrap the project
 on Windows as well, and there will be no more dependency on the build script thereonin.
@@ -235,7 +235,7 @@ That's basically it - `garvel` simply expects the project to have the structure 
 should work without any problems. Note, however, that all resources that will be part of your project's generated artifact (JAR file)
 should be inside the `src` folder.
 
-The `Garvel.gl` file is the configuration file for thie new project. Let's have a look at its contents:
+The `Garvel.gl` file is the configuration file for the new project. Let's have a look at its contents:
 
 ```
 Macushla:hello-world z0ltan$ cat Garvel.gl
@@ -283,7 +283,7 @@ The `Garvel.gl` file is assumed to have the following four sections:
   * `dependencies` - this section defines the external dependencies of your project. 
                      This section is optional.
   
-  * `lib` - this section has two possibe attributes:
+  * `lib` - this section has two possible attributes:
       * `main-class` - this defines the entry-point for your project JAR file. This is **mandatory** if this section
                        is present. The section itself is optional.
       * `fat-jar`    - this attribute indicates that `garvel` must build the project along with all its dependencies into
@@ -725,7 +725,6 @@ The project has a `design` directory which has the following files:
   * ConfigTOMLGrammar.md - this file describes the grammar for the configuration format used by `garvel` (a subset of `TOML`).
   * SemverGrammar.md - this file describes the grammar for the parsing of semantic versioning used for project dependencies.
   * DesignNotes.md - the intial ntes of the project. This is hopelessly outdated, and will be updated soon.
-  * Scratch.md - random notes, scribblings, TODOs et al. This file will be removed shortly.
 
 
 Now that version 1.0 has been achieved, my plan is to track all new features, changes, and issues through Github itself. 
