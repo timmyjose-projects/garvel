@@ -154,6 +154,7 @@ Some common garvel commands are (see all commands with --list):
 	list        List all the available commands
 	install     Setup Garvel
 	uninstall   Remove Garvel setup
+  init        Initialise a new Garvel project in the current directory
 	new         Create a new Garvel project
 	build       Compile the current project and generate artifacts
 	clean       Remove the target directory
