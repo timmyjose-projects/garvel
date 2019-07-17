@@ -10,6 +10,7 @@ public enum CommandType {
     VERSION,
     INSTALL,
     UNINSTALL,
+    INIT,
     NEW,
     CLEAN,
     BUILD,
