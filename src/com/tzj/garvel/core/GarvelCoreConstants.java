@@ -55,7 +55,7 @@ public class GarvelCoreConstants {
     // Note that this provides Garvel's own version, not the project
     // version, which should be queried from the cache, and which
     // should be that specified in the Garvel.gl file.
-    public static final String GARVEL_GARVEL_VERSION = "0.0.1";
+    public static final String GARVEL_GARVEL_VERSION = "1.1.0";
 
     // this should be moved to an external file that can be auto-incremented
     public static final List<String> installedCommands = Arrays.asList(
