@@ -278,7 +278,7 @@ public enum UtilServiceImpl implements UtilService {
      * Simply check that the given path exists and is valid.
      *
      * @param path
-     * @return
+     * @return pathExists
      */
     public boolean pathExists(final Path path) {
         if (path == null) {
@@ -286,6 +286,17 @@ public enum UtilServiceImpl implements UtilService {
         }
 
         return path.toFile().exists();
+    }
+
+    /**
+     * Extract the name of the currenr directory.
+     *
+     * @return currentDirectory
+     */
+    public final String getCurrentDirectory() {
+        final String currentPath = System.getProperty("user.dir");
+
+        return currentPath.substring(currentPath.lastIndexOf("/") + 1);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.tzj.garvel.core.engine.job;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.File;
 
 import com.tzj.garvel.common.spi.core.VCSType;
@@ -24,22 +25,20 @@ public class InitJob implements Job<InitCommandResult> {
     }
 
     /**
-     * 1. Create the project directory
-     * 2. Create subdirectories `src`, `logs`, and`tests`
-     * 3. Create the `Garvel.gl` file.
-     * 4. Fetch dependencies and cache in .garvel, creating appropriate directories. @TODO
+     * 1. Create subdirectories `src`, `logs`, and`tests`
+     * 2. Create the `Garvel.gl` file.
+     * 3. Fetch dependencies and cache in .garvel, creating appropriate directories. @TODO
      *
      * @return
      * @throws Exception
      */
     @Override
     public InitCommandResult call() throws JobException {
-        final Path projectPath = createPath(currentDirectory);
-        final Path srcPath = createPath(projectPath + File.separator + "src");
-        final Path testsPath = createPath(projectPath + File.separator + "tests");
-        final Path configPath = createConfigPath(projectPath + File.separator + "Garvel.gl");
+        final Path srcPath = createPath("src");
+        final Path testsPath = createPath("tests");
+        final Path configPath = createConfigPath("Garvel.gl");
 
-        return new InitCommandResult(projectPath, srcPath, testsPath, configPath);
+        return new InitCommandResult(srcPath, testsPath, configPath);
     }
 
     /**
@@ -64,17 +63,17 @@ public class InitJob implements Job<InitCommandResult> {
     /**
      * Helper method to create the project skeleton.
      *
-     * @param currentDirectory
+     * @param path
      * @return
      * @throws JobException
      */
-    private Path createPath(final String currentDirectory) throws JobException {
+    private Path createPath(final String path) throws JobException {
         Path createdPath = null;
         try {
-            createdPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(currentDirectory);
+            createdPath = CoreModuleLoader.INSTANCE.getFileSystemFramework().makeDirectory(path);
         } catch (FilesystemFrameworkException e) {
             throw new JobException(String.format("Failed to create project directory \"%s\", %s",
-                    currentDirectory, e.getLocalizedMessage()));
+                    path, e.getLocalizedMessage()));
         }
 
         return createdPath;

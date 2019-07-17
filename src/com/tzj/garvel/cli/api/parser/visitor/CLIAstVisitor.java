@@ -17,6 +17,8 @@ public interface CLIAstVisitor {
 
     void visit(ListCommandAst listCommand);
 
+    void visit(InitCommandAst initCommand);
+
     void visit(NewCommandAst newCommand);
 
     void visit(RunCommandAst runCommand);

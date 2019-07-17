@@ -21,10 +21,9 @@ public class CLIInitCommand extends CLICommand {
 
     /**
      * Create the project structure inside the current directory:
-     * 1. Create a directory with the given name. Fails if already exists.
-     * 2. Create the Garvel.gl file inside. Fail if already exists.
-     * 3. Create the `src`, and `tests` directories. Fail if already exists.
-     * 4. Populate the Garvel.gl cache, and fetch data.
+     * 1. Create the Garvel.gl file inside. Fail if already exists.
+     * 2. Create the `src`, and `tests` directories. Fail if already exists.
+     * 3. Populate the Garvel.gl cache, and fetch data.
      */
 
     @Override
@@ -47,10 +46,9 @@ public class CLIInitCommand extends CLICommand {
     }
 
     private void checkSuccess(final InitCommandResult result) {
-        if (result.getProjectPath().toFile().exists() &&
-                result.getSrcPath().toFile().exists()
-                && result.getTestsPath().toFile().exists()
-                && result.getConfigPath().toFile().exists()) {
+        if (result.getSrcPath().toFile().exists() &&
+                result.getTestsPath().toFile().exists() &&
+                result.getConfigPath().toFile().exists()) {
             return;
         }
 

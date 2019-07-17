@@ -83,6 +83,19 @@ public class CLIAstCommandDispatchVisitor implements CLIAstVisitor {
     }
 
     /**
+     * Dispatch the init command to Core.
+     *
+     * @param initCommand
+     */
+    @Override
+    public void visit(final InitCommandAst initCommand) {
+        final CLICommand init = new CLIInitCommand(opts,
+                ModuleLoader.INSTANCE.getUtils().getVCSTypeFromString(initCommand.getVcs().getId().spelling()),
+                initCommand.getCurrentDirectory());
+        init.execute();
+    }
+
+    /**
      * Dispatch the new command to Core.
      *
      * @param newCommand

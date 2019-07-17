@@ -24,5 +24,7 @@ public interface UtilService {
     String getSHA1(Path path);
 
     String convertStringsToOSSpecificClassPathString(List<String> paths);
+
+    String getCurrentDirectory();
 }
 
