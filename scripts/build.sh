@@ -218,7 +218,7 @@ function create_garvel_script()
     echo "java -jar ${TARGET_DIR}/${TARGET_NAME} \$@" >> ${script_path}
 
     chmod +ux ${script_path}
-    echo "[ Finished creating wrapper script ${GARVL_WRAPPER} for ${PROJECT_NAME} in ${TARGET_DIR} ]"
+    echo "[ Finished creating wrapper script ${GARVEL_WRAPPER} for ${PROJECT_NAME} in ${TARGET_DIR} ]"
     echo
     echo "Add the following lines to your .bashrc or .bash_profile file:"
     echo "    export PATH=\"${script_path}\":\$PATH"
