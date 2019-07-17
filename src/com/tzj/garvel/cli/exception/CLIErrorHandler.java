@@ -19,6 +19,7 @@ public class CLIErrorHandler {
             "\tlist        List all the available commands\n" +
             "\tinstall     Setup Garvel\n" +
             "\tuninstall   Remove Garvel setup\n" +
+            "\tinit        Initialise a new Garvel project in the current directory\n" +
             "\tnew         Create a new Garvel project\n" +
             "\tbuild       Compile the current project and generate artifacts\n" +
             "\tclean       Remove the target directory\n" +

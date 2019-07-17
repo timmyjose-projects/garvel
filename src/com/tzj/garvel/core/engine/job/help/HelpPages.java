@@ -46,6 +46,18 @@ public class HelpPages {
             "ARGS:\n" +
             "    None\n\n";
 
+    public static final String initCommand = "garvel-init\n\n" +
+            "Initialises a new project in the current directory. If the `garvel install` command was not executed prior this this command,\n" +
+            "it also invokes the `garvel install` command to perform the initial Garvel setup before creating the project.\n" +
+            "\n" +
+            "USAGE:\n" +
+            "    garvel init [--vcs <vcs-name>] PATH\n" +
+            "\n" +
+            "ARGS:\n" +
+            "    [--vcs <vcs-name> ] initialises this project with the given VCS. Valid values for `vcs-name` are:\n" +
+            "                        git, fossil, mercurial, svn, cvs, and none (default).\n" +
+            "    PATH                the name of the new project. Valid identifiers for the platform will be accepted.\n\n";
+
 
     public static final String newCommand = "garvel-new\n\n" +
             "Creates a new project in the current directory. If the `garvel install` command was not executed prior this this command,\n" +

@@ -13,6 +13,7 @@ Command ::= help Command-Name
            | version
            | install 
            | uninstall
+           | init [--vcs Identifier] PATH
            | new [--vcs Identifier] PATH
            | build
            | clean

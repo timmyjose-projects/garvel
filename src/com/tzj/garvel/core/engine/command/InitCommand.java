@@ -3,6 +3,7 @@ package com.tzj.garvel.core.engine.command;
 import com.tzj.garvel.common.spi.core.command.CommandException;
 import com.tzj.garvel.common.spi.core.command.CommandParams;
 import com.tzj.garvel.common.spi.core.command.CommandResult;
+import com.tzj.garvel.common.spi.core.command.param.InitCommandParams;
 import com.tzj.garvel.common.spi.core.command.param.InstallCommandParams;
 import com.tzj.garvel.common.spi.core.command.result.InitCommandResult;
 import com.tzj.garvel.core.CoreModuleLoader;
@@ -35,7 +36,8 @@ public class InitCommand extends Command {
 
     @Override
     public CommandResult execute(final CommandParams params) throws CommandException {
-        final Job<InitCommandResult> job = new InitJob();
+        final InitCommandParams initCommandParams = (InitCommandParams) params;
+        final Job<InitCommandResult> job = new InitJob(initCommandParams.getVcs(), initCommandParams.getCurrentDirectory());
         final Future<InitCommandResult> task = CoreModuleLoader.INSTANCE.getConcurrencyFramework().getExecutor().submit(job);
 
         InitCommandResult cmdRes = null;

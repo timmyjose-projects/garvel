@@ -28,7 +28,7 @@ public class CLIInitCommand extends CLICommand {
      */
 
     @Override
-    public void run() {
+    public void execute() {
         final InitCommandParams params = new InitCommandParams(vcs, currentDirectory);
 
         try {
