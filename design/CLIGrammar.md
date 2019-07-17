@@ -13,6 +13,7 @@ Command ::= help Command-Name
            | version
            | install 
            | uninstall
+           | init [--vcs Identifier] PATH
            | new [--vcs Identifier] PATH
            | build
            | clean
@@ -26,7 +27,7 @@ CommandName ::= CommandIdentifier
 ```
 
 ```
-CommandIdentifier ::= "help" | "list" | "version" | "new" | "build" | "clean" | "run" | "test"
+CommandIdentifier ::= "help" | "list" | "version" | "init" | new" | "build" | "clean" | "run" | "test"
 ```
 
 ```

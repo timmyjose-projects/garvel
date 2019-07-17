@@ -64,6 +64,7 @@ public class GarvelCoreConstants {
             "version",
             "install",
             "uninstall",
+            "init",
             "new",
             "build",
             "clean",

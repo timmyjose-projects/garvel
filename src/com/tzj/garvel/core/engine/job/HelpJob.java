@@ -32,6 +32,9 @@ public class HelpJob implements Job<HelpCommandResult> {
             case "uninstall":
                 helpPages = HelpPages.uninstallCommand;
                 break;
+            case "init":
+                helpPages = HelpPages.initCommand;
+                break;
             case "new":
                 helpPages = HelpPages.newCommand;
                 break;

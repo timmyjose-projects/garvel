@@ -13,6 +13,7 @@ public enum CLITokenType {
     LIST("list"),
     INSTALL("install"),
     UNINSTALL("uninstall"),
+    INIT("init"),
     NEW("new"),
     BUILD("build"),
     CLEAN("clean"),
@@ -38,6 +39,7 @@ public enum CLITokenType {
         keywordMap.put(LIST.description, LIST);
         keywordMap.put(INSTALL.description, INSTALL);
         keywordMap.put(UNINSTALL.description, UNINSTALL);
+        keywordMap.put(INIT.description, INIT);
         keywordMap.put(NEW.description, NEW);
         keywordMap.put(BUILD.description, BUILD);
         keywordMap.put(CLEAN.description, CLEAN);

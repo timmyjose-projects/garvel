@@ -71,7 +71,7 @@ public enum CLIParserImpl implements CLIParser {
      *
      * @return
      */
-    Program parseProgram() {
+    final Program parseProgram() {
         Program program = null;
 
         switch (currentToken.kind()) {
@@ -96,6 +96,7 @@ public enum CLIParserImpl implements CLIParser {
             case VERSION:
             case INSTALL:
             case UNINSTALL:
+            case INIT:
             case NEW:
             case BUILD:
             case CLEAN:
@@ -126,7 +127,7 @@ public enum CLIParserImpl implements CLIParser {
     }
 
     /**
-     * Command ::= HelpCommand | ListCommand | VersionCommand | NewCommand
+     * Command ::= HelpCommand | ListCommand | VersionCommand | InitCommand | NewCommand
      * | BuildCommand | CleanCommand | RunComman | TestCommand
      *
      * @return
@@ -166,6 +167,27 @@ public enum CLIParserImpl implements CLIParser {
             }
             break;
 
+            case INIT: {
+                acceptIt();
+
+                switch (currentToken.kind()) {
+                    case VCS: {
+                        acceptIt();
+                        final VCSAst vcs = parseVCS();
+                        final String currentDirectory = ModuleLoader.INSTANCE.getUtils().getCurrentDirectory();
+                        command = new InitCommandAst(vcs, currentDirectory);
+                    }
+                    break;
+
+                    default: {
+                        final VCSAst vcs = new VCSAst(new Identifier(NONE.toString()));
+                        final String currentDirectory = ModuleLoader.INSTANCE.getUtils().getCurrentDirectory();
+                        command = new InitCommandAst(vcs, currentDirectory);
+                    }
+                }
+            }
+            break;
+
             case NEW: {
                 acceptIt();
 
@@ -179,8 +201,9 @@ public enum CLIParserImpl implements CLIParser {
                     break;
 
                     case IDENTIFIER: {
+                        final VCSAst vcs = new VCSAst(new Identifier(NONE.toString()));
                         final Path path = parsePath();
-                        command = new NewCommandAst(new VCSAst(new Identifier(NONE.toString())), path);
+                        command = new NewCommandAst(vcs, path);
                     }
                     break;
 
@@ -394,6 +417,7 @@ public enum CLIParserImpl implements CLIParser {
             case VERSION:
             case INSTALL:
             case UNINSTALL:
+            case INIT:
             case NEW:
             case CLEAN:
             case BUILD:
@@ -435,6 +459,7 @@ public enum CLIParserImpl implements CLIParser {
             case VERSION:
             case INSTALL:
             case UNINSTALL:
+            case INIT:
             case NEW:
             case BUILD:
             case CLEAN:

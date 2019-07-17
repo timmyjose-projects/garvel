@@ -47,6 +47,9 @@ public enum CoreServiceImpl implements CoreService {
             case UNINSTALL:
                 command = new UninstallCommand();
                 break;
+            case INIT:
+                command = new InitCommand();
+                break;
             case NEW:
                 command = new NewCommand();
                 break;
